@@ -1,15 +1,23 @@
 {
-  "compilerOptions": {
-    "outDir": "dist",
-    "target": "es6",
-    "module": "commonjs",
-    "jsx": "react",
-    "declaration": false,
-    "noImplicitAny": false,
-    "removeComments": true,
-    "esModuleInterop": true,
-    "noLib": false,
-    "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": true
-  }
+    "compilerOptions": {
+        "allowJs": true,
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "target": "es6",
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true,
+        "noEmitHelpers": false,
+        "noEmit": true,
+        "sourceMap": true,
+        "watch": true,
+        "jsx": "react",
+        "esModuleInterop": true,
+        "baseUrl": "./",
+        "paths": {
+            "*": ["node_modules/*", "libs/*", "src/*"]
+        }
+    },
+    "include": ["./src", "./libs", "./test"]
 }

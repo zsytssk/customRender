@@ -1,18 +1,26 @@
-import React from "react";
-import { CustomRenderer } from "./renderer/index";
+import { Laya } from 'laya/Laya';
+import React from 'react';
+import { CustomRenderer } from './renderer/index';
+import { Label } from 'renderer/type';
 
-const Text = props => {
-  return <p className={props.className}>{props.content}</p>;
-};
+class App extends React.Component {
+    state = {
+        text: Date.now(),
+    };
+    onButtonClick = () => {
+        this.setState(() => ({ text: Date.now() }));
+    };
+    render() {
+        return (
+            <Label
+                text="hello world"
+                color="red"
+                width={1000}
+                align="center"
+            ></Label>
+        );
+    }
+}
 
-const App = () => {
-  return (
-    <div>
-      <Text className="hello-class" content="Hello" />
-      <span style="color:blue;">World</span>
-    </div>
-  );
-};
-
-// ReactDOM.render(<App />, document.getElementById("root"));
-CustomRenderer.render(<App />, document.getElementById("root"));
+Laya.init(600, 500);
+CustomRenderer.render(<App />, Laya.stage);
