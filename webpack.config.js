@@ -1,14 +1,15 @@
 'use strict';
 const path = require('path');
 const webpack = require('webpack');
+const findParam = require('./script/findEnv');
 
-module.exports = {
+const ENV = JSON.stringify(findParam('ENV'));
+const common_config = {
     entry: './src/main.tsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'app.js',
     },
-    mode: 'development',
     resolve: {
         extensions: ['.ts', '.tsx', '.js'],
     },
@@ -27,9 +28,6 @@ module.exports = {
             },
         ],
     },
-    devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-    },
     resolve: {
         modules: [
             path.resolve('./libs'),
@@ -38,4 +36,41 @@ module.exports = {
         ],
         extensions: ['.ts', '.js', '.json'],
     },
+    plugins: [new webpack.DefinePlugin({ ENV })],
+};
+
+const dev_config = {
+    devtool: 'source-map',
+    stats: {
+        warnings: false,
+    },
+    watch: true,
+    devServer: {
+        clientLogLevel: 'silent',
+        host: '0.0.0.0',
+        contentBase: path.join(__dirname, 'dist'),
+        disableHostCheck: true,
+    },
+};
+
+const prod_config = {
+    entry: ['./src/main.tsx'],
+};
+const prod_ts_compile_option = {
+    sourceMap: false,
+};
+
+module.exports = (env, argv) => {
+    if (argv.mode === 'development') {
+        return {
+            ...common_config,
+            ...dev_config,
+        };
+    } else {
+        common_config.module.rules[0].options.compilerOptions = prod_ts_compile_option;
+        return {
+            ...common_config,
+            ...prod_config,
+        };
+    }
 };

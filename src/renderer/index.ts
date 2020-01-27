@@ -1,5 +1,6 @@
 import Reconciler from 'react-reconciler';
 import { HostConfig } from './hostConfig';
+export * from './type';
 
 const reconcilerInstance = Reconciler(HostConfig as any);
 
