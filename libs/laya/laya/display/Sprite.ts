@@ -96,7 +96,7 @@ import { RenderTexture2D } from "../resource/RenderTexture2D";
  * 			sprite.pivotY = 0;//设置 sprite 对象的垂直方法轴心点坐标。
  * 			Laya.stage.addChild(sprite);//将此 sprite 对象添加到显示列表。
  * 			sprite.on(Event.CLICK, this, onClickSprite);//给 sprite 对象添加点击事件侦听。
-	
+
  * 			shape = new Sprite();//创建一个 Sprite 类的实例对象 sprite 。
  * 			shape.graphics.drawRect(0, 0, 100, 100, "#ccff00", "#ff0000", 2);//绘制一个有边框的填充矩形。
  * 			shape.x = 400;//设置 shape 对象相对于父容器的水平方向坐标值。
@@ -141,7 +141,7 @@ import { RenderTexture2D } from "../resource/RenderTexture2D";
  *     sprite.pivotY = 0;//设置 sprite 对象的垂直方法轴心点坐标。
  *     Laya.stage.addChild(sprite);//将此 sprite 对象添加到显示列表。
  *     sprite.on(Event.CLICK, this, onClickSprite);//给 sprite 对象添加点击事件侦听。
-	
+
  *     shape = new laya.display.Sprite();//创建一个 Sprite 类的实例对象 sprite 。
  *     shape.graphics.drawRect(0, 0, 100, 100, "#ccff00", "#ff0000", 2);//绘制一个有边框的填充矩形。
  *     shape.x = 400;//设置 shape 对象相对于父容器的水平方向坐标值。
@@ -183,7 +183,7 @@ import { RenderTexture2D } from "../resource/RenderTexture2D";
  *         this.sprite.pivotY = 0;//设置 sprite 对象的垂直方法轴心点坐标。
  *         Laya.stage.addChild(this.sprite);//将此 sprite 对象添加到显示列表。
  *         this.sprite.on(laya.events.Event.CLICK, this, this.onClickSprite);//给 sprite 对象添加点击事件侦听。
-	
+
  *         this.shape = new Sprite();//创建一个 Sprite 类的实例对象 sprite 。
  *         this.shape.graphics.drawRect(0, 0, 100, 100, "#ccff00", "#ff0000", 2);//绘制一个有边框的填充矩形。
  *         this.shape.x = 400;//设置 shape 对象相对于父容器的水平方向坐标值。
@@ -262,7 +262,7 @@ export class Sprite extends Node {
      */
     hitTestPrior: boolean = false;
 
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     destroy(destroyChild: boolean = true): void {
@@ -630,7 +630,7 @@ export class Sprite extends Node {
         var __childs: any[];
         __childs = this._children;
         for (var i: number = 0, n: number = __childs.length; i < n; i++) {
-            //child = getChildAt(i) as Sprite; 
+            //child = getChildAt(i) as Sprite;
             child = (<Sprite>__childs[i]);
             if (child instanceof Sprite && child._visible === true) {
                 cList = child._boundPointsToParent(ifRotate);
@@ -1125,25 +1125,25 @@ export class Sprite extends Node {
             save = true;
             ctx.transform(transform.a, transform.b, transform.c, transform.d, transform.tx + x+_x, transform.ty + y+_y);
         }
-    	
+
         if ( rt & SpriteConst.ALPHA) {
             var alpha:Number = style.alpha;
             if (alpha > 0.01 || _needRepaint()) {
                 //var temp:Number = context.globalAlpha;
                 ctx.globalAlpha *= alpha;
                 //context.globalAlpha = temp;
-            }				
+            }
         }
-    	
+
         if ( rt & SpriteConst.TEXTURE ) {
             var tex:Texture = texture;
             ctx.drawTexture(tex, x-pivotX+_x, y-pivotY+_y, tex.width, tex.height);
         }
-    	
+
         if ( rt & SpriteConst.GRAPHICS) {
             _graphics && _graphics._render(this, ctx, x-pivotX+_x, y-pivotY+_y);
         }
-    	
+
         if (_children.length) {
             _children.forEach(function(c:Sprite) {
                 c._visible && c.render(ctx, x - pivotX+_x, y - pivotY+_y);
@@ -1184,10 +1184,10 @@ export class Sprite extends Node {
 
     /**
      * 绘制到一个Texture对象
-     * @param canvasWidth 
-     * @param canvasHeight 
-     * @param offsetX 
-     * @param offsetY 
+     * @param canvasWidth
+     * @param canvasHeight
+     * @param offsetX
+     * @param offsetY
      */
     drawToTexture(canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number, rt:RenderTexture2D|null=null): Texture|RenderTexture2D {
         return Sprite.drawToTexture(this, this._renderType, canvasWidth, canvasHeight, offsetX, offsetY,rt);
@@ -1195,8 +1195,8 @@ export class Sprite extends Node {
 
     /**
      * 把当前对象渲染到指定的贴图上。贴图由外部指定，避免每次都创建。
-     * @param offx 
-     * @param offy 
+     * @param offx
+     * @param offy
      * @param tex 输出渲染结果
      */
     drawToTexture3D(offx: number, offy: number, tex: Texture2D) {
@@ -1250,8 +1250,8 @@ export class Sprite extends Node {
 
 	static drawtocanvCtx:Context;
     /**
-     * @private 
-     * 
+     * @private
+     *
      */
     static drawToTexture(sprite: Sprite, _renderType: number, canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number, rt:RenderTexture2D|null=null): Texture|RenderTexture2D {
 		if(!Sprite.drawtocanvCtx){
@@ -1319,7 +1319,7 @@ export class Sprite extends Node {
         if (this._cacheStyle.filters == value) return;
         this._getCacheStyle().filters = value ? value.slice() : null;
         if (value && value.length) {
-            //temp TODO 
+            //temp TODO
             this._setColorFilter(value[0]);
             this._renderType |= SpriteConst.FILTERS;
         } else {
@@ -1533,7 +1533,7 @@ export class Sprite extends Node {
         }
     }
 
-    /**@private 
+    /**@private
      * @override
     */
     protected _setParent(value: Node): void {
@@ -1604,7 +1604,7 @@ export class Sprite extends Node {
         return (this._repaint & SpriteConst.REPAINT_CACHE) && this._cacheStyle.enableCanvasRender && this._cacheStyle.reCache;
     }
 
-    /**@private	
+    /**@private
      * @override
     */
     protected _childChanged(child: Node = null): void {
@@ -1704,7 +1704,7 @@ export class Sprite extends Node {
     }
 
     /**
-     * @internal 
+     * @internal
      * @override
     */
     _setDisplay(value: boolean): void {
@@ -1815,7 +1815,7 @@ export class Sprite extends Node {
      * 等同于graphics.clear();graphics.drawImage()，但性能更高
      * 还可以赋值一个图片地址，则会自动加载图片，然后显示
      */
-    get texture(): Texture {
+    get texture(): Texture | string {
         return this._texture;
     }
 
@@ -1824,7 +1824,7 @@ export class Sprite extends Node {
 
     }
 
-    set texture(value: Texture) {
+    set texture(value: Texture | string) {
         if (typeof (value) == 'string') {
             this.loadImage((<string>((<any>value))));
         } else if (this._texture != value) {

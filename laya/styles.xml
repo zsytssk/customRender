@@ -1,0 +1,6 @@
+<res>
+   <item name="ani/fish" type="" compress="0" pack="2" quality="80" props="" picType="0" scale="0"/>
+   <item name="font" type="" compress="0" pack="2" quality="80" props="" picType="0" scale="0"/>
+   <item name="image/hall/header_bg_03.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="image/hall/play_now_btn.png" type="Sprite" compress="0" pack="2" quality="80" props="" picType="0" scale="0"/>
+</res>

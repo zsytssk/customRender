@@ -7,16 +7,13 @@ const ENV = JSON.stringify(findParam('ENV'));
 const common_config = {
     entry: './src/main.tsx',
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'bin'),
         filename: 'app.js',
-    },
-    resolve: {
-        extensions: ['.ts', '.tsx', '.js'],
     },
     module: {
         rules: [
             {
-                test: /\.(.*)?$/,
+                test: /(.tsx|.ts|.jsx|.js)?$/,
                 loader: 'ts-loader',
                 options: {
                     transpileOnly: true,
@@ -34,7 +31,7 @@ const common_config = {
             path.resolve('./src'),
             path.resolve('./node_modules'),
         ],
-        extensions: ['.ts', '.js', '.json'],
+        extensions: ['.tsx', '.ts', '.js', '.json'],
     },
     plugins: [new webpack.DefinePlugin({ ENV })],
 };
@@ -48,7 +45,7 @@ const dev_config = {
     devServer: {
         clientLogLevel: 'silent',
         host: '0.0.0.0',
-        contentBase: path.join(__dirname, 'dist'),
+        contentBase: path.join(__dirname, 'bin'),
         disableHostCheck: true,
     },
 };

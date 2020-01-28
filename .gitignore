@@ -2,4 +2,5 @@
 /node_modules
 
 # production
-/dist/app.js
+/bin/*
+!/bin/index.html
