@@ -1,12 +1,4 @@
-import {
-    Box,
-    Button,
-    Image,
-    Label,
-    Sprite,
-    View,
-    List,
-} from 'customRenderer/layaCom';
+import { Box, Image, Label, List, Sprite, View } from 'customRenderer/layaCom';
 import React from 'react';
 
 export function CoinMenu(props: ComProps) {

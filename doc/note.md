@@ -1,14 +1,64 @@
+## 2020-01-29 16:21:57
+
+-   @ques 每次打开的弹出层 没有重新的 render
+
+    -   字体显示不清楚
+
+-   @ques 自己写一个弹出层管理器..
+
+-   @ques 怎么将这 showPop 变成全局的
+
+-   @ques react useHook 在其他地方使用...
+
+-   @ques Sprite graphics 属性如何设置
+
+-   @ques 打开弹出层导致屏幕抖动
+
+-   @opt[性能] @ques showPop 好像会频繁的创建 + 销毁 对象 这怎么处理
+    -   如何防止频繁的创建销毁对象, 包括他的子集
+    -   react HostConfig 有没有吧提供 api 去做这些事情
+    -   在创建对象的地方打断点
+    -   ***
+    -   好像和 Context 有关
+    -   @ques zhengming
+
+## 2020-01-29 12:11:38
+
+-   @ques 怎么打开弹出层
+
+    -   @todo 感觉这不太好处理啊
+    -   弹出层没有剧中... 没有背景... 无法关闭
+    -   ***
+    -   reUse
+    -   能不能模拟原生的逻辑
+
+-   @ques ref 在 hook 中怎么用
+
+*   @ques useState 能不能不在函数中执行 ...
+    -   我就可以将 PopContext 所有方法放在一个地方
+*   @ques getPublicInstance
+
+### save
+
+-   @todo 显示隐藏的动画效果 怎么处理
+
 -   @todo 事件交互
+
+*   @todo 如何解决性能问题
 
 -   @ques react useEffect 第二个参数是干什么的
 
--   @ques renderType
+-   @ques 一些特殊的组件 会不会有问题
+
+    -   renderType render list>scrollBar
+
 -   @ques 如何和 ui 编辑器合作
 
--   @ques 一些特殊的组件 会不会有问题
-    -   list>scrollBar
+### finish
 
-### save
+-   @todo react 是先渲染子然后才是父亲 和 laya 不一样
+
+    -   所以 laya 中子类依赖父类的样式 就会有问题
 
 -   @ques type `JSX.Element`
 -   @ques 如何加载场景的资源资源

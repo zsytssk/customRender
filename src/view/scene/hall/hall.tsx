@@ -5,6 +5,7 @@ import {
     SkeletonPlayer,
     Box,
     Label,
+    View,
 } from 'customRenderer/layaCom';
 import { Header } from './header';
 import { Loading } from 'view/loading';
@@ -23,7 +24,7 @@ export const Hall = Loading(res_list, HallCom);
 
 function HallCom() {
     return (
-        <Scene width={1920} height={750} autoDestroyAtClosed={true}>
+        <View width={1920} height={750} autoDestroyAtClosed={true} centerX={0}>
             <Sprite y={0} x={0} texture="image/hall/bg.png" />
             <SkeletonPlayer
                 y={366}
@@ -152,6 +153,6 @@ function HallCom() {
                 url="image/hall/hall_bubble.sk"
                 height={111}
             />
-        </Scene>
+        </View>
     );
 }

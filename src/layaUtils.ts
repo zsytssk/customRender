@@ -3,9 +3,12 @@ import { AtlasInfoManager } from 'laya/laya/net/AtlasInfoManager';
 import { Handler } from 'laya/laya/utils/Handler';
 
 export function layaInit() {
-    return new Promise((resolve, reject) => {
-        Laya.init(1920, 750);
+    return new Promise(resolve => {
+        Laya.init(1130, 750);
         Laya.stage.scaleMode = 'fixedheight';
+        Laya.stage.screenMode = 'horizontal';
+        Laya.stage.alignV = 'middle';
+        Laya.stage.alignH = 'center';
         AtlasInfoManager.enable(
             'fileconfig.json',
             Handler.create(null, async () => {
@@ -16,6 +19,7 @@ export function layaInit() {
 }
 
 export type FunProgress = (progress: number) => void;
+
 /** 加载资源... */
 export function loadRes(res: string[], on_progress?: FunProgress) {
     return new Promise((resolve, reject) => {

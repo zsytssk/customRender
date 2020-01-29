@@ -14,12 +14,10 @@ export function FlagMenu(props: ComProps) {
         <View width={87} height={200} {...props}>
             <Image
                 var="bg"
-                top={0}
                 skin="image/hall/coin_menu_bg.png"
                 sizeGrid="15,15,15,15"
-                right={0}
-                left={0}
-                bottom={0}
+                width={87}
+                height={200}
             />
             <Sprite y={0} x={1} texture="image/hall/menu_top_light.png" />
             <List

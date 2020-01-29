@@ -1,3 +1,3 @@
-`"((\d|\.)+)" - {$1}`
+`"((\d|\.|-)+)" - {$1}`
 `"(true|false)" - {$1}`
-`(sceneBg|sceneColor|editorInfo)=".+"`
+`(runtime|sceneBg|sceneColor|editorInfo)=".+"`

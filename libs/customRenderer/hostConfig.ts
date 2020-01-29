@@ -1,5 +1,6 @@
 import { createEle } from './createEle';
 import { applyNodeProps } from './applyNodeProps';
+import { Box } from 'laya/laya/ui/Box';
 
 export const HostConfig = {
     now: Date.now,
@@ -33,6 +34,7 @@ export const HostConfig = {
         for (const key in newProps) {
             element[key] = newProps[key];
         }
+        applyNodeProps(element, newProps);
         return element;
     },
     appendInitialChild: (parent, child) => {
@@ -45,10 +47,10 @@ export const HostConfig = {
         return false;
     },
     prepareForCommit: (...args) => {
-        // console.log('prepareForCommit', ...args);
+        console.log('prepareForCommit', ...args);
     },
     resetAfterCommit: (...args) => {
-        // console.log('resetAfterCommit', ...args);
+        console.log('resetAfterCommit', ...args);
     },
     appendChildToContainer: (parent, child) => {
         if (child.parent === parent) {
@@ -60,43 +62,51 @@ export const HostConfig = {
     commitMount: (domElement, type, newProps, fiberNode) => {
         domElement.focus();
     },
-    prepareUpdate: function(
+    prepareUpdate: (
         instance,
         type,
         oldProps,
         newProps,
         rootContainerInstance,
         currentHostContext,
-    ) {
+    ) => {
         return {}; //return nothing.
     },
-    commitUpdate: function(
+    commitUpdate: (
         instance,
         updatePayload,
         type,
         oldProps,
         newProps,
         finishedWork,
-    ) {
+    ) => {
         applyNodeProps(instance, newProps, oldProps);
         return; //return nothing.
     },
-    commitTextUpdate: function(textInstance, oldText, newText) {
+    commitTextUpdate: (textInstance, oldText, newText) => {
         textInstance.nodeValue = newText;
     },
     insertBefore: (parentInstance, child, beforeChild) => {
         parentInstance.insertBefore(child, beforeChild);
     },
-    removeChild: function(parentInstance, child) {
+    removeChild: (parentInstance, child) => {
         parentInstance.removeChild(child);
     },
-    insertInContainerBefore: function(container, child, beforeChild) {
-        container.insertBefore(child, beforeChild);
+    insertInContainerBefore: (container: Box, child, beforeChild) => {
+        const index = container.getChildIndex(beforeChild);
+        if (index !== -1) {
+            container.addChildAt(child, index);
+        } else {
+            container.addChild(child);
+        }
     },
-    removeChildFromContainer: function(container, child) {
+    removeChildFromContainer: (container, child) => {
         container.removeChild(child);
     },
-    shouldDeprioritizeSubtree: function(type, nextProps) {
+    shouldDeprioritizeSubtree: (type, nextProps) => {
         return !!nextProps.hidden;
+    },
+    getPublicInstance(instance) {
+        return instance;
     },
 };

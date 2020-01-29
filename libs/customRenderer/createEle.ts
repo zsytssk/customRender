@@ -23,6 +23,7 @@ import { Skeleton } from 'laya/laya/ani/bone/Skeleton';
 import { Templet } from 'laya/laya/ani/bone/Templet';
 import { Scene } from 'laya/laya/display/Scene';
 import { View } from 'laya/laya/ui/View';
+import { HTMLDivElement } from 'laya/laya/html/dom/HTMLDivElement';
 
 export function createEle(type) {
     if (type === 'Box') {

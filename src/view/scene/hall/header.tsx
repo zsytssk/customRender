@@ -6,11 +6,19 @@ import {
     Sprite,
     View,
 } from 'customRenderer/layaCom';
-import React from 'react';
+import React, { useState } from 'react';
 import { CoinMenu } from './coinMenu';
 import { FlagMenu } from './flagMenu';
+import { state as pop_state } from 'view/pop/popContext';
+import { Alert } from 'view/pop/alert';
+import { genRandomStr } from 'utils/utils';
+import { state as scene_state } from '../sceneContext';
 
 export function Header(props: ComProps) {
+    const [flagMenuVisible, setFlagMenuVisible] = useState(false);
+    const toggleFlagMenu = () => {
+        setFlagMenuVisible(!flagMenuVisible);
+    };
     return (
         <View
             width={1920}
@@ -101,9 +109,13 @@ export function Header(props: ComProps) {
                     <Button
                         y={-1}
                         x={0}
-                        var="btn_charge"
                         stateNum={1}
                         skin="image/hall/btn_get.png"
+                        onClick={() => {
+                            const id = genRandomStr();
+                            pop_state.showPop(Alert, `this is a test! ${id}`);
+                        }}
+                        var="testAlert"
                     >
                         <Image
                             y={19}
@@ -111,12 +123,16 @@ export function Header(props: ComProps) {
                             skin="image/international/txt_hall_charge_zh.png"
                         />
                     </Button>
+
                     <Button
                         y={0}
                         x={133}
                         var="btn_get"
                         stateNum={1}
                         skin="image/hall/btn_get.png"
+                        onClick={() => {
+                            scene_state.setCurScene('game');
+                        }}
                     >
                         <Image
                             y={19}
@@ -163,8 +179,13 @@ export function Header(props: ComProps) {
                         skin="image/hall/btn_login.png"
                     />
                 </Box>
-                <FlagMenu y={63.5} x={1188} visible={false} var="flag_menu" />
-                <Box y={16} x={1207.7213862390597} var="flag_box">
+                <FlagMenu
+                    y={63.5}
+                    x={1188}
+                    visible={flagMenuVisible}
+                    var="flag_menu"
+                />
+                <Box y={16} x={1207} var="flag_box" onClick={toggleFlagMenu}>
                     <Button
                         y={7}
                         x={45}
