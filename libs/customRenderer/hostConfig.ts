@@ -52,6 +52,12 @@ export const HostConfig = {
     resetAfterCommit: (...args) => {
         console.log('resetAfterCommit', ...args);
     },
+    appendChild: (parent, child) => {
+        if (child.parent === parent) {
+            return;
+        }
+        parent.addChild(child);
+    },
     appendChildToContainer: (parent, child) => {
         if (child.parent === parent) {
             return;

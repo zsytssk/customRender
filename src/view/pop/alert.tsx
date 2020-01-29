@@ -2,12 +2,11 @@ import { Box, Button, Image, Label, Sprite } from 'customRenderer/layaCom';
 import { Dialog as LayaDialog } from 'laya/laya/ui/Dialog';
 import { Label as LayaLabel } from 'laya/laya/ui/Label';
 import React, { useEffect, useRef } from 'react';
-import { state } from './popContext';
-import { PopProps } from './popManager';
+import { PopProps, PopState } from './popManager';
 import { Laya } from 'laya/Laya';
 
 export const Alert = (props: PopProps) => {
-    const { hidePop } = state;
+    const { hidePop } = PopState;
     const { id, args, isShow } = props;
     const [msg] = args;
     const self_ele = useRef(null as LayaDialog);

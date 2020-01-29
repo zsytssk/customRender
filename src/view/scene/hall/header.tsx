@@ -9,10 +9,10 @@ import {
 import React, { useState } from 'react';
 import { CoinMenu } from './coinMenu';
 import { FlagMenu } from './flagMenu';
-import { state as pop_state } from 'view/pop/popContext';
+import { PopState } from 'view/pop/popManager';
 import { Alert } from 'view/pop/alert';
 import { genRandomStr } from 'utils/utils';
-import { state as scene_state } from '../sceneContext';
+import { SceneState } from '../sceneManager';
 
 export function Header(props: ComProps) {
     const [flagMenuVisible, setFlagMenuVisible] = useState(false);
@@ -113,7 +113,7 @@ export function Header(props: ComProps) {
                         skin="image/hall/btn_get.png"
                         onClick={() => {
                             const id = genRandomStr();
-                            pop_state.showPop(Alert, `this is a test! ${id}`);
+                            PopState.showPop(Alert, `this is a test! ${id}`);
                         }}
                         var="testAlert"
                     >
@@ -131,7 +131,7 @@ export function Header(props: ComProps) {
                         stateNum={1}
                         skin="image/hall/btn_get.png"
                         onClick={() => {
-                            scene_state.setCurScene('game');
+                            SceneState.setCurScene('game');
                         }}
                     >
                         <Image

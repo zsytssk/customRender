@@ -1,3 +1,12 @@
+-   https://github.com/chentsulin/awesome-react-renderer
+-   https://www.npmjs.com/package/react-game-engine
+
+-   @ques getChildHostContext 也许有什么作用
+
+## 2020-01-29 17:08:18
+
+-   @todo 其实根本就不需要 context...
+
 ## 2020-01-29 16:21:57
 
 -   @ques 每次打开的弹出层 没有重新的 render
