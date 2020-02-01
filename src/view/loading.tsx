@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import {
-    Dialog,
-    Sprite,
-    ProgressBar,
-    SkeletonPlayer,
-} from 'customRenderer/layaCom';
+import { ProgressBar, SkeletonPlayer, Sprite } from 'customRenderer/layaCom';
 import { loadRes } from 'layaUtils';
+import React, { useEffect, useState } from 'react';
+import { Scene } from './com/scene';
 
 const load_res = [
     'comp/label.png',
@@ -33,7 +29,7 @@ export const Loading = (res: string[], Comp: CtorJSXEle) => {
         }
 
         return (
-            <Dialog width={1920} height={750}>
+            <Scene>
                 <Sprite y={0} x={0} texture="image/loading/load_bg.png" />
                 <Sprite y={503} x={546} texture="image/loading/loading.png" />
                 <ProgressBar
@@ -47,7 +43,7 @@ export const Loading = (res: string[], Comp: CtorJSXEle) => {
                     x={960}
                     url="image/loading/loading_logo.sk"
                 />
-            </Dialog>
+            </Scene>
         );
     };
 };

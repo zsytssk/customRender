@@ -1,63 +1,56 @@
 const propsToSkip = { children: true, ref: true, key: true, style: true };
 
-export function applyNodeProps(instance, props, oldProps = {}) {
-    const updatedProps = {};
-    let hasUpdates = false;
-    for (const key in oldProps) {
-        if (propsToSkip[key]) {
-            continue;
-        }
-        const isEvent = key.slice(0, 2) === 'on';
-        const propChanged = oldProps[key] !== props[key];
-        if (isEvent && propChanged) {
-            let eventName = key.substr(2).toLowerCase();
-            if (eventName.substr(0, 7) === 'content') {
-                eventName =
-                    'content' +
-                    eventName.substr(7, 1).toUpperCase() +
-                    eventName.substr(8);
-            }
-            instance.off(eventName, instance, oldProps[key]);
-        }
-        const toRemove = !props.hasOwnProperty(key);
-        if (toRemove) {
-            instance[key] = undefined;
-        }
-    }
+export function shallowDiff(oldObj: {}, newObj: {}) {
+    const uniqueProps = new Set([
+        ...Object.keys(oldObj),
+        ...Object.keys(newObj),
+    ]);
+    const changedProps = Array.from(uniqueProps).filter(
+        propName => oldObj[propName] !== newObj[propName],
+    );
+
+    return changedProps;
+}
+
+export function initNodeProps(instance, props) {
     for (const key in props) {
         if (propsToSkip[key]) {
             continue;
         }
-        const isEvent = key.slice(0, 2) === 'on';
-        const toAdd = oldProps[key] !== props[key];
-        if (isEvent && toAdd) {
-            let eventName = key.substr(2).toLowerCase();
-            if (eventName.substr(0, 7) === 'content') {
-                eventName =
-                    'content' +
-                    eventName.substr(7, 1).toUpperCase() +
-                    eventName.substr(8);
-            }
-            if (props[key]) {
-                instance.on(eventName, instance, props[key]);
-            }
+        const is_event = isEvent(key);
+        if (!is_event) {
+            instance[key] = props[key];
+            continue;
         }
-        if (
-            !isEvent &&
-            (props[key] !== oldProps[key] || props[key] !== instance[key])
-        ) {
-            hasUpdates = true;
-            updatedProps[key] = props[key];
+        const eventName = key.substr(2).toLowerCase();
+        if (props[key]) {
+            instance.on(eventName, instance, props[key]);
         }
     }
-
-    if (hasUpdates) {
-        setAttrs(instance, updatedProps);
+}
+export function updateNodeProps(
+    instance,
+    newProps,
+    oldProps,
+    changeKeys: string[],
+) {
+    for (const key of changeKeys) {
+        if (propsToSkip[key]) {
+            continue;
+        }
+        const is_event = isEvent(key);
+        if (!is_event) {
+            instance[key] = newProps[key];
+            continue;
+        }
+        const eventName = key.substr(2).toLowerCase();
+        if (oldProps[key]) {
+            instance.off(eventName, instance, oldProps[key]);
+        }
+        instance.on(eventName, instance, newProps[key]);
     }
 }
 
-function setAttrs(instance, props) {
-    for (let key in props) {
-        instance[key] = props[key];
-    }
+function isEvent(name: string) {
+    return name.slice(0, 2) === 'on';
 }

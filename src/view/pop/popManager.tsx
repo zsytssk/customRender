@@ -23,6 +23,7 @@ export const PopState = {
         PopState.showPop(Alert, `this is a test! ${id}`);
     },
 };
+window.test = PopState;
 export const PopManager = () => {
     const [pop_list, setPopList] = useState(new Set() as PopList);
 

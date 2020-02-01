@@ -1,7 +1,19 @@
--   https://github.com/chentsulin/awesome-react-renderer
--   https://www.npmjs.com/package/react-game-engine
+-   @ques getChildHostContext | prepareUpdate 也许有什么作用
 
--   @ques getChildHostContext 也许有什么作用
+-   @ques hostConfig 中函数分别在什么时候调用
+
+    -   函数的周期链子
+
+-   @ques prepareUpdate 在什么时候执行 ..
+
+-   @ques appendInitialChild 在什么时候执行
+-   @ques isPrimaryRenderer
+
+## 2020-01-30 15:44:40
+
+-   @ques No default value
+    -   会不会是 cocos 的 %s 导致的
+    -   在线上看看 这可能在什么地方出现
 
 ## 2020-01-29 17:08:18
 

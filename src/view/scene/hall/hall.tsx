@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-    Scene,
     Sprite,
     SkeletonPlayer,
     Box,
     Label,
     View,
 } from 'customRenderer/layaCom';
+import { View as LayaView } from 'laya/laya/ui/View';
 import { Header } from './header';
 import { Loading } from 'view/loading';
+import { Laya } from 'laya/Laya';
+import { Scene } from 'view/com/scene';
 
 const res_list = [
     'image/hall/bg.png',
@@ -24,7 +26,7 @@ export const Hall = Loading(res_list, HallCom);
 
 function HallCom() {
     return (
-        <View width={1920} height={750} autoDestroyAtClosed={true} centerX={0}>
+        <Scene>
             <Sprite y={0} x={0} texture="image/hall/bg.png" />
             <SkeletonPlayer
                 y={366}
@@ -153,6 +155,6 @@ function HallCom() {
                 url="image/hall/hall_bubble.sk"
                 height={111}
             />
-        </View>
+        </Scene>
     );
 }

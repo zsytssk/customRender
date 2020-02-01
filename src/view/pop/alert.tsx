@@ -21,6 +21,7 @@ export const Alert = (props: PopProps) => {
         pop.y = (stage.height - pop.height) / 2;
         pop.visible = isShow;
     }, []);
+
     return (
         <Box width={658} height={429} ref={self_ele as any} visible={false}>
             <Box y={0} x={0} width={658} height={427}>

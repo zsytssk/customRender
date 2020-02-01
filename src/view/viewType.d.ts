@@ -4,6 +4,7 @@ type ComProps = {
     visible?: boolean;
     var?: string;
     name?: string;
+    children?: JSX.Element[];
 };
 
 type CtorJSXEle = (...args) => JSX.Element;

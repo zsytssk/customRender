@@ -1,6 +1,5 @@
 import { createEle } from './createEle';
-import { applyNodeProps } from './applyNodeProps';
-import { Box } from 'laya/laya/ui/Box';
+import { shallowDiff, initNodeProps, updateNodeProps } from './applyNodeProps';
 
 export const HostConfig = {
     now: Date.now,
@@ -8,9 +7,8 @@ export const HostConfig = {
         const rootContext = {};
         return rootContext;
     },
-    getChildHostContext: (...args) => {
-        const context = {};
-        return context;
+    getChildHostContext: (parentContext, fiberType, rootInstance) => {
+        return {};
     },
     shouldSetTextContent: (type, nextProps) => {
         return false;
@@ -34,7 +32,7 @@ export const HostConfig = {
         for (const key in newProps) {
             element[key] = newProps[key];
         }
-        applyNodeProps(element, newProps);
+
         return element;
     },
     appendInitialChild: (parent, child) => {
@@ -43,14 +41,59 @@ export const HostConfig = {
         }
         parent.addChild(child);
     },
-    finalizeInitialChildren: (...args) => {
+    /** 所有子类dom创建完成 正式添加到dom中之前 */
+    finalizeInitialChildren: (element, type, props) => {
+        initNodeProps(element, props);
         return false;
     },
-    prepareForCommit: (...args) => {
-        console.log('prepareForCommit', ...args);
+    prepareForCommit: () => {},
+    resetAfterCommit: () => {},
+    supportsMutation: true,
+    commitMount: (element, type, newProps, fiberNode) => {
+        element.focus();
     },
-    resetAfterCommit: (...args) => {
-        console.log('resetAfterCommit', ...args);
+    prepareUpdate: (
+        instance,
+        type,
+        oldProps,
+        newProps,
+        rootContainerInstance,
+        currentHostContext,
+    ) => {
+        return shallowDiff(oldProps, newProps);
+    },
+    commitUpdate(
+        instance,
+        updatePayload,
+        type,
+        oldProps,
+        newProps,
+        finishedWork,
+    ) {
+        updateNodeProps(instance, newProps, oldProps, updatePayload);
+        return; //return nothing.
+    },
+    commitTextUpdate: (textInstance, oldText, newText) => {
+        throw new Error(`don't support text`);
+    },
+    insertBefore: (parent, child, beforeChild) => {
+        const index = parent.getChildIndex(beforeChild);
+        if (index !== -1) {
+            parent.addChildAt(child, index);
+        } else {
+            parent.addChild(child);
+        }
+    },
+    removeChild: (parentInstance, child) => {
+        parentInstance.removeChild(child);
+    },
+    insertInContainerBefore: (parent, child, beforeChild) => {
+        const index = parent.getChildIndex(beforeChild);
+        if (index !== -1) {
+            parent.addChildAt(child, index);
+        } else {
+            parent.addChild(child);
+        }
     },
     appendChild: (parent, child) => {
         if (child.parent === parent) {
@@ -64,53 +107,11 @@ export const HostConfig = {
         }
         parent.addChild(child);
     },
-    supportsMutation: true,
-    commitMount: (domElement, type, newProps, fiberNode) => {
-        domElement.focus();
-    },
-    prepareUpdate: (
-        instance,
-        type,
-        oldProps,
-        newProps,
-        rootContainerInstance,
-        currentHostContext,
-    ) => {
-        return {}; //return nothing.
-    },
-    commitUpdate: (
-        instance,
-        updatePayload,
-        type,
-        oldProps,
-        newProps,
-        finishedWork,
-    ) => {
-        applyNodeProps(instance, newProps, oldProps);
-        return; //return nothing.
-    },
-    commitTextUpdate: (textInstance, oldText, newText) => {
-        textInstance.nodeValue = newText;
-    },
-    insertBefore: (parentInstance, child, beforeChild) => {
-        parentInstance.insertBefore(child, beforeChild);
-    },
-    removeChild: (parentInstance, child) => {
-        parentInstance.removeChild(child);
-    },
-    insertInContainerBefore: (container: Box, child, beforeChild) => {
-        const index = container.getChildIndex(beforeChild);
-        if (index !== -1) {
-            container.addChildAt(child, index);
-        } else {
-            container.addChild(child);
-        }
-    },
     removeChildFromContainer: (container, child) => {
         container.removeChild(child);
     },
-    shouldDeprioritizeSubtree: (type, nextProps) => {
-        return !!nextProps.hidden;
+    shouldDeprioritizeSubtree: (type, props) => {
+        return !!props.visible;
     },
     getPublicInstance(instance) {
         return instance;

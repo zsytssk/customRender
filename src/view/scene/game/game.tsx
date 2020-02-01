@@ -4,12 +4,13 @@ import {
     HTMLDivElement,
     Image,
     Label,
-    Scene,
     SkeletonPlayer,
+    View,
 } from 'customRenderer/layaCom';
 import React from 'react';
 import { Loading } from 'view/loading';
 import { SkillBox } from './skillBox';
+import { Scene } from 'view/com/scene';
 
 const res = [
     'image/game/normal_bg/bg1.jpg',
@@ -28,7 +29,7 @@ export const Game = Loading(res, GameCom);
 
 export function GameCom() {
     return (
-        <Scene width={1920} height={750} autoDestroyAtClosed={true}>
+        <Scene>
             <Box width={1920} var="bg" height={750} centerY={0} centerX={0}>
                 <Image
                     skin="image/game/normal_bg/bg1.jpg"
