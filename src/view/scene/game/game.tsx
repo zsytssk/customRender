@@ -5,13 +5,13 @@ import {
     Image,
     Label,
     SkeletonPlayer,
-    View,
 } from 'customRenderer/layaCom';
 import React from 'react';
-import { Loading } from 'view/loading';
-import { SkillBox } from './skillBox';
 import { Scene } from 'view/com/scene';
+import { Loading } from 'view/loading';
 import { SceneState } from '../sceneManager';
+import { SkillBox } from './skillBox';
+import { Pool } from './pool';
 
 const res = [
     'image/game/normal_bg/bg1.jpg',
@@ -46,17 +46,7 @@ export function GameCom() {
                     scaleX={4}
                 />
             </Box>
-            <Box
-                y={0}
-                x={0}
-                width={1920}
-                var="pool"
-                mouseThrough={false}
-                mouseEnabled={true}
-                height={750}
-                centerY={0}
-                centerX={0}
-            />
+            <Pool />
             <Box
                 y={0}
                 x={0}

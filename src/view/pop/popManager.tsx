@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useContext, useState } from 'react';
 import { Box, Sprite } from 'customRenderer';
-import { Sprite as LayaSprite } from 'laya/laya/display/Sprite';
 import { Laya } from 'laya/Laya';
+import { Sprite as LayaSprite } from 'laya/laya/display/Sprite';
+import React, { useEffect, useRef, useState } from 'react';
 import { genRandomStr } from 'utils/utils';
 import { Alert } from './alert';
 
@@ -23,7 +23,7 @@ export const PopState = {
         PopState.showPop(Alert, `this is a test! ${id}`);
     },
 };
-window.test = PopState;
+(window as any).test = PopState;
 export const PopManager = () => {
     const [pop_list, setPopList] = useState(new Set() as PopList);
     const maskRef = useRef(null as LayaSprite);

@@ -16,7 +16,7 @@
         "esModuleInterop": true,
         "baseUrl": "./",
         "paths": {
-            "*": ["node_modules/*", "libs/*", "src/*"]
+            "*": ["node_modules/*", "libs/*", "src/*", "test/*"]
         }
     },
     "include": ["./src", "./libs", "./test"]

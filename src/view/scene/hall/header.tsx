@@ -13,6 +13,7 @@ import { PopState } from 'view/pop/popManager';
 import { Alert } from 'view/pop/alert';
 import { genRandomStr } from 'utils/utils';
 import { SceneState } from '../sceneManager';
+import { enterGame } from 'view/viewState';
 
 export function Header(props: ComProps) {
     const [flagMenuVisible, setFlagMenuVisible] = useState(false);
@@ -131,7 +132,7 @@ export function Header(props: ComProps) {
                         stateNum={1}
                         skin="image/hall/btn_get.png"
                         onClick={() => {
-                            SceneState.setCurScene('game');
+                            enterGame();
                         }}
                     >
                         <Image

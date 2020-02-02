@@ -5,7 +5,7 @@ const findParam = require('./script/findEnv');
 
 const ENV = JSON.stringify(findParam('ENV'));
 const common_config = {
-    entry: './src/main.tsx',
+    entry: ['./test/test.ts', './src/main.tsx'],
     output: {
         path: path.resolve(__dirname, 'bin'),
         filename: 'app.js',
@@ -13,20 +13,21 @@ const common_config = {
     module: {
         rules: [
             {
-                test: /(.tsx|.ts|.jsx|.js)?$/,
+                test: /(.tsx|.ts|.jsx|.js)$/,
                 loader: 'ts-loader',
                 options: {
                     transpileOnly: true,
                 },
             },
             {
-                test: /(\.glsl|.fs|.vs)$/,
+                test: /(.glsl|.fs|.vs)$/,
                 loader: 'webpack-glsl-loader',
             },
         ],
     },
     resolve: {
         modules: [
+            path.resolve('./test'),
             path.resolve('./libs'),
             path.resolve('./src'),
             path.resolve('./node_modules'),
@@ -37,7 +38,7 @@ const common_config = {
 };
 
 const dev_config = {
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     stats: {
         warnings: false,
     },

@@ -1,10 +1,26 @@
--   @ques 怎么让 loading 延后
+-   @ques 如何将鱼销毁
 
--   @ques@opt customise render 怎么先创建父亲 再创建子
+### save
+
+-   @opt 在添加鱼的那一瞬间很卡
 
 -   @todo model + connect
 
+-   @todo addFish + addPlayer...
+
+-   @todo 先全部使用 jsx, 然后再对性能进行优化...
+    -   将高性能的地方独立处理
+    -   一旦都创建好了 就不会太卡
+
+### finish
+
+-   @todo 为什么后面一条鱼 会把前面的鱼冲掉
+
 ## 2020-02-02 11:11:29
+
+-   @ques@opt customise render 怎么先创建父亲 再创建子
+
+-   @ques 怎么让 loading 延后
 
 -   @ques getChildHostContext | prepareUpdate 也许有什么作用
 
