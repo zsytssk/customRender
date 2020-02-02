@@ -29,17 +29,7 @@ export const HostConfig = {
         workInProgress,
     ) => {
         const element = createEle(type);
-        for (const key in newProps) {
-            element[key] = newProps[key];
-        }
-
         return element;
-    },
-    appendInitialChild: (parent, child) => {
-        if (child.parent === parent) {
-            return;
-        }
-        parent.addChild(child);
     },
     /** 所有子类dom创建完成 正式添加到dom中之前 */
     finalizeInitialChildren: (element, type, props) => {
@@ -49,9 +39,7 @@ export const HostConfig = {
     prepareForCommit: () => {},
     resetAfterCommit: () => {},
     supportsMutation: true,
-    commitMount: (element, type, newProps, fiberNode) => {
-        element.focus();
-    },
+    commitMount: (element, type, newProps, fiberNode) => {},
     prepareUpdate: (
         instance,
         type,
@@ -73,8 +61,11 @@ export const HostConfig = {
         updateNodeProps(instance, newProps, oldProps, updatePayload);
         return; //return nothing.
     },
-    commitTextUpdate: (textInstance, oldText, newText) => {
-        throw new Error(`don't support text`);
+    appendInitialChild: (parent, child, ...test) => {
+        if (child.parent === parent) {
+            return;
+        }
+        parent.addChild(child);
     },
     insertBefore: (parent, child, beforeChild) => {
         const index = parent.getChildIndex(beforeChild);
@@ -84,10 +75,7 @@ export const HostConfig = {
             parent.addChild(child);
         }
     },
-    removeChild: (parentInstance, child) => {
-        parentInstance.removeChild(child);
-    },
-    insertInContainerBefore: (parent, child, beforeChild) => {
+    insertInContainerBefore: (parent, child, beforeChild, ...test) => {
         const index = parent.getChildIndex(beforeChild);
         if (index !== -1) {
             parent.addChildAt(child, index);
@@ -95,17 +83,20 @@ export const HostConfig = {
             parent.addChild(child);
         }
     },
-    appendChild: (parent, child) => {
+    appendChild: (parent, child, ...test) => {
         if (child.parent === parent) {
             return;
         }
         parent.addChild(child);
     },
-    appendChildToContainer: (parent, child) => {
+    appendChildToContainer: (parent, child, ...test) => {
         if (child.parent === parent) {
             return;
         }
         parent.addChild(child);
+    },
+    removeChild: (parentInstance, child) => {
+        parentInstance.removeChild(child);
     },
     removeChildFromContainer: (container, child) => {
         container.removeChild(child);
@@ -115,5 +106,8 @@ export const HostConfig = {
     },
     getPublicInstance(instance) {
         return instance;
+    },
+    commitTextUpdate: (textInstance, oldText, newText) => {
+        throw new Error(`don't support text`);
     },
 };

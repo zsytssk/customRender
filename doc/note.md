@@ -1,3 +1,11 @@
+-   @ques 怎么让 loading 延后
+
+-   @ques@opt customise render 怎么先创建父亲 再创建子
+
+-   @todo model + connect
+
+## 2020-02-02 11:11:29
+
 -   @ques getChildHostContext | prepareUpdate 也许有什么作用
 
 -   @ques hostConfig 中函数分别在什么时候调用

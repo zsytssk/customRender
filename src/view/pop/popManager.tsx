@@ -26,6 +26,7 @@ export const PopState = {
 window.test = PopState;
 export const PopManager = () => {
     const [pop_list, setPopList] = useState(new Set() as PopList);
+    const maskRef = useRef(null as LayaSprite);
 
     const showPop = (...params: Parameters<ShowPop>) => {
         const [Ele, ...args] = params;
@@ -60,21 +61,22 @@ export const PopManager = () => {
     PopState.showPop = showPop;
     PopState.hidePop = hidePop;
 
-    const maskRef = useRef(null as LayaSprite);
-
     useEffect(() => {
         const mask_layer = maskRef.current;
-        const stage = Laya.stage;
-        if (mask_layer) {
-            mask_layer.alpha = 0.5;
-            mask_layer.graphics.drawRect(
-                0,
-                0,
-                stage.width,
-                stage.height,
-                'black',
-            );
-        }
+        const resizeMask = () => {
+            const { width, height } = Laya.stage;
+            if (mask_layer) {
+                mask_layer.alpha = 0.5;
+                mask_layer.graphics.clear();
+                mask_layer.graphics.drawRect(0, 0, width, height, 'black');
+            }
+        };
+        Laya.stage.on(Laya.Event.RESIZE, this, resizeMask);
+        resizeMask();
+
+        return () => {
+            Laya.stage.off(Laya.Event.RESIZE, this, resizeMask);
+        };
     });
 
     const show_arr = [] as JSX.Element[];

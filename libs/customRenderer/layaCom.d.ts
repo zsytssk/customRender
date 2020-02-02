@@ -20,7 +20,6 @@ import { Panel as LayaPanel } from 'laya/laya/ui/Panel';
 import { ProgressBar as LayaProgressBar } from 'laya/laya/ui/ProgressBar';
 import { TextInput as LayaTextInput } from 'laya/laya/ui/TextInput';
 import { Text as LayaText } from 'laya/laya/display/Text';
-import { Dialog as LayaDialog } from 'laya/laya/ui/Dialog';
 import { FontClip as LayaFontClip } from 'laya/laya/ui/FontClip';
 import { TextArea as LayaTextArea } from 'laya/laya/ui/TextArea';
 import { HTMLDivElement as LayaHTMLDivElement } from 'laya/laya/html/dom/HTMLDivElement';
@@ -29,8 +28,9 @@ import { Animation as LayaAnimation } from 'laya/laya/display/Animation';
 import { Templet as LayaTemplet } from 'laya/laya/ani/bone/Templet';
 import { Skeleton as LayaSkeleton } from 'laya/laya/ani/bone/Skeleton';
 import { Node as LayaNode } from 'laya/laya/display/Node';
-import { Scene as LayaScene } from 'laya/laya/display/Scene';
 import { View as LayaView } from 'laya/laya/ui/View';
+import { Dialog as LayaDialog } from 'laya/laya/ui/Dialog';
+import { Scene as LayaScene } from 'laya/laya/display/Scene';
 
 export type ExtraProps = {
     var?: string;
@@ -67,7 +67,6 @@ export declare class LayaCom<T> extends React.Component<
 }
 
 export declare class Stage extends LayaCom<LayaStage> {}
-export declare class Scene extends LayaCom<LayaScene> {}
 export declare class View extends LayaCom<LayaView> {}
 export declare class Node extends LayaCom<LayaNode> {}
 export declare class Label extends LayaCom<LayaLabel> {}
@@ -89,7 +88,6 @@ export declare class Panel extends LayaCom<LayaPanel> {}
 export declare class ProgressBar extends LayaCom<LayaProgressBar> {}
 export declare class TextInput extends LayaCom<LayaTextInput> {}
 export declare class Text extends LayaCom<LayaText> {}
-export declare class Dialog extends LayaCom<LayaDialog> {}
 export declare class FontClip extends LayaCom<LayaFontClip> {}
 export declare class Sprite extends LayaCom<LayaSprite> {}
 export declare class TextArea extends LayaCom<LayaTextArea> {}
@@ -98,3 +96,5 @@ export declare class Animation extends LayaCom<LayaAnimation> {}
 export declare class Templet extends LayaCom<LayaTemplet> {}
 export declare class Skeleton extends LayaCom<LayaSkeleton> {}
 export declare class SkeletonPlayer extends LayaCom<LayaSkeleton> {}
+export declare class Dialog extends LayaCom<LayaDialog> {}
+export declare class Scene extends LayaCom<LayaScene> {}

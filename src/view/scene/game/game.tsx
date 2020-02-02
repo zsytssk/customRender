@@ -11,6 +11,7 @@ import React from 'react';
 import { Loading } from 'view/loading';
 import { SkillBox } from './skillBox';
 import { Scene } from 'view/com/scene';
+import { SceneState } from '../sceneManager';
 
 const res = [
     'image/game/normal_bg/bg1.jpg',
@@ -80,6 +81,9 @@ export function GameCom() {
                     var="btn_leave"
                     stateNum={1}
                     skin="image/game/btn_quit.png"
+                    onClick={() => {
+                        SceneState.setCurScene('hall');
+                    }}
                 />
                 <Button
                     y={10}
@@ -90,17 +94,17 @@ export function GameCom() {
                 />
                 <Button
                     y={10}
+                    x={1154}
                     var="btn_voice"
                     stateNum={1}
                     skin="image/game/btn_music.png"
-                    right={100}
                 />
                 <Button
                     y={10}
+                    x={1254}
                     var="btn_help"
                     stateNum={1}
                     skin="image/game/btn_help.png"
-                    right={0}
                 />
                 <SkillBox y={648} x={460} />
                 <Box y={653} x={-44.5} width={287} var="bullet_box" height={92}>

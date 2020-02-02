@@ -1,29 +1,20 @@
 import { Box, Button, Image, Label, Sprite } from 'customRenderer/layaCom';
-import { Dialog as LayaDialog } from 'laya/laya/ui/Dialog';
 import { Label as LayaLabel } from 'laya/laya/ui/Label';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
+import { Pop } from 'view/com/pop';
 import { PopProps, PopState } from './popManager';
-import { Laya } from 'laya/Laya';
 
 export const Alert = (props: PopProps) => {
     const { hidePop } = PopState;
     const { id, args, isShow } = props;
     const [msg] = args;
-    const self_ele = useRef(null as LayaDialog);
     const label_ele = useRef(null as LayaLabel);
     const hide = () => {
         hidePop(id);
     };
-    useEffect(() => {
-        const pop = self_ele.current;
-        const stage = Laya.stage;
-        pop.x = (stage.width - pop.width) / 2;
-        pop.y = (stage.height - pop.height) / 2;
-        pop.visible = isShow;
-    }, []);
 
     return (
-        <Box width={658} height={429} ref={self_ele as any} visible={false}>
+        <Pop width={658} height={429} isShow={isShow}>
             <Box y={0} x={0} width={658} height={427}>
                 <Sprite y={0} x={0} texture="image/pop/alert/alert_bg_01.png" />
                 <Image
@@ -95,6 +86,6 @@ export const Alert = (props: PopProps) => {
                 x={292}
                 texture="image/international/txt_tip_title.png"
             />
-        </Box>
+        </Pop>
     );
 };

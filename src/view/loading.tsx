@@ -1,7 +1,7 @@
 import { ProgressBar, SkeletonPlayer, Sprite } from 'customRenderer/layaCom';
 import { loadRes } from 'layaUtils';
 import React, { useEffect, useState } from 'react';
-import { Scene } from './com/scene';
+import { Pop } from './com/pop';
 
 const load_res = [
     'comp/label.png',
@@ -14,6 +14,7 @@ const load_res = [
 export const Loading = (res: string[], Comp: CtorJSXEle) => {
     return () => {
         const [value, setProgress] = useState(0);
+        const [delay, setDelay] = useState(true);
         const [loaded, setLoaded] = useState(false);
 
         useEffect(() => {
@@ -22,16 +23,22 @@ export const Loading = (res: string[], Comp: CtorJSXEle) => {
             }).then(() => {
                 setLoaded(true);
             });
+
+            /** 最少显示500ms loading */
+            setTimeout(() => {
+                setDelay(false);
+            }, 500);
         }, []);
 
-        if (loaded) {
+        if (loaded && !delay) {
             return <Comp></Comp>;
         }
 
         return (
-            <Scene>
+            <Pop width={1920} height={750} isShow={true}>
                 <Sprite y={0} x={0} texture="image/loading/load_bg.png" />
                 <Sprite y={503} x={546} texture="image/loading/loading.png" />
+
                 <ProgressBar
                     y={584}
                     x={529}
@@ -43,7 +50,7 @@ export const Loading = (res: string[], Comp: CtorJSXEle) => {
                     x={960}
                     url="image/loading/loading_logo.sk"
                 />
-            </Scene>
+            </Pop>
         );
     };
 };
