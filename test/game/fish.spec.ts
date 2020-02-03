@@ -38,7 +38,9 @@ export const fish_test = new Test('fish', runner => {
             const pathId = i;
             const time = 5;
             const fish_data = genFishInfo(typeId, pathId, time);
-            modelState.app.game.addFish(fish_data);
+            setTimeout(() => {
+                modelState.app.game.addFish(fish_data);
+            }, i * 1000);
         }
     });
 

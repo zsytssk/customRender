@@ -28,7 +28,6 @@ export function Pool() {
         if (fish.destroyed) {
             continue;
         }
-        console.log(`fish:>`, fish.id);
         fish_view_list.push(<Fish model={fish} key={fish.id}></Fish>);
     }
     return (
