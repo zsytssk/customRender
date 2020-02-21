@@ -12,6 +12,7 @@ import { Loading } from 'view/loading';
 import { SceneState } from '../sceneManager';
 import { SkillBox } from './skillBox';
 import { Pool } from './pool';
+import { GunWrap } from './gunWrap/gunBoxWrap';
 
 const res = [
     'image/game/normal_bg/bg1.jpg',
@@ -139,17 +140,7 @@ export function GameCom() {
                     />
                 </Box>
             </Box>
-            <Box
-                y={0}
-                x={0}
-                width={1920}
-                var="gun_wrap"
-                mouseThrough={true}
-                mouseEnabled={true}
-                height={750}
-                centerY={0}
-                centerX={0}
-            />
+            <GunWrap />
             <Button
                 y={0}
                 x={920}

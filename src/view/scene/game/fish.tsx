@@ -6,6 +6,7 @@ import { vectorToDegree } from 'utils/mathUtils';
 type FishProps = {
     model: FishModel;
 };
+
 export function Fish({ model }: FishProps) {
     const [pos, setPos] = useState({ x: 0, y: 0 });
     const [rotation, setRotation] = useState(0);
