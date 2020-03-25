@@ -9,7 +9,8 @@
         "webpack-test": "webpack --ENV=TEST --mode development",
         "webpack-test-server": "webpack-dev-server --ENV=TEST --mode development",
         "webpack-prod": "webpack --ENV=PROD --mode production",
-        "webpack-prod-server": "webpack-dev-server --ENV=DEV --mode development"
+        "webpack-prod-server": "webpack-dev-server --ENV=DEV --mode development",
+        "uiToJsx": "ts-node --project ./script/tsconfig.json --files ./script/uiToJsx/uiToJsx.ts"
     },
     "keywords": [],
     "author": "",

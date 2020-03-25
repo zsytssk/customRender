@@ -4,7 +4,7 @@ import { walk } from '../zutil/ls/walk';
 import { parseFile } from './parseItem';
 
 const src_path = path.resolve(__dirname, '../../laya/pages');
-const dist_path = path.resolve(__dirname, '../../src/view/ui');
+const dist_path = path.resolve(__dirname, '../../src/ui');
 
 async function main() {
     const files = await walk(src_path);

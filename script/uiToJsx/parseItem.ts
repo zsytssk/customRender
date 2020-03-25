@@ -21,7 +21,7 @@ const jsx_tpl2 = `<$1 $2 />`;
 const ref_tpl1 = `export type RefObj = {$1};`;
 const ref_tpl2 = `const $1 = useRef(null as $2);`;
 const import_tpl = `import $1 from '$2'`;
-const ignore_props = ['sceneColor'];
+const ignore_props = ['sceneColor', 'sceneBg'];
 const is_num_props = ['stateNum'];
 
 export async function parseFile(name: string, file: string) {
