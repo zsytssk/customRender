@@ -3,7 +3,7 @@ import { AutoLaunchModel } from './autoLaunchModel';
 import { BombModel } from './bombModel';
 import { FreezeModel } from './freezeModel';
 import { SkillCoreCom } from './skillCoreCom';
-import { TrackFishModel } from './trackFishModel';
+import { LockFishModel } from './lockFishModel';
 
 /** 技能的接口 */
 export interface SkillModel {
@@ -19,6 +19,6 @@ export interface SkillModel {
 export const SkillCtorMap = {
     [SkillMap.Freezing]: FreezeModel,
     [SkillMap.Bomb]: BombModel,
-    [SkillMap.TrackFish]: TrackFishModel,
+    [SkillMap.TrackFish]: LockFishModel,
     [SkillMap.Auto]: AutoLaunchModel,
 };

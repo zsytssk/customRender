@@ -1,4 +1,4 @@
-import { setProps } from 'utils/utils';
+import { setProps, callFunc } from 'utils/utils';
 import { clearCount, startCount } from 'utils/count';
 import { PlayerModel } from 'model/game/playerModel';
 import { ComponentManager } from 'comMan/component';
@@ -10,7 +10,9 @@ export enum SkillStatus {
     Normal = 'normal',
     /** 激活前 防止多次激活 */
     PreActive = 'pre_active',
-    /** 激活状态1 */
+    /** 激活状态 */
+    Disable = 'disable',
+    /** 激活状态 */
     Active = 'active',
 }
 /** 技能属性 */
@@ -26,10 +28,13 @@ export type SkillInfo = {
     player?: PlayerModel;
 };
 
+export type ActiveStepFun = (status: SkillStatus) => void;
+
 /** 技能属性 */
 export type SkillActiveInfo = {
     num?: number;
     used_time?: number;
+    duration?: number;
 };
 
 /** 技能的事件 */
@@ -92,33 +97,39 @@ export class SkillCoreCom extends ComponentManager {
     public activeEvent(info: any) {
         this.event.emit(SkillEvent.ActiveSkill, info);
     }
-    public active(info?: SkillActiveInfo) {
-        return new Promise((resolve, reject) => {
-            /** 只能激活一次 */
-            if (this.status === SkillStatus.Active) {
-                resolve(false);
-                return;
-            }
-            const { cool_time, event } = this;
-            const { used_time } = info;
-            /** 倒计时的时间间隔 */
-            const count_delta = 0.03;
-            const remain_time = cool_time - used_time;
+    public active(info?: SkillActiveInfo, step_fn?: ActiveStepFun) {
+        /** 只能激活一次 */
+        if (this.status === SkillStatus.Active) {
+            return false;
+        }
+        const { cool_time, event } = this;
+        const { used_time, duration } = info;
+        /** 倒计时的时间间隔 */
+        const count_delta = 0.05;
+        const cool_remain_time = cool_time - used_time;
+        const duration_remain_time = duration - used_time;
 
-            this.setStatus(SkillStatus.Active);
-            this.count_index = startCount(
-                remain_time,
-                count_delta,
-                (rate: number) => {
-                    const radio = rate * (remain_time / cool_time);
-                    event.emit(SkillEvent.UpdateRadio, radio);
-                    if (radio === 0) {
-                        this.disable();
-                        resolve(true);
-                    }
-                },
-            );
-        });
+        this.setStatus(SkillStatus.Active);
+        this.count_index = startCount(
+            cool_remain_time,
+            count_delta,
+            (rate: number) => {
+                const cool_radio_time = rate * cool_remain_time;
+                const cool_radio = rate * (cool_remain_time / cool_time);
+                event.emit(SkillEvent.UpdateRadio, cool_radio);
+                if (
+                    cool_radio_time <= duration_remain_time &&
+                    this.status !== SkillStatus.Disable
+                ) {
+                    this.disable();
+                    callFunc(step_fn, this.status);
+                }
+                if (cool_radio === 0) {
+                    this.reset();
+                    callFunc(step_fn, this.status);
+                }
+            },
+        );
     }
     /** 重置 */
     public reset() {
@@ -127,8 +138,7 @@ export class SkillCoreCom extends ComponentManager {
     }
     /** 禁用 */
     public disable() {
-        this.setStatus(SkillStatus.Normal);
-        clearCount(this.count_index);
+        this.setStatus(SkillStatus.Disable);
     }
     /** 清除 */
     public destroy() {
