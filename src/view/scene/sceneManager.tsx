@@ -14,5 +14,5 @@ export function SceneManager() {
     }
     SceneState.setCurScene = setCurScene;
     SceneState.curScene = cur_scene;
-    return <Fragment>{CurScene}</Fragment>;
+    return <>{CurScene}</>;
 }

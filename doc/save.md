@@ -2,6 +2,9 @@
 `"(true|false)" - {$1}`
 `(runtime|sceneBg|sceneColor|editorInfo)=".+"`
 
+-   @todo 能上生产的动画。。。
+    -   test -> tpl -> 正式项目
+
 ## url
 
 -   https://gist.github.com/search?o=desc&q=finalizeInitialChildren&s=updated

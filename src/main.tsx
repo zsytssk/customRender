@@ -9,10 +9,10 @@ import { initAppModel } from 'view/viewState';
 function App() {
     initAppModel();
     return (
-        <Fragment>
+        <>
             <SceneManager />
             <PopManager />
-        </Fragment>
+        </>
     );
 }
 
