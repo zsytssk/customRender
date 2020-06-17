@@ -2,7 +2,7 @@ import { HtmlVideo } from "./HtmlVideo";
 import { WebGLVideo } from "./WebGLVideo";
 import { Sprite } from "../../display/Sprite";
 import { Texture } from "../../resource/Texture";
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { Rectangle } from "../../maths/Rectangle";
 import { Stage } from "../../display/Stage";
 
@@ -402,9 +402,9 @@ export class Video extends Sprite {
 		return this.videoElement.seeking;
 	}
 	/**
-	 * 
-	 * @param width 
-	 * @param height 
+	 *
+	 * @param width
+	 * @param height
 	 * @override
 	 */
 	size(width: number, height: number): Sprite {

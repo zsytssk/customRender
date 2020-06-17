@@ -2,7 +2,7 @@ import { Text } from "./Text";
 import { Event } from "../events/Event"
 import { Matrix } from "../maths/Matrix"
 import { Utils } from "../utils/Utils"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 /**
  * 用户输入一个或多个文本字符时后调度。
@@ -419,7 +419,7 @@ export class Input extends Text {
     /**@private */
     private _onKeyDown(e: any): void {
         if (e.keyCode === 13) {
-            // 移动平台单行输入状态下点击回车收回输入法。 
+            // 移动平台单行输入状态下点击回车收回输入法。
             if (ILaya.Browser.onMobile && !this._multiline)
                 this.focus = false;
 
@@ -427,7 +427,7 @@ export class Input extends Text {
         }
     }
 
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     set text(value: string) {
@@ -463,8 +463,8 @@ export class Input extends Text {
             return this._content || "";
     }
     /**
-     * 
-     * @param text 
+     *
+     * @param text
      * @override
      */
     changeText(text: string): void {
@@ -477,7 +477,7 @@ export class Input extends Text {
             super.changeText(text);
     }
 
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     set color(value: string) {
@@ -492,7 +492,7 @@ export class Input extends Text {
         return super.color;
     }
 
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     set bgColor(value: string) {

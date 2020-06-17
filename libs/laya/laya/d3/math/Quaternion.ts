@@ -4,7 +4,7 @@ import { Matrix3x3 } from "./Matrix3x3";
 import { MathUtils3D } from "./MathUtils3D";
 import { Vector2 } from "./Vector2";
 import { IClone } from "../core/IClone"
-import { ILaya3D } from "../../../ILaya3D";
+import { ILaya3D } from "../../../../ILaya3D";
 
 /**
  * <code>Quaternion</code> 类用于创建四元数。
@@ -180,9 +180,9 @@ export class Quaternion implements IClone {
 
 		var omega: number, cosom: number, sinom: number, scale0: number, scale1: number;
 
-		// calc cosine 
+		// calc cosine
 		cosom = ax * bx + ay * by + az * bz + aw * bw;
-		// adjust signs (if necessary) 
+		// adjust signs (if necessary)
 		if (cosom < 0.0) {
 			cosom = -cosom;
 			bx = -bx;
@@ -190,20 +190,20 @@ export class Quaternion implements IClone {
 			bz = -bz;
 			bw = -bw;
 		}
-		// calculate coefficients 
+		// calculate coefficients
 		if ((1.0 - cosom) > 0.000001) {
-			// standard case (slerp) 
+			// standard case (slerp)
 			omega = Math.acos(cosom);
 			sinom = Math.sin(omega);
 			scale0 = Math.sin((1.0 - t) * omega) / sinom;
 			scale1 = Math.sin(t * omega) / sinom;
 		} else {
-			// "from" and "to" quaternions are very close  
-			//  ... so we can do a linear interpolation 
+			// "from" and "to" quaternions are very close
+			//  ... so we can do a linear interpolation
 			scale0 = 1.0 - t;
 			scale1 = t;
 		}
-		// calculate final values 
+		// calculate final values
 		out.x = scale0 * ax + scale1 * bx;
 		out.y = scale0 * ay + scale1 * by;
 		out.z = scale0 * az + scale1 * bz;

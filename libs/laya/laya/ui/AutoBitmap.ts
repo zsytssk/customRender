@@ -2,7 +2,7 @@ import { Graphics } from "../display/Graphics"
 import { Texture } from "../resource/Texture"
 import { Utils } from "../utils/Utils"
 import { ClassUtils } from "../utils/ClassUtils";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 
 /**
  * <code>AutoBitmap</code> 类是用于表示位图图像或绘制图形的显示对象。
@@ -27,7 +27,7 @@ export class AutoBitmap extends Graphics {
     ///**@private */
     //private var _key:String;
 
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     destroy(): void {

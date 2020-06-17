@@ -1,31 +1,30 @@
-import { ILaya } from "../../ILaya";
-import { Const } from "../Const";
-import { Event } from "../events/Event";
-import { EventDispatcher } from "../events/EventDispatcher";
-import { ColorFilter } from "../filters/ColorFilter";
-import { Filter } from "../filters/Filter";
-import { GrahamScan } from "../maths/GrahamScan";
-import { Matrix } from "../maths/Matrix";
-import { Point } from "../maths/Point";
-import { Rectangle } from "../maths/Rectangle";
-import { RenderSprite } from "../renders/RenderSprite";
-import { Context } from "../resource/Context";
-import { HTMLCanvas } from "../resource/HTMLCanvas";
-import { Texture } from "../resource/Texture";
-import { Texture2D } from "../resource/Texture2D";
-import { ClassUtils } from "../utils/ClassUtils";
-import { Handler } from "../utils/Handler";
-import { Utils } from "../utils/Utils";
-import { BoundsStyle } from "./css/BoundsStyle";
-import { CacheStyle } from "./css/CacheStyle";
-import { SpriteStyle } from "./css/SpriteStyle";
-import { Graphics } from "./Graphics";
-import { Node } from "./Node";
-import { SpriteConst } from "./SpriteConst";
-import { Stage } from "./Stage";
-import { URL } from "../net/URL";
-import { RenderTexture2D } from "../resource/RenderTexture2D";
-
+import { ILaya } from '../../../ILaya';
+import { Const } from '../Const';
+import { Event } from '../events/Event';
+import { EventDispatcher } from '../events/EventDispatcher';
+import { ColorFilter } from '../filters/ColorFilter';
+import { Filter } from '../filters/Filter';
+import { GrahamScan } from '../maths/GrahamScan';
+import { Matrix } from '../maths/Matrix';
+import { Point } from '../maths/Point';
+import { Rectangle } from '../maths/Rectangle';
+import { RenderSprite } from '../renders/RenderSprite';
+import { Context } from '../resource/Context';
+import { HTMLCanvas } from '../resource/HTMLCanvas';
+import { Texture } from '../resource/Texture';
+import { Texture2D } from '../resource/Texture2D';
+import { ClassUtils } from '../utils/ClassUtils';
+import { Handler } from '../utils/Handler';
+import { Utils } from '../utils/Utils';
+import { BoundsStyle } from './css/BoundsStyle';
+import { CacheStyle } from './css/CacheStyle';
+import { SpriteStyle } from './css/SpriteStyle';
+import { Graphics } from './Graphics';
+import { Node } from './Node';
+import { SpriteConst } from './SpriteConst';
+import { Stage } from './Stage';
+import { URL } from '../net/URL';
+import { RenderTexture2D } from '../resource/RenderTexture2D';
 
 /**在显示对象上按下后调度。
  * @eventType Event.MOUSE_DOWN
@@ -264,7 +263,7 @@ export class Sprite extends Node {
 
     /**@inheritDoc
      * @override
-    */
+     */
     destroy(destroyChild: boolean = true): void {
         super.destroy(destroyChild);
         this._style && this._style.recover();
@@ -299,9 +298,7 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setCustomRender(): void {
-
-    }
+    _setCustomRender(): void {}
 
     /**
      * 设置是否开启自定义渲染，只有开启自定义渲染，才能使用customRender函数渲染。
@@ -349,14 +346,14 @@ export class Sprite extends Node {
         this._getCacheStyle().enableCanvasRender = tEnable;
         if (tEnable) {
             if (this._cacheStyle.needBitmapCache()) {
-                this._cacheStyle.cacheAs = "bitmap";
+                this._cacheStyle.cacheAs = 'bitmap';
             } else {
                 this._cacheStyle.cacheAs = this._cacheStyle.userSetCache;
             }
             this._cacheStyle.reCache = true;
             this._renderType |= SpriteConst.CANVAS;
         } else {
-            this._cacheStyle.cacheAs = "none";
+            this._cacheStyle.cacheAs = 'none';
             this._cacheStyle.releaseContext();
             this._renderType &= ~SpriteConst.CANVAS;
         }
@@ -395,12 +392,10 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setWidth(texture: Texture, value: number): void {
-    }
+    _setWidth(texture: Texture, value: number): void {}
 
     /**@internal */
-    _setHeight(texture: Texture, value: number): void {
-    }
+    _setHeight(texture: Texture, value: number): void {}
 
     /**表示显示对象相对于父容器的水平方向坐标值。*/
     get x(): number {
@@ -461,7 +456,8 @@ export class Sprite extends Node {
         }
     }
     get_width(): number {
-        if (!this.autoSize) return this._width || (this.texture ? this.texture.width : 0);
+        if (!this.autoSize)
+            return this._width || (this.texture ? this.texture.width : 0);
         if (this.texture) return this.texture.width;
         if (!this._graphics && this._children.length === 0) return 0;
         return this.getSelfBounds().width;
@@ -490,7 +486,8 @@ export class Sprite extends Node {
         }
     }
     get_height(): number {
-        if (!this.autoSize) return this._height || (this.texture ? this.texture.height : 0);
+        if (!this.autoSize)
+            return this._height || (this.texture ? this.texture.height : 0);
         if (this.texture) return this.texture.height;
         if (!this._graphics && this._children.length === 0) return 0;
         return this.getSelfBounds().height;
@@ -524,7 +521,9 @@ export class Sprite extends Node {
      * @return 矩形区域。
      */
     getBounds(): Rectangle {
-        return this._getBoundsStyle().bounds = Rectangle._getWrapRec(this._boundPointsToParent());
+        return (this._getBoundsStyle().bounds = Rectangle._getWrapRec(
+            this._boundPointsToParent(),
+        ));
     }
 
     /**
@@ -533,7 +532,8 @@ export class Sprite extends Node {
      * @return 矩形区域。
      */
     getSelfBounds(): Rectangle {
-        if (this._boundStyle && this._boundStyle.userBounds) return this._boundStyle.userBounds;
+        if (this._boundStyle && this._boundStyle.userBounds)
+            return this._boundStyle.userBounds;
         if (!this._graphics && this._children.length === 0 && !this._texture)
             return Rectangle.TEMP.setTo(0, 0, this.width, this.height); // 如果没有graphics则取对象指定的大小。原来是0000
         //if (_renderType === (SpriteConst.IMAGE | SpriteConst.GRAPHICS)) {
@@ -542,7 +542,9 @@ export class Sprite extends Node {
         //var tDrawCmd:Array = _graphics._one;
         //return _boundStyle.bounds.setTo(tDrawCmd[1], tDrawCmd[2], tDrawCmd[3], tDrawCmd[4]);
         //}
-        return this._getBoundsStyle().bounds = Rectangle._getWrapRec(this._getBoundPointsM(false));
+        return (this._getBoundsStyle().bounds = Rectangle._getWrapRec(
+            this._getBoundPointsM(false),
+        ));
     }
 
     /**
@@ -553,11 +555,12 @@ export class Sprite extends Node {
      * @return 顶点列表。结构：[x1,y1,x2,y2,x3,y3,...]。
      */
     _boundPointsToParent(ifRotate: boolean = false): any[] {
-        var pX: number = 0, pY: number = 0;
+        var pX: number = 0,
+            pY: number = 0;
         if (this._style) {
             pX = this.pivotX;
             pY = this.pivotY;
-            ifRotate = ifRotate || (this._style.rotation !== 0);
+            ifRotate = ifRotate || this._style.rotation !== 0;
             if (this._style.scrollRect) {
                 pX += this._style.scrollRect.x;
                 pY += this._style.scrollRect.y;
@@ -567,7 +570,12 @@ export class Sprite extends Node {
         if (!pList || pList.length < 1) return pList;
 
         if (pList.length != 8) {
-            pList = ifRotate ? GrahamScan.scanPList(pList) : Rectangle._getWrapRec(pList, Rectangle.TEMP)._getBoundPoints();
+            pList = ifRotate
+                ? GrahamScan.scanPList(pList)
+                : Rectangle._getWrapRec(
+                      pList,
+                      Rectangle.TEMP,
+                  )._getBoundPoints();
         }
 
         if (!this.transform) {
@@ -575,7 +583,8 @@ export class Sprite extends Node {
             return pList;
         }
         var tPoint: Point = Point.TEMP;
-        var i: number, len: number = pList.length;
+        var i: number,
+            len: number = pList.length;
         for (i = 0; i < len; i += 2) {
             tPoint.x = pList[i];
             tPoint.y = pList[i + 1];
@@ -603,7 +612,8 @@ export class Sprite extends Node {
      * @return 顶点列表。结构：[x1,y1,x2,y2,x3,y3,...]。
      */
     _getBoundPointsM(ifRotate: boolean = false): any[] {
-        if (this._boundStyle && this._boundStyle.userBounds) return this._boundStyle.userBounds._getBoundPoints();
+        if (this._boundStyle && this._boundStyle.userBounds)
+            return this._boundStyle.userBounds._getBoundPoints();
         if (!this._boundStyle) this._getBoundsStyle();
         if (!this._boundStyle.temBM) this._boundStyle.temBM = [];
         if (this._style.scrollRect) {
@@ -620,7 +630,12 @@ export class Sprite extends Node {
             pList = Utils.clearArray(this._boundStyle.temBM);
             if (this._texture) {
                 rec = Rectangle.TEMP;
-                rec.setTo(0, 0, this.width || this._texture.width, this.height || this._texture.height);
+                rec.setTo(
+                    0,
+                    0,
+                    this.width || this._texture.width,
+                    this.height || this._texture.height,
+                );
                 Utils.concatArray(pList, rec._getBoundPoints());
             }
         }
@@ -631,7 +646,7 @@ export class Sprite extends Node {
         __childs = this._children;
         for (var i: number = 0, n: number = __childs.length; i < n; i++) {
             //child = getChildAt(i) as Sprite;
-            child = (<Sprite>__childs[i]);
+            child = <Sprite>__childs[i];
             if (child instanceof Sprite && child._visible === true) {
                 cList = child._boundPointsToParent(ifRotate);
                 if (cList)
@@ -647,7 +662,8 @@ export class Sprite extends Node {
      * @return  cache数据 CacheStyle 。
      */
     _getCacheStyle(): CacheStyle {
-        this._cacheStyle === CacheStyle.EMPTY && (this._cacheStyle = CacheStyle.create());
+        this._cacheStyle === CacheStyle.EMPTY &&
+            (this._cacheStyle = CacheStyle.create());
         return this._cacheStyle;
     }
 
@@ -657,7 +673,8 @@ export class Sprite extends Node {
      * @return  样式 Style 。
      */
     getStyle(): SpriteStyle {
-        this._style === SpriteStyle.EMPTY && (this._style = SpriteStyle.create());
+        this._style === SpriteStyle.EMPTY &&
+            (this._style = SpriteStyle.create());
         return this._style;
     }
 
@@ -697,7 +714,6 @@ export class Sprite extends Node {
     _setScaleY(value: number): void {
         this._style.scaleY = value;
     }
-
 
     set_scaleX(value: number): void {
         var style: SpriteStyle = this.getStyle();
@@ -784,14 +800,16 @@ export class Sprite extends Node {
     protected _adjustTransform(): Matrix {
         this._tfChanged = false;
         var style: SpriteStyle = this._style;
-        var sx: number = style.scaleX, sy: number = style.scaleY;
+        var sx: number = style.scaleX,
+            sy: number = style.scaleY;
         var sskx: number = style.skewX;
         var ssky: number = style.skewY;
         var rot: number = style.rotation;
-        var m: Matrix = this._transform || (this._transform = this._createTransform());
+        var m: Matrix =
+            this._transform || (this._transform = this._createTransform());
         if (rot || sx !== 1 || sy !== 1 || sskx !== 0 || ssky !== 0) {
             m._bTransform = true;
-            var skx: number = (rot - sskx) * 0.0174532922222222;//laya.CONST.PI180;
+            var skx: number = (rot - sskx) * 0.0174532922222222; //laya.CONST.PI180;
             var sky: number = (rot + ssky) * 0.0174532922222222;
             var cx: number = Math.cos(sky);
             var ssx: number = Math.sin(sky);
@@ -811,9 +829,7 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setTransform(value: Matrix): void {
-
-    }
+    _setTransform(value: Matrix): void {}
 
     /**
      * <p>对象的矩阵信息。通过设置矩阵可以实现节点旋转，缩放，位移效果。</p>
@@ -833,7 +849,8 @@ export class Sprite extends Node {
 
     set_transform(value: Matrix): void {
         this._tfChanged = false;
-        var m: Matrix = this._transform || (this._transform = this._createTransform());
+        var m: Matrix =
+            this._transform || (this._transform = this._createTransform());
         value.copyTo(m);
         this._setTransform(m);
         //设置transform时重置x,y
@@ -915,7 +932,7 @@ export class Sprite extends Node {
     }
 
     set alpha(value: number) {
-        value = value < 0 ? 0 : (value > 1 ? 1 : value);
+        value = value < 0 ? 0 : value > 1 ? 1 : value;
         this._setAlpha(value);
     }
 
@@ -940,9 +957,7 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setBlendMode(value: string): void {
-
-    }
+    _setBlendMode(value: string): void {}
 
     /**指定要使用的混合模式。目前只支持"lighter"。*/
     get blendMode(): string {
@@ -952,7 +967,8 @@ export class Sprite extends Node {
     set blendMode(value: string) {
         this._setBlendMode(value);
         this.getStyle().blendMode = value;
-        if (value && value != "source-over") this._renderType |= SpriteConst.BLEND;
+        if (value && value != 'source-over')
+            this._renderType |= SpriteConst.BLEND;
         else this._renderType &= ~SpriteConst.BLEND;
         this._setRenderType(this._renderType);
         this.parentRepaint();
@@ -968,12 +984,10 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setGraphics(value: Graphics): void {
-    }
+    _setGraphics(value: Graphics): void {}
 
     /**@internal */
-    _setGraphicsCallBack(): void {
-    }
+    _setGraphicsCallBack(): void {}
 
     set graphics(value: Graphics) {
         if (this._graphics) this._graphics._sp = null;
@@ -1000,9 +1014,7 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setScrollRect(value: Rectangle): void {
-
-    }
+    _setScrollRect(value: Rectangle): void {}
 
     set scrollRect(value: Rectangle) {
         this.getStyle().scrollRect = value;
@@ -1114,7 +1126,12 @@ export class Sprite extends Node {
      * @param	y Y轴坐标。
      */
     render(ctx: Context, x: number, y: number): void {
-        RenderSprite.renders[this._renderType]._fun(this, ctx, x + this._x, y + this._y);
+        RenderSprite.renders[this._renderType]._fun(
+            this,
+            ctx,
+            x + this._x,
+            y + this._y,
+        );
         /*
         var rt:int = _renderType;
         var style:SpriteStyle = _style;
@@ -1177,9 +1194,21 @@ export class Sprite extends Node {
      * @param	y 绘制的 Y 轴偏移量。
      * @return  HTMLCanvas 对象。
      */
-    drawToCanvas(canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number): HTMLCanvas {
+    drawToCanvas(
+        canvasWidth: number,
+        canvasHeight: number,
+        offsetX: number,
+        offsetY: number,
+    ): HTMLCanvas {
         //console.log('drawToCanvas is deprecated, please use drawToTexture');
-        return Sprite.drawToCanvas(this, this._renderType, canvasWidth, canvasHeight, offsetX, offsetY);
+        return Sprite.drawToCanvas(
+            this,
+            this._renderType,
+            canvasWidth,
+            canvasHeight,
+            offsetX,
+            offsetY,
+        );
     }
 
     /**
@@ -1189,8 +1218,22 @@ export class Sprite extends Node {
      * @param offsetX
      * @param offsetY
      */
-    drawToTexture(canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number, rt:RenderTexture2D|null=null): Texture|RenderTexture2D {
-        return Sprite.drawToTexture(this, this._renderType, canvasWidth, canvasHeight, offsetX, offsetY,rt);
+    drawToTexture(
+        canvasWidth: number,
+        canvasHeight: number,
+        offsetX: number,
+        offsetY: number,
+        rt: RenderTexture2D | null = null,
+    ): Texture | RenderTexture2D {
+        return Sprite.drawToTexture(
+            this,
+            this._renderType,
+            canvasWidth,
+            canvasHeight,
+            offsetX,
+            offsetY,
+            rt,
+        );
     }
 
     /**
@@ -1200,15 +1243,21 @@ export class Sprite extends Node {
      * @param tex 输出渲染结果
      */
     drawToTexture3D(offx: number, offy: number, tex: Texture2D) {
-        throw 'not implement'
+        throw 'not implement';
     }
-
 
     /**
      * @private
      * 绘制到画布。
      */
-    static drawToCanvas(sprite: Sprite, _renderType: number, canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number): HTMLCanvas {
+    static drawToCanvas(
+        sprite: Sprite,
+        _renderType: number,
+        canvasWidth: number,
+        canvasHeight: number,
+        offsetX: number,
+        offsetY: number,
+    ): HTMLCanvas {
         offsetX -= sprite.x;
         offsetY -= sprite.y;
         offsetX |= 0;
@@ -1224,9 +1273,14 @@ export class Sprite extends Node {
         ctx.flush();
         ctx._targets.end();
         ctx._targets.restore();
-        var dt: Uint8Array = ctx._targets.getData(0, 0, canvasWidth, canvasHeight);
+        var dt: Uint8Array = ctx._targets.getData(
+            0,
+            0,
+            canvasWidth,
+            canvasHeight,
+        );
         ctx.destroy();
-        var imgdata: any = new ImageData(canvasWidth, canvasHeight);;	//创建空的imagedata。因为下面要翻转，所以不直接设置内容
+        var imgdata: any = new ImageData(canvasWidth, canvasHeight); //创建空的imagedata。因为下面要翻转，所以不直接设置内容
         //翻转getData的结果。
         var lineLen: number = canvasWidth * 4;
         var temp: Uint8Array = new Uint8Array(lineLen);
@@ -1243,46 +1297,59 @@ export class Sprite extends Node {
         //画到2d画布上
         var canv: HTMLCanvas = new HTMLCanvas(true);
         canv.size(canvasWidth, canvasHeight);
-        var ctx2d: CanvasRenderingContext2D = <CanvasRenderingContext2D>(canv.getContext('2d') as any);
-        ctx2d.putImageData(imgdata, 0, 0);;
+        var ctx2d: CanvasRenderingContext2D = <CanvasRenderingContext2D>(
+            (canv.getContext('2d') as any)
+        );
+        ctx2d.putImageData(imgdata, 0, 0);
         return canv;
     }
 
-	static drawtocanvCtx:Context;
+    static drawtocanvCtx: Context;
     /**
      * @private
      *
      */
-    static drawToTexture(sprite: Sprite, _renderType: number, canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number, rt:RenderTexture2D|null=null): Texture|RenderTexture2D {
-		if(!Sprite.drawtocanvCtx){
-			Sprite.drawtocanvCtx = new Context();
-		}
+    static drawToTexture(
+        sprite: Sprite,
+        _renderType: number,
+        canvasWidth: number,
+        canvasHeight: number,
+        offsetX: number,
+        offsetY: number,
+        rt: RenderTexture2D | null = null,
+    ): Texture | RenderTexture2D {
+        if (!Sprite.drawtocanvCtx) {
+            Sprite.drawtocanvCtx = new Context();
+        }
         offsetX -= sprite.x;
         offsetY -= sprite.y;
         offsetX |= 0;
         offsetY |= 0;
         canvasWidth |= 0;
         canvasHeight |= 0;
-		var ctx = rt?Sprite.drawtocanvCtx:new Context();
-		ctx.clear();
-		ctx.size(canvasWidth, canvasHeight);
-		if(rt){
-			ctx._targets=rt;
-		}else{
-			ctx.asBitmap=true;
-		}
+        var ctx = rt ? Sprite.drawtocanvCtx : new Context();
+        ctx.clear();
+        ctx.size(canvasWidth, canvasHeight);
+        if (rt) {
+            ctx._targets = rt;
+        } else {
+            ctx.asBitmap = true;
+        }
         ctx._targets.start();
-        ctx._targets.clear(0, 0, 0, 0);	// 否则没有地方调用clear
+        ctx._targets.clear(0, 0, 0, 0); // 否则没有地方调用clear
         RenderSprite.renders[_renderType]._fun(sprite, ctx, offsetX, offsetY);
         ctx.flush();
         ctx._targets.end();
-		ctx._targets.restore();
-		if(!rt){
-        	var rtex: Texture = new Texture(((<Texture2D>(ctx._targets as any))), Texture.INV_UV);
-        	ctx.destroy(true);// 保留 _targets
-			return rtex;
-		}
-		return rt;
+        ctx._targets.restore();
+        if (!rt) {
+            var rtex: Texture = new Texture(
+                <Texture2D>(ctx._targets as any),
+                Texture.INV_UV,
+            );
+            ctx.destroy(true); // 保留 _targets
+            return rtex;
+        }
+        return rt;
     }
 
     /**
@@ -1312,7 +1379,7 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setColorFilter(value: any): void { }
+    _setColorFilter(value: any): void {}
 
     set filters(value: any[]) {
         value && value.length === 0 && (value = null);
@@ -1330,7 +1397,7 @@ export class Sprite extends Node {
 
         if (value && value.length > 0) {
             if (!this._getBit(Const.DISPLAY)) this._setBitUp(Const.DISPLAY);
-            if (!(value.length == 1 && (value[0] instanceof ColorFilter))) {
+            if (!(value.length == 1 && value[0] instanceof ColorFilter)) {
                 this._getCacheStyle().cacheForFilters = true;
                 this._checkCanvasEnable();
             }
@@ -1373,7 +1440,11 @@ export class Sprite extends Node {
      * @param globalNode		global节点，默认为Laya.stage
      * @return 转换后的坐标的点。
      */
-    localToGlobal(point: Point, createNewPoint: boolean = false, globalNode: Sprite = null): Point {
+    localToGlobal(
+        point: Point,
+        createNewPoint: boolean = false,
+        globalNode: Sprite = null,
+    ): Point {
         //if (!_displayedInStage || !point) return point;
         if (createNewPoint === true) {
             point = new Point(point.x, point.y);
@@ -1383,7 +1454,7 @@ export class Sprite extends Node {
         while (ele && !ele.destroyed) {
             if (ele == globalNode) break;
             point = ele.toParentPoint(point);
-            ele = (<Sprite>ele.parent);
+            ele = <Sprite>ele.parent;
         }
 
         return point;
@@ -1396,7 +1467,11 @@ export class Sprite extends Node {
      * @param globalNode		global节点，默认为Laya.stage
      * @return 转换后的坐标的点。
      */
-    globalToLocal(point: Point, createNewPoint: boolean = false, globalNode: Sprite = null): Point {
+    globalToLocal(
+        point: Point,
+        createNewPoint: boolean = false,
+        globalNode: Sprite = null,
+    ): Point {
         //if (!_displayedInStage || !point) return point;
         if (createNewPoint) {
             point = new Point(point.x, point.y);
@@ -1407,7 +1482,7 @@ export class Sprite extends Node {
         while (ele && !ele.destroyed) {
             if (ele == globalNode) break;
             list.push(ele);
-            ele = (<Sprite>ele.parent);
+            ele = <Sprite>ele.parent;
         }
         var i: number = list.length - 1;
         while (i >= 0) {
@@ -1483,7 +1558,12 @@ export class Sprite extends Node {
      * @return 此 EventDispatcher 对象。
      * @override
      */
-    on(type: string, caller: any, listener: Function, args: any[] = null): EventDispatcher {
+    on(
+        type: string,
+        caller: any,
+        listener: Function,
+        args: any[] = null,
+    ): EventDispatcher {
         //如果是鼠标事件，则设置自己和父对象为可接受鼠标交互事件
         if (this._mouseState !== 1 && this.isMouseEvent(type)) {
             this.mouseEnabled = true;
@@ -1506,7 +1586,12 @@ export class Sprite extends Node {
      * @return 此 EventDispatcher 对象。
      * @override
      */
-    once(type: string, caller: any, listener: Function, args: any[] = null): EventDispatcher {
+    once(
+        type: string,
+        caller: any,
+        listener: Function,
+        args: any[] = null,
+    ): EventDispatcher {
         //如果是鼠标事件，则设置自己和父对象为可接受鼠标交互事件
         if (this._mouseState !== 1 && this.isMouseEvent(type)) {
             this.mouseEnabled = true;
@@ -1523,19 +1608,19 @@ export class Sprite extends Node {
     protected _onDisplay(v?: boolean): void {
         if (this._mouseState !== 1) {
             var ele: Sprite = this;
-            ele = (<Sprite>ele.parent);
+            ele = <Sprite>ele.parent;
             while (ele && ele._mouseState !== 1) {
                 if (ele._getBit(Const.HAS_MOUSE)) break;
                 ele.mouseEnabled = true;
                 ele._setBit(Const.HAS_MOUSE, true);
-                ele = (<Sprite>ele.parent);
+                ele = <Sprite>ele.parent;
             }
         }
     }
 
     /**@private
      * @override
-    */
+     */
     protected _setParent(value: Node): void {
         super._setParent(value);
         if (value && this._getBit(Const.HAS_MOUSE)) {
@@ -1566,7 +1651,7 @@ export class Sprite extends Node {
             else loaded.call(this);
         }
 
-        function loaded(this:Sprite): void {
+        function loaded(this: Sprite): void {
             this.repaint(SpriteConst.REPAINT_ALL);
             complete && complete.run();
         }
@@ -1594,30 +1679,34 @@ export class Sprite extends Node {
         }
     }
 
-
     /**
      * @internal
      * 获取是否重新缓存。
      * @return 如果重新缓存值为 true，否则值为 false。
      */
     _needRepaint(): boolean {
-        return (this._repaint & SpriteConst.REPAINT_CACHE) && this._cacheStyle.enableCanvasRender && this._cacheStyle.reCache;
+        return (
+            this._repaint & SpriteConst.REPAINT_CACHE &&
+            this._cacheStyle.enableCanvasRender &&
+            this._cacheStyle.reCache
+        );
     }
 
     /**@private
      * @override
-    */
+     */
     protected _childChanged(child: Node = null): void {
         if (this._children.length) this._renderType |= SpriteConst.CHILDS;
         else this._renderType &= ~SpriteConst.CHILDS;
         this._setRenderType(this._renderType);
-        if (child && this._getBit(Const.HAS_ZORDER)) ILaya.systemTimer.callLater(this, this.updateZOrder);
+        if (child && this._getBit(Const.HAS_ZORDER))
+            ILaya.systemTimer.callLater(this, this.updateZOrder);
         this.repaint(SpriteConst.REPAINT_ALL);
     }
 
     /**cacheAs时，设置所有父对象缓存失效。 */
     parentRepaint(type: number = SpriteConst.REPAINT_CACHE): void {
-        var p: Sprite = (<Sprite>this._parent);
+        var p: Sprite = <Sprite>this._parent;
         if (p && !(p._repaint & type)) {
             p._repaint |= type;
             p.parentRepaint(type);
@@ -1642,9 +1731,7 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setMask(value: Sprite): void {
-
-    }
+    _setMask(value: Sprite): void {}
 
     /**
      * <p>遮罩，可以设置一个对象(支持位图和矢量图)，根据对象形状进行遮罩显示。</p>
@@ -1693,9 +1780,27 @@ export class Sprite extends Node {
      * @param disableMouseEvent	（可选）禁用其他对象的鼠标检测，默认为false，设置为true能提高性能。
      * @param ratio				（可选）惯性阻尼系数，影响惯性力度和时长。
      */
-    startDrag(area: Rectangle = null, hasInertia: boolean = false, elasticDistance: number = 0, elasticBackTime: number = 300, data: any = null, disableMouseEvent: boolean = false, ratio: number = 0.92): void {
-        this._style.dragging || (this.getStyle().dragging = new ILaya.Dragging());
-        this._style.dragging.start(this, area, hasInertia, elasticDistance, elasticBackTime, data, disableMouseEvent, ratio);
+    startDrag(
+        area: Rectangle = null,
+        hasInertia: boolean = false,
+        elasticDistance: number = 0,
+        elasticBackTime: number = 300,
+        data: any = null,
+        disableMouseEvent: boolean = false,
+        ratio: number = 0.92,
+    ): void {
+        this._style.dragging ||
+            (this.getStyle().dragging = new ILaya.Dragging());
+        this._style.dragging.start(
+            this,
+            area,
+            hasInertia,
+            elasticDistance,
+            elasticBackTime,
+            data,
+            disableMouseEvent,
+            ratio,
+        );
     }
 
     /**停止拖动此对象。*/
@@ -1706,7 +1811,7 @@ export class Sprite extends Node {
     /**
      * @internal
      * @override
-    */
+     */
     _setDisplay(value: boolean): void {
         if (!value) {
             if (this._cacheStyle) {
@@ -1730,13 +1835,19 @@ export class Sprite extends Node {
         var point: Point = this.globalToLocal(Point.TEMP.setTo(x, y));
         x = point.x;
         y = point.y;
-        var rect: Rectangle = this._style.hitArea ? this._style.hitArea : (this._width > 0 && this._height > 0) ? Rectangle.TEMP.setTo(0, 0, this._width, this._height) : this.getSelfBounds();
+        var rect: Rectangle = this._style.hitArea
+            ? this._style.hitArea
+            : this._width > 0 && this._height > 0
+            ? Rectangle.TEMP.setTo(0, 0, this._width, this._height)
+            : this.getSelfBounds();
         return rect.contains(x, y);
     }
 
     /**获得相对于本对象上的鼠标坐标信息。*/
     getMousePoint(): Point {
-        return this.globalToLocal(Point.TEMP.setTo(ILaya.stage.mouseX, ILaya.stage.mouseY));
+        return this.globalToLocal(
+            Point.TEMP.setTo(ILaya.stage.mouseX, ILaya.stage.mouseY),
+        );
     }
 
     /**
@@ -1748,7 +1859,7 @@ export class Sprite extends Node {
         while (ele) {
             if (ele === ILaya.stage) break;
             scale *= ele.scaleX;
-            ele = (<Sprite>ele.parent);
+            ele = <Sprite>ele.parent;
         }
         return scale;
     }
@@ -1762,7 +1873,7 @@ export class Sprite extends Node {
         while (ele) {
             if (ele === ILaya.stage) break;
             angle += ele.rotation;
-            ele = (<Sprite>ele.parent);
+            ele = <Sprite>ele.parent;
         }
         return angle;
     }
@@ -1776,7 +1887,7 @@ export class Sprite extends Node {
         while (ele) {
             if (ele === ILaya.stage) break;
             scale *= ele.scaleY;
-            ele = (<Sprite>ele.parent);
+            ele = <Sprite>ele.parent;
         }
         return scale;
     }
@@ -1820,13 +1931,11 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setTexture(value: Texture | string): void {
-
-    }
+    _setTexture(value: Texture | string): void {}
 
     set texture(value: Texture | string) {
-        if (typeof (value) == 'string') {
-            this.loadImage((<string>((<any>value))));
+        if (typeof value == 'string') {
+            this.loadImage(<string>(<any>value));
         } else if (this._texture != value) {
             this._texture && this._texture._removeReference();
             this._texture = value;
@@ -1853,20 +1962,23 @@ export class Sprite extends Node {
     }
 
     set viewport(value: Rectangle) {
-        if (typeof (value) == 'string') {
+        if (typeof value == 'string') {
             var recArr: any[];
-            recArr = ((<string>((<any>value)))).split(",");
+            recArr = (<string>(<any>value)).split(',');
             if (recArr.length > 3) {
-                value = new Rectangle(parseFloat(recArr[0]), parseFloat(recArr[1]), parseFloat(recArr[2]), parseFloat(recArr[3]));
+                value = new Rectangle(
+                    parseFloat(recArr[0]),
+                    parseFloat(recArr[1]),
+                    parseFloat(recArr[2]),
+                    parseFloat(recArr[3]),
+                );
             }
         }
         this.getStyle().viewport = value;
     }
 
     /**@internal */
-    _setRenderType(type: number): void {
-
-    }
+    _setRenderType(type: number): void {}
 
     /**@internal */
     _setTranformChange(): void {
@@ -1876,14 +1988,23 @@ export class Sprite extends Node {
     }
 
     /**@internal */
-    _setBgStyleColor(x: number, y: number, width: number, height: number, fillColor: any): void {
-
-    }
+    _setBgStyleColor(
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        fillColor: any,
+    ): void {}
 
     /**@internal */
-    _setBorderStyleColor(x: number, y: number, width: number, height: number, fillColor: any, borderWidth: number): void {
-
-    }
+    _setBorderStyleColor(
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        fillColor: any,
+        borderWidth: number,
+    ): void {}
 
     /**@private */
     captureMouseEvent(exclusive: boolean): void {
@@ -1904,6 +2025,5 @@ export class Sprite extends Node {
     }
 }
 
-
-ClassUtils.regClass("laya.display.Sprite", Sprite);
-ClassUtils.regClass("Laya.Sprite", Sprite);
+ClassUtils.regClass('laya.display.Sprite', Sprite);
+ClassUtils.regClass('Laya.Sprite', Sprite);

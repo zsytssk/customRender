@@ -1,7 +1,7 @@
 import { HTMLElement } from "./HTMLElement";
 import { Graphics } from "../../display/Graphics"
 import { HTMLStyle } from "../utils/HTMLStyle"
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { ClassUtils } from "../../utils/ClassUtils";
 
 /**
@@ -15,11 +15,11 @@ export class HTMLStyleElement extends HTMLElement {
     protected _creates(): void {
     }
     /**
-     * 
-     * @param graphic 
-     * @param gX 
-     * @param gY 
-     * @param recList 
+     *
+     * @param graphic
+     * @param gX
+     * @param gY
+     * @param recList
      * @override
      */
     drawToGraphic(graphic: Graphics, gX: number, gY: number, recList: any[]): void {

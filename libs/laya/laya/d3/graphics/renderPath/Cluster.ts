@@ -1,4 +1,4 @@
-import { Config3D } from "../../../../Config3D";
+import { Config3D } from "../../../../../Config3D";
 import { Texture2D } from "../../../resource/Texture2D";
 import { Camera } from "../../core/Camera";
 import { LightQueue } from "../../core/light/LightQueue";
@@ -84,15 +84,15 @@ export class Cluster {
         /*
         Layout of clusterTexture
         |------------------------------------------------------U(XY)
-        |               cluster0               cluster1       
-        |        (PCou|SCou|Off0|Off1) | (PCou|SCou|Off0|Off1) 
-        |               cluster2               cluster3      
-        |        (PCou|SCou|Off0|Off1) | (PCou|SCou|Off0|Off1) 
+        |               cluster0               cluster1
+        |        (PCou|SCou|Off0|Off1) | (PCou|SCou|Off0|Off1)
+        |               cluster2               cluster3
+        |        (PCou|SCou|Off0|Off1) | (PCou|SCou|Off0|Off1)
         |-----------------------------------------------------------
-        |                                    _                              
+        |                                    _
         |        (poi0|poi1|spo0|spo1) |(spo2|poi0|poi1|poi2)
         |             _
-        |        (poi3|spo0|....|....) |(....|....|....|....) 
+        |        (poi3|spo0|....|....) |(....|....|....|....)
         |
         V(Z)
         */

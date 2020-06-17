@@ -1,16 +1,16 @@
-import { SoundChannel } from "./SoundChannel";
-import { Event } from "../events/Event"
-import { AudioSound } from "./h5audio/AudioSound"
-import { WebAudioSound } from "./webaudio/WebAudioSound"
+import { SoundChannel } from './SoundChannel';
+import { Event } from '../events/Event';
+import { AudioSound } from './h5audio/AudioSound';
+import { WebAudioSound } from './webaudio/WebAudioSound';
 //import { Loader } from "../net/Loader"
-import { URL } from "../net/URL"
-import { Handler } from "../utils/Handler"
-import { Utils } from "../utils/Utils"
-import { Sound } from "./Sound";
-import { Stage } from "../display/Stage";
-import { LoaderManager } from "../net/LoaderManager";
-import { Timer } from "../utils/Timer";
-import { ILaya } from "../../ILaya";
+import { URL } from '../net/URL';
+import { Handler } from '../utils/Handler';
+import { Utils } from '../utils/Utils';
+import { Sound } from './Sound';
+import { Stage } from '../display/Stage';
+import { LoaderManager } from '../net/LoaderManager';
+import { Timer } from '../utils/Timer';
+import { ILaya } from '../../../ILaya';
 /**
  * <code>SoundManager</code> 是一个声音管理类。提供了对背景音乐、音效的播放控制方法。
  * 引擎默认有两套声音方案：WebAudio和H5Audio
@@ -20,8 +20,6 @@ import { ILaya } from "../../ILaya";
  * 详细教程及声音格式请参考：http://ldc2.layabox.com/doc/?nav=ch-as-1-7-0
  */
 export class SoundManager {
-
-
     /**
      * 背景音乐音量。
      * @default 1
@@ -71,9 +69,13 @@ export class SoundManager {
 
     /**@internal */
     static __init__(): boolean {
-
         var win: any = ILaya.Browser.window;
-        var supportWebAudio: boolean = win["AudioContext"] || win["webkitAudioContext"] || win["mozAudioContext"] ? true : false;
+        var supportWebAudio: boolean =
+            win['AudioContext'] ||
+            win['webkitAudioContext'] ||
+            win['mozAudioContext']
+                ? true
+                : false;
         if (supportWebAudio) WebAudioSound.initWebAudio();
         SoundManager._soundClass = supportWebAudio ? WebAudioSound : AudioSound;
         AudioSound._initMusicAudio();
@@ -156,12 +158,20 @@ export class SoundManager {
     static set autoStopMusic(v: boolean) {
         ILaya.stage.off(Event.BLUR, null, SoundManager._stageOnBlur);
         ILaya.stage.off(Event.FOCUS, null, SoundManager._stageOnFocus);
-        ILaya.stage.off(Event.VISIBILITY_CHANGE, null, SoundManager._visibilityChange);
+        ILaya.stage.off(
+            Event.VISIBILITY_CHANGE,
+            null,
+            SoundManager._visibilityChange,
+        );
         SoundManager._autoStopMusic = v;
         if (v) {
             ILaya.stage.on(Event.BLUR, null, SoundManager._stageOnBlur);
             ILaya.stage.on(Event.FOCUS, null, SoundManager._stageOnFocus);
-            ILaya.stage.on(Event.VISIBILITY_CHANGE, null, SoundManager._visibilityChange);
+            ILaya.stage.on(
+                Event.VISIBILITY_CHANGE,
+                null,
+                SoundManager._visibilityChange,
+            );
         }
     }
 
@@ -186,16 +196,18 @@ export class SoundManager {
             if (!SoundManager._musicChannel.isStopped) {
                 SoundManager._blurPaused = true;
                 SoundManager._musicChannel.pause();
-
             }
-
         }
         SoundManager.stopAllSound();
         ILaya.stage.once(Event.MOUSE_DOWN, null, SoundManager._stageOnFocus);
     }
 
     private static _recoverWebAudio(): void {
-        if (WebAudioSound.ctx && WebAudioSound.ctx.state != "running" && WebAudioSound.ctx.resume)
+        if (
+            WebAudioSound.ctx &&
+            WebAudioSound.ctx.state != 'running' &&
+            WebAudioSound.ctx.resume
+        )
             WebAudioSound.ctx.resume();
     }
 
@@ -204,7 +216,10 @@ export class SoundManager {
         SoundManager._recoverWebAudio();
         ILaya.stage.off(Event.MOUSE_DOWN, null, SoundManager._stageOnFocus);
         if (SoundManager._blurPaused) {
-            if (SoundManager._musicChannel && SoundManager._musicChannel.isStopped) {
+            if (
+                SoundManager._musicChannel &&
+                SoundManager._musicChannel.isStopped
+            ) {
                 SoundManager._blurPaused = false;
                 SoundManager._musicChannel.resume();
             }
@@ -245,11 +260,14 @@ export class SoundManager {
         if (value == SoundManager._musicMuted) return;
         if (value) {
             if (SoundManager._bgMusic) {
-                if (SoundManager._musicChannel && !SoundManager._musicChannel.isStopped) {
+                if (
+                    SoundManager._musicChannel &&
+                    !SoundManager._musicChannel.isStopped
+                ) {
                     if (ILaya.Render.isConchApp) {
-                        if ((SoundManager._musicChannel as any)._audio) (SoundManager._musicChannel as any)._audio.muted = true;;
-                    }
-                    else {
+                        if ((SoundManager._musicChannel as any)._audio)
+                            (SoundManager._musicChannel as any)._audio.muted = true;
+                    } else {
                         SoundManager._musicChannel.pause();
                     }
                 } else {
@@ -265,15 +283,14 @@ export class SoundManager {
             if (SoundManager._bgMusic) {
                 if (SoundManager._musicChannel) {
                     if (ILaya.Render.isConchApp) {
-                        if ((SoundManager._musicChannel as any)._audio) (SoundManager._musicChannel as any)._audio.muted = false;;
-                    }
-                    else {
+                        if ((SoundManager._musicChannel as any)._audio)
+                            (SoundManager._musicChannel as any)._audio.muted = false;
+                    } else {
                         SoundManager._musicChannel.resume();
                     }
                 }
             }
         }
-
     }
 
     static get musicMuted(): boolean {
@@ -302,7 +319,13 @@ export class SoundManager {
      * @param startTime		声音播放起始时间。
      * @return SoundChannel对象，通过此对象可以对声音进行控制，以及获取声音信息。
      */
-    static playSound(url: string, loops: number = 1, complete: Handler = null, soundClass: new () => any = null, startTime: number = 0): SoundChannel {
+    static playSound(
+        url: string,
+        loops: number = 1,
+        complete: Handler = null,
+        soundClass: new () => any = null,
+        startTime: number = 0,
+    ): SoundChannel {
         if (!SoundManager._isActive || !url) return null;
         if (SoundManager._muted) return null;
         SoundManager._recoverWebAudio();
@@ -312,22 +335,40 @@ export class SoundManager {
         } else {
             if (ILaya.Render.isConchApp) {
                 var ext: string = Utils.getFileExtension(url);
-                if (ext != "wav" && ext != "ogg") {
-                    alert("The sound only supports wav or ogg format,for optimal performance reason,please refer to the official website document.");
+                if (ext != 'wav' && ext != 'ogg') {
+                    alert(
+                        'The sound only supports wav or ogg format,for optimal performance reason,please refer to the official website document.',
+                    );
                     return null;
                 }
             }
             if (SoundManager._soundMuted) return null;
         }
         var tSound: Sound;
-        if (!ILaya.Browser.onBDMiniGame && !ILaya.Browser.onMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame) {
+        if (
+            !ILaya.Browser.onBDMiniGame &&
+            !ILaya.Browser.onMiniGame &&
+            !ILaya.Browser.onKGMiniGame &&
+            !ILaya.Browser.onQGMiniGame &&
+            !ILaya.Browser.onVVMiniGame &&
+            !ILaya.Browser.onAlipayMiniGame &&
+            !ILaya.Browser.onQQMiniGame
+        ) {
             tSound = ILaya.loader.getRes(url);
         }
         if (!soundClass) soundClass = SoundManager._soundClass;
         if (!tSound) {
             tSound = new soundClass();
             tSound.load(url);
-            if (!ILaya.Browser.onBDMiniGame && !ILaya.Browser.onMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame) {
+            if (
+                !ILaya.Browser.onBDMiniGame &&
+                !ILaya.Browser.onMiniGame &&
+                !ILaya.Browser.onKGMiniGame &&
+                !ILaya.Browser.onQGMiniGame &&
+                !ILaya.Browser.onVVMiniGame &&
+                !ILaya.Browser.onAlipayMiniGame &&
+                !ILaya.Browser.onQQMiniGame
+            ) {
                 ILaya.Loader.cacheRes(url, tSound);
             }
         }
@@ -335,7 +376,10 @@ export class SoundManager {
         channel = tSound.play(startTime, loops);
         if (!channel) return null;
         channel.url = url;
-        channel.volume = (url == SoundManager._bgMusic) ? SoundManager.musicVolume : SoundManager.soundVolume;
+        channel.volume =
+            url == SoundManager._bgMusic
+                ? SoundManager.musicVolume
+                : SoundManager.soundVolume;
         channel.completeHandler = complete;
         return channel;
     }
@@ -360,11 +404,22 @@ export class SoundManager {
      * @param startTime	声音播放起始时间。
      * @return SoundChannel对象，通过此对象可以对声音进行控制，以及获取声音信息。
      */
-    static playMusic(url: string, loops: number = 0, complete: Handler = null, startTime: number = 0): SoundChannel {
+    static playMusic(
+        url: string,
+        loops: number = 0,
+        complete: Handler = null,
+        startTime: number = 0,
+    ): SoundChannel {
         url = URL.formatURL(url);
         SoundManager._bgMusic = url;
         if (SoundManager._musicChannel) SoundManager._musicChannel.stop();
-        return SoundManager._musicChannel = SoundManager.playSound(url, loops, complete, SoundManager._musicClass, startTime);
+        return (SoundManager._musicChannel = SoundManager.playSound(
+            url,
+            loops,
+            complete,
+            SoundManager._musicClass,
+            startTime,
+        ));
     }
 
     /**
@@ -467,4 +522,3 @@ export class SoundManager {
         }
     }
 }
-

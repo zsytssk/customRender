@@ -1,5 +1,5 @@
 import { Button } from "./Button"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -96,7 +96,7 @@ export class CheckBox extends Button {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     protected preinitialize(): void {
@@ -106,7 +106,7 @@ export class CheckBox extends Button {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     protected initialize(): void {
@@ -118,7 +118,7 @@ export class CheckBox extends Button {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

@@ -6,7 +6,7 @@ import { Point } from "../maths/Point"
 import { Rectangle } from "../maths/Rectangle"
 import { Browser } from "../utils/Browser"
 import { Stage } from "../display/Stage";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 
 
 /**
@@ -447,7 +447,7 @@ export class MouseManager {
     }
 
     /**
-     * 
+     *
      * @param	sp
      * @param	exlusive  是否是独占模式
      */

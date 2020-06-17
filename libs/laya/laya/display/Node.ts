@@ -6,7 +6,7 @@ import { Pool } from "../utils/Pool"
 import { Stat } from "../utils/Stat"
 import { Timer } from "../utils/Timer"
 import { Sprite } from "./Sprite";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -151,7 +151,7 @@ export class Node extends EventDispatcher {
         this.offAll();
 
         //移除所有timer
-        //this.timer.clearAll(this);			
+        //this.timer.clearAll(this);
     }
 
     /**

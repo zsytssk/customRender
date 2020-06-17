@@ -1,7 +1,7 @@
 import { UIGroup } from "./UIGroup";
 import { Sprite } from "../display/Sprite"
 import { Radio } from "./Radio"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -85,7 +85,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  * }
  */
 export class RadioGroup extends UIGroup {
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     protected createItem(skin: string, label: string): Sprite {

@@ -1,8 +1,7 @@
-import { Transform } from "./Transform";
-import { Sprite } from "../../display/Sprite";
-import { Matrix } from "../../maths/Matrix";
-import { ILaya } from "../../../ILaya";
-
+import { Transform } from './Transform';
+import { Sprite } from '../../display/Sprite';
+import { Matrix } from '../../maths/Matrix';
+import { ILaya } from '../../../../ILaya';
 
 /**
  * @private
@@ -30,12 +29,12 @@ export class Bone {
     /**@internal */
     private _sprite: Sprite;
 
-    constructor() {
-    }
+    constructor() {}
 
     setTempMatrix(matrix: Matrix): void {
         this._tempMatrix = matrix;
-        var i: number = 0, n: number = 0;
+        var i: number = 0,
+            n: number = 0;
         var tBone: Bone;
         for (i = 0, n = this._children.length; i < n; i++) {
             tBone = this._children[i];
@@ -44,22 +43,25 @@ export class Bone {
     }
 
     //TODO:coverage
-    update(pMatrix: Matrix|null = null): void {
+    update(pMatrix: Matrix | null = null): void {
         this.rotation = this.transform.skX;
         var tResultMatrix: Matrix;
         if (pMatrix) {
             tResultMatrix = this.resultTransform.getMatrix();
             Matrix.mul(tResultMatrix, pMatrix, this.resultMatrix);
             this.resultRotation = this.rotation;
-        }
-        else {
-            this.resultRotation = this.rotation + this.parentBone.resultRotation;
+        } else {
+            this.resultRotation =
+                this.rotation + this.parentBone.resultRotation;
             if (this.parentBone) {
                 if (this.inheritRotation && this.inheritScale) {
                     tResultMatrix = this.resultTransform.getMatrix();
-                    Matrix.mul(tResultMatrix, this.parentBone.resultMatrix, this.resultMatrix);
-                }
-                else {
+                    Matrix.mul(
+                        tResultMatrix,
+                        this.parentBone.resultMatrix,
+                        this.resultMatrix,
+                    );
+                } else {
                     var parent: Bone = this.parentBone;
                     var tAngle: number;
                     var cos: number;
@@ -72,49 +74,71 @@ export class Bone {
                     //out.tx = ba * atx + bc * aty + btx;
                     //out.ty = bb * atx + bd * aty + bty;
                     tResultMatrix = this.resultTransform.getMatrix();
-                    var worldX: number = tParentMatrix.a * tResultMatrix.tx + tParentMatrix.c * tResultMatrix.ty + tParentMatrix.tx;
-                    var worldY: number = tParentMatrix.b * tResultMatrix.tx + tParentMatrix.d * tResultMatrix.ty + tParentMatrix.ty;
+                    var worldX: number =
+                        tParentMatrix.a * tResultMatrix.tx +
+                        tParentMatrix.c * tResultMatrix.ty +
+                        tParentMatrix.tx;
+                    var worldY: number =
+                        tParentMatrix.b * tResultMatrix.tx +
+                        tParentMatrix.d * tResultMatrix.ty +
+                        tParentMatrix.ty;
 
                     var tTestMatrix: Matrix = new Matrix();
                     if (this.inheritRotation) {
-                        tAngle = Math.atan2(parent.resultMatrix.b, parent.resultMatrix.a);
-                        cos = Math.cos(tAngle), sin = Math.sin(tAngle);
+                        tAngle = Math.atan2(
+                            parent.resultMatrix.b,
+                            parent.resultMatrix.a,
+                        );
+                        (cos = Math.cos(tAngle)), (sin = Math.sin(tAngle));
                         tTestMatrix.setTo(cos, sin, -sin, cos, 0, 0);
                         Matrix.mul(this._tempMatrix, tTestMatrix, Matrix.TEMP);
                         Matrix.TEMP.copyTo(tTestMatrix);
                         tResultMatrix = this.resultTransform.getMatrix();
-                        Matrix.mul(tResultMatrix, tTestMatrix, this.resultMatrix);
-                        if (this.resultTransform.scX * this.resultTransform.scY < 0) {
+                        Matrix.mul(
+                            tResultMatrix,
+                            tTestMatrix,
+                            this.resultMatrix,
+                        );
+                        if (
+                            this.resultTransform.scX *
+                                this.resultTransform.scY <
+                            0
+                        ) {
                             this.resultMatrix.rotate(Math.PI * 0.5);
                         }
                         this.resultMatrix.tx = worldX;
                         this.resultMatrix.ty = worldY;
-                    }
-                    else if (this.inheritScale) {
+                    } else if (this.inheritScale) {
                         tResultMatrix = this.resultTransform.getMatrix();
                         Matrix.TEMP.identity();
                         Matrix.TEMP.d = this.d;
-                        Matrix.mul(tResultMatrix, Matrix.TEMP, this.resultMatrix);
+                        Matrix.mul(
+                            tResultMatrix,
+                            Matrix.TEMP,
+                            this.resultMatrix,
+                        );
                         this.resultMatrix.tx = worldX;
                         this.resultMatrix.ty = worldY;
-                    }
-                    else {
+                    } else {
                         tResultMatrix = this.resultTransform.getMatrix();
                         Matrix.TEMP.identity();
                         Matrix.TEMP.d = this.d;
-                        Matrix.mul(tResultMatrix, Matrix.TEMP, this.resultMatrix);
+                        Matrix.mul(
+                            tResultMatrix,
+                            Matrix.TEMP,
+                            this.resultMatrix,
+                        );
                         this.resultMatrix.tx = worldX;
                         this.resultMatrix.ty = worldY;
                     }
                 }
-
-            }
-            else {
+            } else {
                 tResultMatrix = this.resultTransform.getMatrix();
                 tResultMatrix.copyTo(this.resultMatrix);
             }
         }
-        var i: number = 0, n: number = 0;
+        var i: number = 0,
+            n: number = 0;
         var tBone: Bone;
         for (i = 0, n = this._children.length; i < n; i++) {
             tBone = this._children[i];
@@ -124,7 +148,8 @@ export class Bone {
 
     //TODO:coverage
     updateChild(): void {
-        var i: number = 0, n: number = 0;
+        var i: number = 0,
+            n: number = 0;
         var tBone: Bone;
         for (i = 0, n = this._children.length; i < n; i++) {
             tBone = this._children[i];
@@ -135,7 +160,7 @@ export class Bone {
     //TODO:coverage
     setRotation(rd: number): void {
         if (this._sprite) {
-            this._sprite.rotation = rd * 180 / Math.PI;
+            this._sprite.rotation = (rd * 180) / Math.PI;
         }
     }
 
@@ -145,19 +170,25 @@ export class Bone {
             if (this._sprite) {
                 this._sprite.x = x + this.resultMatrix.tx;
                 this._sprite.y = y + this.resultMatrix.ty;
-            }
-            else {
+            } else {
                 this._sprite = new Sprite();
-                this._sprite.graphics.drawCircle(0, 0, 5, "#ff0000");
-                this._sprite.graphics.drawLine(0, 0, this.length, 0, "#00ff00");
-                this._sprite.graphics.fillText(this.name, 0, 0, "20px Arial", "#00ff00", "center");
+                this._sprite.graphics.drawCircle(0, 0, 5, '#ff0000');
+                this._sprite.graphics.drawLine(0, 0, this.length, 0, '#00ff00');
+                this._sprite.graphics.fillText(
+                    this.name,
+                    0,
+                    0,
+                    '20px Arial',
+                    '#00ff00',
+                    'center',
+                );
                 ILaya.stage.addChild(this._sprite);
                 this._sprite.x = x + this.resultMatrix.tx;
                 this._sprite.y = y + this.resultMatrix.ty;
             }
-
         }
-        var i: number = 0, n: number = 0;
+        var i: number = 0,
+            n: number = 0;
         var tBone: Bone;
         for (i = 0, n = this._children.length; i < n; i++) {
             tBone = this._children[i];
@@ -171,14 +202,13 @@ export class Bone {
     }
 
     //TODO:coverage
-    findBone(boneName: string): Bone|null {
+    findBone(boneName: string): Bone | null {
         if (this.name == boneName) {
             return this;
-        }
-        else {
+        } else {
             var i: number, n: number;
             var tBone: Bone;
-            var tResult: Bone|null;
+            var tResult: Bone | null;
             for (i = 0, n = this._children.length; i < n; i++) {
                 tBone = this._children[i];
                 tResult = tBone.findBone(boneName);
@@ -194,10 +224,13 @@ export class Bone {
     localToWorld(local: number[]): void {
         var localX: number = local[0];
         var localY: number = local[1];
-        local[0] = localX * this.resultMatrix.a + localY * this.resultMatrix.c + this.resultMatrix.tx;
-        local[1] = localX * this.resultMatrix.b + localY * this.resultMatrix.d + this.resultMatrix.ty;
+        local[0] =
+            localX * this.resultMatrix.a +
+            localY * this.resultMatrix.c +
+            this.resultMatrix.tx;
+        local[1] =
+            localX * this.resultMatrix.b +
+            localY * this.resultMatrix.d +
+            this.resultMatrix.ty;
     }
-
 }
-
-

@@ -1,4 +1,4 @@
-import { Laya } from "../../../../Laya";
+import { Laya } from "../../../../../Laya";
 import { Handler } from "../../../utils/Handler";
 import { Shader3D } from "../../shader/Shader3D";
 import { ShaderDefine } from "../../shader/ShaderDefine";
@@ -24,7 +24,7 @@ export class BaseMaterial {
 	static SHADERDEFINE_ALPHATEST: ShaderDefine = null;
 
 	/**
-	 * @deprecated 
+	 * @deprecated
 	 * BaseMaterial has deprecated,please use Material instead.
 	 */
 	static load(url: string, complete: Handler): void {

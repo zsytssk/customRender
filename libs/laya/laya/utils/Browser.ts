@@ -1,7 +1,7 @@
 //import { HTMLCanvas } from "../resource/HTMLCanvas"
 import { HTMLCanvas } from "../resource/HTMLCanvas";
-import { ILaya } from "../../ILaya";
-import { Laya } from "../../Laya";
+import { ILaya } from "../../../ILaya";
+import { Laya } from "../../../Laya";
 
 
 /**
@@ -231,7 +231,7 @@ export class Browser {
             doc.getElementsByTagName('head')[0].appendChild(meta);
         }
 
-        //处理兼容性			
+        //处理兼容性
         Browser.onMobile = (window as any).isConchApp ? true : u.indexOf("Mobile") > -1;
         Browser.onIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
         Browser.onIPhone = u.indexOf("iPhone") > -1;

@@ -1,6 +1,6 @@
 import { LayoutBox } from "./LayoutBox";
 import { UIComponent } from "./UIComponent";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 /**
 	 * <code>HBox</code> 是一个水平布局容器类。
@@ -23,8 +23,8 @@ export class HBox extends LayoutBox {
      */
     static BOTTOM: string = "bottom";
 
-		/** 
-		 * @inheritDoc	
+		/**
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected sortItem(items: any[]): void {
@@ -44,8 +44,8 @@ export class HBox extends LayoutBox {
         return super.height;
     }
 
-		/** 
-		 * @inheritDoc	
+		/**
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected changeItems(): void {

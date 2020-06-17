@@ -1,9 +1,9 @@
-import { Sprite } from "./Sprite";
-import { Rectangle } from "../maths/Rectangle"
-import { Texture } from "../resource/Texture"
-import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
-import { ClassUtils } from "../utils/ClassUtils";
+import { Sprite } from './Sprite';
+import { Rectangle } from '../maths/Rectangle';
+import { Texture } from '../resource/Texture';
+import { Handler } from '../utils/Handler';
+import { ILaya } from '../../../ILaya';
+import { ClassUtils } from '../utils/ClassUtils';
 /**
  * <code>BitmapFont</code> 是位图字体类，用于定义位图字体信息。
  * 字体制作及使用方法，请参考文章
@@ -35,18 +35,29 @@ export class BitmapFont {
         this._path = path;
         this._complete = complete;
 
-        if (!path || path.indexOf(".fnt") === -1) {
-            console.error('Bitmap font configuration information must be a ".fnt" file');
+        if (!path || path.indexOf('.fnt') === -1) {
+            console.error(
+                'Bitmap font configuration information must be a ".fnt" file',
+            );
             return;
         }
-        ILaya.loader.load([{ url: path, type: ILaya.Loader.XML }, { url: path.replace(".fnt", ".png"), type: ILaya.Loader.IMAGE }], Handler.create(this, this._onLoaded));
+        ILaya.loader.load(
+            [
+                { url: path, type: ILaya.Loader.XML },
+                { url: path.replace('.fnt', '.png'), type: ILaya.Loader.IMAGE },
+            ],
+            Handler.create(this, this._onLoaded),
+        );
     }
 
     /**
      * @private
      */
     private _onLoaded(): void {
-        this.parseFont(ILaya.Loader.getRes(this._path), ILaya.Loader.getRes(this._path.replace(".fnt", ".png")));
+        this.parseFont(
+            ILaya.Loader.getRes(this._path),
+            ILaya.Loader.getRes(this._path.replace('.fnt', '.png')),
+        );
         this._complete && this._complete.run();
     }
 
@@ -61,34 +72,62 @@ export class BitmapFont {
         var tX: number = 0;
         var tScale: number = 1;
 
-        var tInfo: any = xml.getElementsByTagName("info");
+        var tInfo: any = xml.getElementsByTagName('info');
         if (!tInfo[0].getAttributeNode) {
             return this.parseFont2(xml, texture);
         }
-        this.fontSize = parseInt(tInfo[0].getAttributeNode("size").nodeValue);
+        this.fontSize = parseInt(tInfo[0].getAttributeNode('size').nodeValue);
 
-        var tPadding: string = tInfo[0].getAttributeNode("padding").nodeValue;
-        var tPaddingArray: any[] = tPadding.split(",");
-        this._padding = [parseInt(tPaddingArray[0]), parseInt(tPaddingArray[1]), parseInt(tPaddingArray[2]), parseInt(tPaddingArray[3])];
+        var tPadding: string = tInfo[0].getAttributeNode('padding').nodeValue;
+        var tPaddingArray: any[] = tPadding.split(',');
+        this._padding = [
+            parseInt(tPaddingArray[0]),
+            parseInt(tPaddingArray[1]),
+            parseInt(tPaddingArray[2]),
+            parseInt(tPaddingArray[3]),
+        ];
 
-        var chars = xml.getElementsByTagName("char");
+        var chars = xml.getElementsByTagName('char');
         var i: number = 0;
         for (i = 0; i < chars.length; i++) {
             var tAttribute: any = chars[i];
-            var tId: number = parseInt(tAttribute.getAttributeNode("id").nodeValue);
+            var tId: number = parseInt(
+                tAttribute.getAttributeNode('id').nodeValue,
+            );
 
-            var xOffset: number = parseInt(tAttribute.getAttributeNode("xoffset").nodeValue) / tScale;
-            var yOffset: number = parseInt(tAttribute.getAttributeNode("yoffset").nodeValue) / tScale;
-            var xAdvance: number = parseInt(tAttribute.getAttributeNode("xadvance").nodeValue) / tScale;
+            var xOffset: number =
+                parseInt(tAttribute.getAttributeNode('xoffset').nodeValue) /
+                tScale;
+            var yOffset: number =
+                parseInt(tAttribute.getAttributeNode('yoffset').nodeValue) /
+                tScale;
+            var xAdvance: number =
+                parseInt(tAttribute.getAttributeNode('xadvance').nodeValue) /
+                tScale;
 
             var region: Rectangle = new Rectangle();
-            region.x = parseInt(tAttribute.getAttributeNode("x").nodeValue);
-            region.y = parseInt(tAttribute.getAttributeNode("y").nodeValue);
-            region.width = parseInt(tAttribute.getAttributeNode("width").nodeValue);
-            region.height = parseInt(tAttribute.getAttributeNode("height").nodeValue);
+            region.x = parseInt(tAttribute.getAttributeNode('x').nodeValue);
+            region.y = parseInt(tAttribute.getAttributeNode('y').nodeValue);
+            region.width = parseInt(
+                tAttribute.getAttributeNode('width').nodeValue,
+            );
+            region.height = parseInt(
+                tAttribute.getAttributeNode('height').nodeValue,
+            );
 
-            var tTexture: Texture = Texture.create(texture, region.x, region.y, region.width, region.height, xOffset, yOffset);
-            this._maxWidth = Math.max(this._maxWidth, xAdvance + this.letterSpacing);
+            var tTexture: Texture = Texture.create(
+                texture,
+                region.x,
+                region.y,
+                region.width,
+                region.height,
+                xOffset,
+                yOffset,
+            );
+            this._maxWidth = Math.max(
+                this._maxWidth,
+                xAdvance + this.letterSpacing,
+            );
             this._fontCharDic[tId] = tTexture;
             this._fontWidthMap[tId] = xAdvance;
         }
@@ -105,32 +144,51 @@ export class BitmapFont {
         var tX: number = 0;
         var tScale: number = 1;
 
-        var tInfo: any = xml.getElementsByTagName("info");
-        this.fontSize = parseInt(tInfo[0].attributes["size"].nodeValue);
+        var tInfo: any = xml.getElementsByTagName('info');
+        this.fontSize = parseInt(tInfo[0].attributes['size'].nodeValue);
 
-        var tPadding: string = tInfo[0].attributes["padding"].nodeValue;
-        var tPaddingArray: any[] = tPadding.split(",");
-        this._padding = [parseInt(tPaddingArray[0]), parseInt(tPaddingArray[1]), parseInt(tPaddingArray[2]), parseInt(tPaddingArray[3])];
+        var tPadding: string = tInfo[0].attributes['padding'].nodeValue;
+        var tPaddingArray: any[] = tPadding.split(',');
+        this._padding = [
+            parseInt(tPaddingArray[0]),
+            parseInt(tPaddingArray[1]),
+            parseInt(tPaddingArray[2]),
+            parseInt(tPaddingArray[3]),
+        ];
 
-        var chars = xml.getElementsByTagName("char");
+        var chars = xml.getElementsByTagName('char');
         var i: number = 0;
         for (i = 0; i < chars.length; i++) {
             var tAttribute = chars[i].attributes;
-            var tId: number = parseInt(tAttribute["id"].nodeValue);
+            var tId: number = parseInt(tAttribute['id'].nodeValue);
 
-            var xOffset: number = parseInt(tAttribute["xoffset"].nodeValue) / tScale;
-            var yOffset: number = parseInt(tAttribute["yoffset"].nodeValue) / tScale;
+            var xOffset: number =
+                parseInt(tAttribute['xoffset'].nodeValue) / tScale;
+            var yOffset: number =
+                parseInt(tAttribute['yoffset'].nodeValue) / tScale;
 
-            var xAdvance: number = parseInt(tAttribute["xadvance"].nodeValue) / tScale;
+            var xAdvance: number =
+                parseInt(tAttribute['xadvance'].nodeValue) / tScale;
 
             var region: Rectangle = new Rectangle();
-            region.x = parseInt(tAttribute["x"].nodeValue);
-            region.y = parseInt(tAttribute["y"].nodeValue);
-            region.width = parseInt(tAttribute["width"].nodeValue);
-            region.height = parseInt(tAttribute["height"].nodeValue);
+            region.x = parseInt(tAttribute['x'].nodeValue);
+            region.y = parseInt(tAttribute['y'].nodeValue);
+            region.width = parseInt(tAttribute['width'].nodeValue);
+            region.height = parseInt(tAttribute['height'].nodeValue);
 
-            var tTexture: Texture = Texture.create(texture, region.x, region.y, region.width, region.height, xOffset, yOffset);
-            this._maxWidth = Math.max(this._maxWidth, xAdvance + this.letterSpacing);
+            var tTexture: Texture = Texture.create(
+                texture,
+                region.x,
+                region.y,
+                region.width,
+                region.height,
+                xOffset,
+                yOffset,
+            );
+            this._maxWidth = Math.max(
+                this._maxWidth,
+                xAdvance + this.letterSpacing,
+            );
             this._fontCharDic[tId] = tTexture;
             this._fontWidthMap[tId] = xAdvance;
         }
@@ -177,8 +235,9 @@ export class BitmapFont {
      */
     getCharWidth(char: string): number {
         var code: number = char.charCodeAt(0);
-        if (this._fontWidthMap[code]) return this._fontWidthMap[code] + this.letterSpacing;
-        if (char === " ") return this._spaceWidth + this.letterSpacing;
+        if (this._fontWidthMap[code])
+            return this._fontWidthMap[code] + this.letterSpacing;
+        if (char === ' ') return this._spaceWidth + this.letterSpacing;
         return 0;
     }
 
@@ -213,12 +272,19 @@ export class BitmapFont {
      * @internal
      * 将指定的文本绘制到指定的显示对象上。
      */
-    _drawText(text: string, sprite: Sprite, drawX: number, drawY: number, align: string, width: number): void {
+    _drawText(
+        text: string,
+        sprite: Sprite,
+        drawX: number,
+        drawY: number,
+        align: string,
+        width: number,
+    ): void {
         var tWidth: number = this.getTextWidth(text);
         var tTexture: Texture;
         var dx: number = 0;
-        align === "center" && (dx = (width - tWidth) / 2);
-        align === "right" && (dx = (width - tWidth));
+        align === 'center' && (dx = (width - tWidth) / 2);
+        align === 'right' && (dx = width - tWidth);
         var tx: number = 0;
         for (var i: number = 0, n: number = text.length; i < n; i++) {
             tTexture = this.getCharTexture(text.charAt(i));
@@ -230,6 +296,5 @@ export class BitmapFont {
     }
 }
 
-
-ClassUtils.regClass("laya.display.BitmapFont", BitmapFont);
-ClassUtils.regClass("Laya.BitmapFont", BitmapFont);
+ClassUtils.regClass('laya.display.BitmapFont', BitmapFont);
+ClassUtils.regClass('Laya.BitmapFont', BitmapFont);

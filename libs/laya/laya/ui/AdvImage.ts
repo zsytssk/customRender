@@ -2,11 +2,11 @@ import { Image } from "./Image";
 import { Event } from "../events/Event"
 import { LocalStorage } from "../net/LocalStorage"
 import { Browser } from "../utils/Browser"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
- * 广告插件 
+ * 广告插件
  * @author 小松
  * @date -2018-09-19
  */
@@ -79,7 +79,7 @@ export class AdvImage extends Image {
 	}
 
 	/**
-	 * 跳转游戏 
+	 * 跳转游戏
 	 * @param callBack Function 回调参数说明：type 0 跳转成功；1跳转失败；2跳转接口调用成功
 	 */
 	private jumptoGame(): void {
@@ -134,7 +134,7 @@ export class AdvImage extends Image {
 	}
 
 	/**
-	 * 获取广告列表数据信息 
+	 * 获取广告列表数据信息
 	 */
 	private onGetAdvsListData(): void {
 		var _this: any = this;
@@ -239,7 +239,7 @@ export class AdvImage extends Image {
 	}
 	/**
 	 * @override
-	 * @param destroyChild 
+	 * @param destroyChild
 	 */
  	destroy(destroyChild: boolean = true): void {
 		ILaya.timer.clear(this, this.onLunbo);

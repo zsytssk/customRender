@@ -3,7 +3,7 @@ import { Byte } from "../../utils/Byte";
 import { Handler } from "../../utils/Handler";
 import { Const } from "../../Const";
 import { Event } from "../../events/Event";
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { Matrix } from "../../maths/Matrix";
 
 
@@ -119,7 +119,7 @@ export class MovieClip extends Sprite {
 
 	/**
 	 * @internal
-	 * @override 
+	 * @override
 	 */
 	_setDisplay(value: boolean): void {
 		super._setDisplay(value);
@@ -128,7 +128,7 @@ export class MovieClip extends Sprite {
 		}
 	}
 	/**
-	 * @internal 
+	 * @internal
 	 * @override
 	 */
 	protected _onDisplay(value?: boolean): void {
@@ -390,12 +390,12 @@ export class MovieClip extends Sprite {
 				case 11: //scale
 					_idOfSprite[_data.getUint16()].setScale(_data.getFloat32(), _data.getFloat32());
 					break;
-				case 98: //event		
+				case 98: //event
 					eStr = _data.getString();
 					this.event(eStr);
 					if (eStr == "stop") this.stop();
 					break;
-				case 99: //FrameBegin				
+				case 99: //FrameBegin
 					this._curIndex = _data.getUint16();
 					ifAdd && this.updateZOrder();
 					break;

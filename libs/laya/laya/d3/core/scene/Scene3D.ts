@@ -1,5 +1,5 @@
-import { Config3D } from "../../../../Config3D";
-import { ILaya } from "../../../../ILaya";
+import { Config3D } from "../../../../../Config3D";
+import { ILaya } from "../../../../../ILaya";
 import { Sprite } from "../../../display/Sprite";
 import { LayaGL } from "../../../layagl/LayaGL";
 import { Loader } from "../../../net/Loader";
@@ -1159,7 +1159,7 @@ export class Scene3D extends Sprite implements ISubmit, ICreateResource {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	renderSubmit(): number {
 		var gl: any = LayaGL.instance;
@@ -1177,20 +1177,20 @@ export class Scene3D extends Sprite implements ISubmit, ICreateResource {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	getRenderType(): number {
 		return 0;
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	releaseRender(): void {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	reUse(context: Context, pos: number): number {
 		return 0;

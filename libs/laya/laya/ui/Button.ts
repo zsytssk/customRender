@@ -11,7 +11,7 @@ import { UIUtils } from "./UIUtils"
 import { Handler } from "../utils/Handler"
 import { Utils } from "../utils/Utils"
 import { WeakObject } from "../utils/WeakObject"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -238,7 +238,7 @@ export class Button extends UIComponent implements ISelect {
         this.label = label;
     }
 
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     destroy(destroyChild: boolean = true): void {
@@ -251,7 +251,7 @@ export class Button extends UIComponent implements ISelect {
         this._labelColors = this._sources = this._strokeColors = null;
     }
 
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     protected createChildren(): void {
@@ -270,7 +270,7 @@ export class Button extends UIComponent implements ISelect {
         }
     }
 
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     protected initialize(): void {
@@ -314,7 +314,7 @@ export class Button extends UIComponent implements ISelect {
             this._skin = value;
             if (value) {
                 if (!Loader.getRes(value)) {
-                    ILaya.loader.load(this._skin, Handler.create(this, this._skinLoaded), null, Loader.IMAGE, 1);//TODO 
+                    ILaya.loader.load(this._skin, Handler.create(this, this._skinLoaded), null, Loader.IMAGE, 1);//TODO
                 } else {
                     this._skinLoaded();
                 }
@@ -644,7 +644,7 @@ export class Button extends UIComponent implements ISelect {
         this._bitmap.sizeGrid = UIUtils.fillArray(Styles.defaultSizeGrid, value, Number);
     }
 
-    /**@inheritDoc 
+    /**@inheritDoc
      * @override
     */
     set width(value: number) {
@@ -660,7 +660,7 @@ export class Button extends UIComponent implements ISelect {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set height(value: number) {
@@ -676,7 +676,7 @@ export class Button extends UIComponent implements ISelect {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

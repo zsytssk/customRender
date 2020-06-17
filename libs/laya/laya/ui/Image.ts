@@ -6,7 +6,7 @@ import { AutoBitmap } from "./AutoBitmap"
 import { UIComponent } from "./UIComponent"
 import { UIUtils } from "./UIUtils"
 import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -18,7 +18,7 @@ import { ClassUtils } from "../utils/ClassUtils";
 /**
  * <code>Image</code> 类是用于表示位图图像或绘制图形的显示对象。
  * Image和Clip组件是唯一支持异步加载的两个组件，比如img.skin = "abc/xxx.png"，其他UI组件均不支持异步加载。
- * 
+ *
  * @example <caption>以下示例代码，创建了一个新的 <code>Image</code> 实例，设置了它的皮肤、位置信息，并添加到舞台上。</caption>
  *	package
  *	 {
@@ -105,7 +105,7 @@ export class Image extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  destroy(destroyChild: boolean = true): void {
@@ -123,7 +123,7 @@ export class Image extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected createChildren(): void {
@@ -192,7 +192,7 @@ export class Image extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected measureWidth(): number {
@@ -200,7 +200,7 @@ export class Image extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected measureHeight(): number {
@@ -208,7 +208,7 @@ export class Image extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set width(value: number) {
@@ -221,7 +221,7 @@ export class Image extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set height(value: number) {
@@ -249,7 +249,7 @@ export class Image extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

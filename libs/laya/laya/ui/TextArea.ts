@@ -3,7 +3,7 @@ import { VScrollBar } from "./VScrollBar";
 import { HScrollBar } from "./HScrollBar";
 import { Styles } from "./Styles";
 import { Event } from "../events/Event"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -67,7 +67,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *         Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
  *         Laya.loader.load(["resource/ui/input.png"], Handler.create(this, this.onLoadComplete));//加载资源。
  *     }
-	
+
  *     private onLoadComplete(): void {
  *         var textArea: TextArea = new TextArea("这个一个TextArea实例。");//创建一个 TextArea 类的实例对象 textArea 。
  *         textArea.skin = "resource/ui/input.png";//设置 textArea 的皮肤。
@@ -104,8 +104,8 @@ export class TextArea extends TextInput {
         this.callLater(this.changeScroll);
     }
     /**
-     * 
-     * @param destroyChild 
+     *
+     * @param destroyChild
      * @override
      */
     destroy(destroyChild: boolean = true): void {

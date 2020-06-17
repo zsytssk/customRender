@@ -1,8 +1,8 @@
-import { AtlasGrid } from "./AtlasGrid";
-import { TextTexture } from "./TextTexture";
-import { Point } from "../../maths/Point"
-import { CharRenderInfo } from "./CharRenderInfo"
-import { ILaya } from "../../../ILaya";
+import { AtlasGrid } from './AtlasGrid';
+import { TextTexture } from './TextTexture';
+import { Point } from '../../maths/Point';
+import { CharRenderInfo } from './CharRenderInfo';
+import { ILaya } from '../../../../ILaya';
 /**
  *  文字贴图的大图集。
  */
@@ -11,17 +11,24 @@ export class TextAtlas {
     texHeight: number = 1024;
     private atlasgrid: AtlasGrid;
     //private protectDist: number = 1;
-    texture: TextTexture|null = null;
-    charMaps: any = {};		// 保存文字信息的字典
+    texture: TextTexture | null = null;
+    charMaps: any = {}; // 保存文字信息的字典
     static atlasGridW: number = 16;
 
     constructor() {
         this.texHeight = this.texWidth = ILaya.TextRender.atlasWidth;
-        this.texture = TextTexture.getTextTexture(this.texWidth, this.texHeight);
+        this.texture = TextTexture.getTextTexture(
+            this.texWidth,
+            this.texHeight,
+        );
         if (this.texWidth / TextAtlas.atlasGridW > 256) {
             TextAtlas.atlasGridW = Math.ceil(this.texWidth / 256);
         }
-        this.atlasgrid = new AtlasGrid(this.texWidth / TextAtlas.atlasGridW, this.texHeight / TextAtlas.atlasGridW, this.texture.id);
+        this.atlasgrid = new AtlasGrid(
+            this.texWidth / TextAtlas.atlasGridW,
+            this.texHeight / TextAtlas.atlasGridW,
+            this.texture.id,
+        );
     }
 
     setProtecteDist(d: number): void {
@@ -36,7 +43,12 @@ export class TextAtlas {
      * @return
      */
     getAEmpty(w: number, h: number, pt: Point): boolean {
-        var find: boolean = this.atlasgrid.addRect(1, Math.ceil(w / TextAtlas.atlasGridW), Math.ceil(h / TextAtlas.atlasGridW), pt);
+        var find: boolean = this.atlasgrid.addRect(
+            1,
+            Math.ceil(w / TextAtlas.atlasGridW),
+            Math.ceil(h / TextAtlas.atlasGridW),
+            pt,
+        );
         if (find) {
             pt.x *= TextAtlas.atlasGridW;
             pt.y *= TextAtlas.atlasGridW;
@@ -65,8 +77,5 @@ export class TextAtlas {
         this.texture.discard();
     }
 
-    printDebugInfo(): void {
-
-    }
+    printDebugInfo(): void {}
 }
-

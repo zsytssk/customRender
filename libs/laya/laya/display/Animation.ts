@@ -4,7 +4,7 @@ import { Loader } from "../net/Loader"
 import { GraphicAnimation } from "../utils/GraphicAnimation"
 import { Handler } from "../utils/Handler"
 import { Utils } from "../utils/Utils"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -171,7 +171,7 @@ export class Animation extends AnimationBase {
         return rst;
     }
 
-    /**@private 
+    /**@private
     *  @override
     */
     protected _frameLoop(): void {
@@ -180,7 +180,7 @@ export class Animation extends AnimationBase {
         }
     }
 
-    /**@private 
+    /**@private
      * @override
     */
     protected _displayToIndex(value: number): void {

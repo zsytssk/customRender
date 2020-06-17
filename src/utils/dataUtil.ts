@@ -6,8 +6,8 @@ import { SHAPE } from 'data/shape';
 import { vectorToAngle } from './mathUtils';
 import { GunInfo } from 'data/gun';
 import { FishModel } from 'model/game/fish/fishModel';
-import { Sprite } from 'laya/laya/display/Sprite';
-import { Box } from 'laya/laya/ui/Box';
+import { Sprite } from 'laya/display/Sprite';
+import { Box } from 'laya/ui/Box';
 import { createSkeleton, createAnimation, createImg } from './createSkeleton';
 
 /** 获取皮肤对应的id */

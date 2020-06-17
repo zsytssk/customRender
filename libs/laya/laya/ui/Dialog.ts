@@ -10,7 +10,7 @@ import { Rectangle } from "../maths/Rectangle"
 import { Handler } from "../utils/Handler"
 import { Tween } from "../utils/Tween"
 import { IUI } from "./IUI";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -268,7 +268,7 @@ export class Dialog extends View {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  open(closeOther: boolean = true, param: any = null): void {
@@ -289,7 +289,7 @@ export class Dialog extends View {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  destroy(destroyChild: boolean = true): void {
@@ -332,7 +332,7 @@ export class Dialog extends View {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set zOrder(value: number) {

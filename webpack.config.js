@@ -29,6 +29,7 @@ const common_config = {
         modules: [
             path.resolve('./test'),
             path.resolve('./libs'),
+            path.resolve('./library'),
             path.resolve('./src'),
             path.resolve('./node_modules'),
         ],

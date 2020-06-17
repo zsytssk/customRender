@@ -1,6 +1,6 @@
 import { HtmlVideo } from "./HtmlVideo";
 import { LayaGL } from "../../layagl/LayaGL";
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { WebGLContext } from "../../webgl/WebGLContext";
 
 
@@ -21,7 +21,7 @@ export class WebGLVideo extends HtmlVideo {
 		this.gl = ILaya.Render.isConchApp ? (window as any).LayaGLContext.instance : WebGLContext.mainContext;
 		this._source = this.gl.createTexture();
 
-		//preTarget = WebGLContext.curBindTexTarget; 
+		//preTarget = WebGLContext.curBindTexTarget;
 		//preTexture = WebGLContext.curBindTexValue;
 
 		WebGLContext.bindTexture(this.gl, gl.TEXTURE_2D, this._source);

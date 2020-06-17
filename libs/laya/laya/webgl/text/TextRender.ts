@@ -13,7 +13,7 @@ import { CharRenderInfo } from "./CharRenderInfo"
 import { CharRender_Canvas } from "./CharRender_Canvas"
 import { CharRender_Native } from "./CharRender_Native"
 import { ICharRender } from "./ICharRender"
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 
 export class TextRender {
     //config
@@ -35,7 +35,7 @@ export class TextRender {
 
     /**
      * fontSizeInfo
-     * 记录每种字体的像素的大小。标准是32px的字体。由4个byte组成，分别表示[xdist,ydist,w,h]。 
+     * 记录每种字体的像素的大小。标准是32px的字体。由4个byte组成，分别表示[xdist,ydist,w,h]。
      * xdist,ydist 是像素起点到排版原点的距离，都是正的，表示实际数据往左和上偏多少，如果实际往右和下偏，则算作0，毕竟这个只是一个大概
      * 例如 [Arial]=0x00002020, 表示宽高都是32
      */
@@ -162,7 +162,7 @@ export class TextRender {
         this._curStrPos = i;
         return str.substring(start, i);
 	}
-	
+
     filltext(ctx: Context, data: string | WordText, x: number, y: number, fontStr: string, color: string, strokeColor: string, lineWidth: number, textAlign: string, underLine: number = 0): void {
         if (data.length <= 0)
             return;
@@ -197,12 +197,12 @@ export class TextRender {
         if (TextRender.scaleFontWithCtx) {
             var sx: number = 1;
             var sy: number = 1;
-    
+
             if (!ILaya.Render.isConchApp || ((window as any).conchTextCanvas.scale)) {
                 sx = ctx.getMatScaleX();
                 sy = ctx.getMatScaleY();
             }
-            
+
             if (sx < 1e-4 || sy < 1e-1)
                 return;
             this.fontScaleX = sx;
@@ -217,7 +217,7 @@ export class TextRender {
         var str = (<string>data);
         var isHtmlChar= !!htmlchars;
         /**
-         * sameTexData 
+         * sameTexData
          * WordText 中保存了一个数组，这个数组是根据贴图排序的，目的是为了能相同的贴图合并。
          * 类型是 {ri:CharRenderInfo,stx:int,sty:int,...}[文字个数][贴图分组]
          */
@@ -423,7 +423,7 @@ export class TextRender {
         var margin: number = ILaya.Render.isConchApp ? 0 : (font._size / 3 | 0);	// 凑的。 注意这里不能乘以缩放，因为ctx会自动处理
         // 如果不存在，就要插入已有的，或者创建新的
         var imgdt: ImageData|null=null;
-        // 先大约测量文字宽度 
+        // 先大约测量文字宽度
 
         if (!lineWidth) {
             lineWidth = 0;
@@ -660,7 +660,7 @@ export class TextRender {
             // 如果当前行有数据，就要往上找
             while (true) {
                 y = (sy + ey) / 2 | 0;	// 必须是int
-                if (y + 1 >= sy) {// 
+                if (y + 1 >= sy) {//
                     // 找到了。严格来说还不知道这个是否有像素，不过这里要求不严格，可以认为有
                     curbbx[1] = y;
                     break;
@@ -754,7 +754,7 @@ export class TextRender {
         TextRender.tmpRI.height = TextRender.standardFontSize;
         this.charRender.fontsz = TextRender.standardFontSize;
         var bmpdt: ImageData = this.charRender.getCharBmp('g', fontstr, 0, 'red', null, TextRender.tmpRI, orix, oriy, marginr, marginb);
-        // native 返回的是 textBitmap。 data直接是ArrayBuffer 
+        // native 返回的是 textBitmap。 data直接是ArrayBuffer
         if (ILaya.Render.isConchApp) {
             //bmpdt.data.buffer = bmpdt.data;
             (bmpdt as any).data = new Uint8ClampedArray(bmpdt.data);

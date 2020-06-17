@@ -5,7 +5,7 @@ import { ScrollBar } from "./ScrollBar";
 import { Clip } from "./Clip";
 import { Event } from "../events/Event"
 import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -28,24 +28,24 @@ import { ClassUtils } from "../utils/ClassUtils";
  *		import laya.ui.Tree;
  *		import laya.utils.Browser;
  *		import laya.utils.Handler;
-	
+
  *		public class Tree_Example
  *		{
-	
+
  *			public function Tree_Example()
  *			{
  *				Laya.init(640, 800);
  *				Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
  *				Laya.loader.load(["resource/ui/vscroll.png", "resource/ui/vscroll$bar.png", "resource/ui/vscroll$down.png", "resource/ui/vscroll$up.png", "resource/ui/clip_selectBox.png", "resource/ui/clip_tree_folder.png", "resource/ui/clip_tree_arrow.png"], Handler.create(this, onLoadComplete));
  *			}
-	
+
  *			private function onLoadComplete():void
  *			{
  *				var xmlString:String;//创建一个xml字符串，用于存储树结构数据。
  *				xmlString = "&lt;root&gt;&lt;item label='box1'&gt;&lt;abc label='child1'/&gt;&lt;abc label='child2'/&gt;&lt;abc label='child3'/&gt;&lt;abc label='child4'/&gt;&lt;abc label='child5'/&gt;&lt;/item&gt;&lt;item label='box2'&gt;&lt;abc label='child1'/&gt;&lt;abc label='child2'/&gt;&lt;abc label='child3'/&gt;&lt;abc label='child4'/&gt;&lt;/item&gt;&lt;/root&gt;";
  *				var domParser:* = new Browser.window.DOMParser();//创建一个DOMParser实例domParser。
  *				var xml:* = domParser.parseFromString(xmlString, "text/xml");//解析xml字符。
-	
+
  *				var tree:Tree = new Tree();//创建一个 Tree 类的实例对象 tree 。
  *				tree.scrollBarSkin = "resource/ui/vscroll.png";//设置 tree 的皮肤。
  *				tree.itemRender = Item;//设置 tree 的项渲染器。
@@ -58,7 +58,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *			}
  *		}
  *	}
-	
+
  * import laya.ui.Box;
  * import laya.ui.Clip;
  * import laya.ui.Label;
@@ -69,7 +69,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *			this.name = "render";
  *			this.right = 0;
  *			this.left = 0;
-	
+
  *			var selectBox:Clip = new Clip("resource/ui/clip_selectBox.png", 1, 2);
  *			selectBox.name = "selectBox";
  *			selectBox.height = 24;
@@ -77,13 +77,13 @@ import { ClassUtils } from "../utils/ClassUtils";
  *			selectBox.y = 0;
  *			selectBox.left = 12;
  *			addChild(selectBox);
-	
+
  *			var folder:Clip = new Clip("resource/ui/clip_tree_folder.png", 1, 3);
  *			folder.name = "folder";
  *			folder.x = 14;
  *			folder.y = 4;
  *			addChild(folder);
-	
+
  *			var label:Label = new Label("treeItem");
  *			label.name = "label";
  *			label.color = "#ffff00";
@@ -94,7 +94,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *			label.left = 33;
  *			label.right = 0;
  *			addChild(label);
-	
+
  *			var arrow:Clip = new Clip("resource/ui/clip_tree_arrow.png", 1, 2);
  *			arrow.name = "arrow";
  *			arrow.x = 0;
@@ -112,7 +112,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *     xmlString = "&lt;root&gt;&lt;item label='box1'&gt;&lt;abc label='child1'/&gt;&lt;abc label='child2'/&gt;&lt;abc label='child3'/&gt;&lt;abc label='child4'/&gt;&lt;abc label='child5'/&gt;&lt;/item&gt;&lt;item label='box2'&gt;&lt;abc label='child1'/&gt;&lt;abc label='child2'/&gt;&lt;abc label='child3'/&gt;&lt;abc label='child4'/&gt;&lt;/item&gt;&lt;/root&gt;";
  *     var domParser = new laya.utils.Browser.window.DOMParser();//创建一个DOMParser实例domParser。
  *     var xml = domParser.parseFromString(xmlString, "text/xml");//解析xml字符。
-	
+
  *     var tree = new laya.ui.Tree();//创建一个 Tree 类的实例对象 tree 。
  *     tree.scrollBarSkin = "resource/ui/vscroll.png";//设置 tree 的皮肤。
  *     tree.itemRender = mypackage.treeExample.Item;//设置 tree 的项渲染器。
@@ -128,7 +128,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *         Item.__super.call(this);//初始化父类。
  *         this.right = 0;
  *         this.left = 0;
-	
+
  *         var selectBox = new laya.ui.Clip("resource/ui/clip_selectBox.png", 1, 2);
  *         selectBox.name = "selectBox";//设置 selectBox 的name 为“selectBox”时，将被识别为树结构的项的背景。2帧：悬停时背景、选中时背景。
  *         selectBox.height = 24;
@@ -136,13 +136,13 @@ import { ClassUtils } from "../utils/ClassUtils";
  *         selectBox.y = 0;
  *         selectBox.left = 12;
  *         this.addChild(selectBox);//需要使用this.访问父类的属性或方法。
-	
+
  *         var folder = new laya.ui.Clip("resource/ui/clip_tree_folder.png", 1, 3);
  *         folder.name = "folder";//设置 folder 的name 为“folder”时，将被识别为树结构的文件夹开启状态图表。2帧：折叠状态、打开状态。
  *         folder.x = 14;
  *         folder.y = 4;
  *         this.addChild(folder);
-	
+
  *         var label = new laya.ui.Label("treeItem");
  *         label.name = "label";//设置 label 的name 为“label”时，此值将用于树结构数据赋值。
  *         label.color = "#ffff00";
@@ -153,7 +153,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *         label.left = 33;
  *         label.right = 0;
  *         this.addChild(label);
-	
+
  *         var arrow = new laya.ui.Clip("resource/ui/clip_tree_arrow.png", 1, 2);
  *         arrow.name = "arrow";//设置 arrow 的name 为“arrow”时，将被识别为树结构的文件夹开启状态图表。2帧：折叠状态、打开状态。
  *         arrow.x = 0;
@@ -167,7 +167,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  * import Browser = laya.utils.Browser;
  * import Handler = laya.utils.Handler;
  * class Tree_Example {
-	
+
  *     constructor() {
  *         Laya.init(640, 800);
  *         Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
@@ -178,7 +178,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *         xmlString = "&lt;root&gt;&lt;item label='box1'&gt;&lt;abc label='child1'/&gt;&lt;abc label='child2'/&gt;&lt;abc label='child3'/&gt;&lt;abc label='child4'/&gt;&lt;abc label='child5'/&gt;&lt;/item&gt;&lt;item label='box2'&gt;&lt;abc  * label='child1'/&gt;&lt;abc label='child2'/&gt;&lt;abc label='child3'/&gt;&lt;abc label='child4'/&gt;&lt;/item&gt;&lt;/root&gt;";
  *         var domParser: any = new Browser.window.DOMParser();//创建一个DOMParser实例domParser。
  *         var xml: any = domParser.parseFromString(xmlString, "text/xml");//解析xml字符。
-	
+
  *         var tree: Tree = new Tree();//创建一个 Tree 类的实例对象 tree 。
  *         tree.scrollBarSkin = "resource/ui/vscroll.png";//设置 tree 的皮肤。
  *         tree.itemRender = Item;//设置 tree 的项渲染器。
@@ -206,13 +206,13 @@ import { ClassUtils } from "../utils/ClassUtils";
  *         selectBox.y = 0;
  *         selectBox.left = 12;
  *         this.addChild(selectBox);
-	
+
  *         var folder: Clip = new Clip("resource/ui/clip_tree_folder.png", 1, 3);
  *         folder.name = "folder";
  *         folder.x = 14;
  *         folder.y = 4;
  *         this.addChild(folder);
-	
+
  *         var label: Label = new Label("treeItem");
  *         label.name = "label";
  *         label.color = "#ffff00";
@@ -223,7 +223,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *         label.left = 33;
  *         label.right = 0;
  *         this.addChild(label);
-	
+
  *         var arrow: Clip = new Clip("resource/ui/clip_tree_arrow.png", 1, 2);
  *         arrow.name = "arrow";
  *         arrow.x = 0;
@@ -256,7 +256,7 @@ export class Tree extends Box implements IRender {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     destroy(destroyChild: boolean = true): void {
@@ -442,7 +442,7 @@ export class Tree extends Box implements IRender {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set height(value: number) {
@@ -562,7 +562,7 @@ export class Tree extends Box implements IRender {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

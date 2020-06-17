@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'customRenderer';
-import { Laya } from 'laya/Laya';
+import { Laya } from 'Laya';
 
 export function Scene(props: ComProps) {
     const { children } = props;
@@ -19,6 +19,7 @@ export function Scene(props: ComProps) {
             Laya.stage.off(Laya.Event.RESIZE, this, setXFn);
         };
     }, []);
+
     return (
         <View x={x} width={1920} height={750} autoDestroyAtClosed={true}>
             {...children}

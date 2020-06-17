@@ -1,18 +1,18 @@
 import { UIComponent } from "../../laya/ui/UIComponent";
-import { Laya } from "./../../Laya";
+import { Laya } from "../../../Laya";
 import { Stage } from "../../laya/display/Stage"
 import { Matrix } from "../../laya/maths/Matrix"
 import { Texture } from "../../laya/resource/Texture"
 import { Texture2D } from "../resource/Texture2D";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
-	
+
 /**
  * 微信开放数据展示组件，直接实例本组件，即可根据组件宽高，位置，以最优的方式显示开放域数据
  */
 export class WXOpenDataViewer extends UIComponent {
     //private _texture:Texture;
-    
+
     constructor(){
         super();
         this._width = this._height = 200;
@@ -29,16 +29,16 @@ export class WXOpenDataViewer extends UIComponent {
     }
     /**
      * @override
-     */ 
+     */
     onDisable():void {
         this.postMsg({type: "undisplay"});
         Laya.timer.clear(this, this._onLoop);
     }
-    
+
     private _onLoop():void {
         (this.texture.bitmap as Texture2D).loadImageSource((window as any).sharedCanvas);
     }
-    
+
     /**
      * @override
      */
@@ -78,7 +78,7 @@ export class WXOpenDataViewer extends UIComponent {
         super.x = value;
         this.callLater(this._postMsg);
     }
-    
+
     /**
      * @override
      */
@@ -93,14 +93,14 @@ export class WXOpenDataViewer extends UIComponent {
         super.y = value;
         this.callLater(this._postMsg);
     }
-    
+
     /**
      * @override
      */
     get y(){
         return super.y;
     }
-    
+
     private _postMsg():void {
         var mat:Matrix = new Matrix();
         mat.translate(this.x, this.y);
@@ -108,7 +108,7 @@ export class WXOpenDataViewer extends UIComponent {
         mat.scale(stage._canvasTransform.getScaleX() * this.globalScaleX * stage.transform.getScaleX(), stage._canvasTransform.getScaleY() * this.globalScaleY * stage.transform.getScaleY());
         this.postMsg({type: "changeMatrix", a: mat.a, b: mat.b, c: mat.c, d: mat.d, tx: mat.tx, ty: mat.ty, w: this.width, h: this.height});
     }
-    
+
     /**向开放数据域发送消息*/
         postMsg(msg:any):void {
         if ((window as any).wx && (window as any).wx.getOpenDataContext) {

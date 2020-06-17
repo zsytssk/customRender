@@ -1,4 +1,4 @@
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { Prefab } from "../components/Prefab";
 import { Text } from "../display/Text";
 import { Event } from "../events/Event";
@@ -628,7 +628,7 @@ export class Loader extends EventDispatcher {
 	}
 
     /**
-     * 清理指定资源地址的缓存。 
+     * 清理指定资源地址的缓存。
      * @param url 资源地址。
      */
     static clearRes(url: string): void {

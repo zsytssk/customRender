@@ -1,8 +1,8 @@
-import { Laya } from "../../Laya";
-import { Component } from "../components/Component";
-import { ClassUtils } from "../utils/ClassUtils";
-import { IPhysics } from "./IPhysics";
-import { RigidBody } from "./RigidBody";
+import { Laya } from '../../../Laya';
+import { Component } from '../components/Component';
+import { ClassUtils } from '../utils/ClassUtils';
+import { IPhysics } from './IPhysics';
+import { RigidBody } from './RigidBody';
 
 /**
  * 碰撞体基类
@@ -46,10 +46,9 @@ export class ColliderBase extends Component {
      * @override
      */
     protected _onEnable(): void {
-        if(this.rigidBody){
+        if (this.rigidBody) {
             this.refresh();
-        }
-        else{
+        } else {
             Laya.systemTimer.callLater(this, this._checkRigidBody);
         }
     }
@@ -162,9 +161,7 @@ export class ColliderBase extends Component {
      * @private
      * 重置形状
      */
-    resetShape(re: boolean = true): void {
-
-    }
+    resetShape(re: boolean = true): void {}
 
     /**
      * 获取是否为单实例组件。
@@ -175,5 +172,5 @@ export class ColliderBase extends Component {
     }
 }
 
-ClassUtils.regClass("laya.physics.ColliderBase", ColliderBase);
-ClassUtils.regClass("Laya.ColliderBase", ColliderBase);
+ClassUtils.regClass('laya.physics.ColliderBase', ColliderBase);
+ClassUtils.regClass('Laya.ColliderBase', ColliderBase);

@@ -1,6 +1,5 @@
-import { ILaya } from "../../../ILaya";
-import { Handler } from "../../utils/Handler";
-
+import { ILaya } from '../../../../ILaya';
+import { Handler } from '../../utils/Handler';
 
 /**
  * Media用于捕捉摄像头和麦克风。可以捕捉任意之一，或者同时捕捉两者。<code>getCamera</code>前可以使用<code>supported()</code>检查当前浏览器是否支持。
@@ -8,9 +7,7 @@ import { Handler } from "../../utils/Handler";
  * <p>目前Media在移动平台只支持Android，不支持IOS。只可在FireFox完整地使用，Chrome测试时无法捕捉视频。</p>
  */
 export class Media {
-    constructor() {
-
-    }
+    constructor() {}
 
     /**
      * 检查浏览器兼容性。
@@ -27,12 +24,17 @@ export class Media {
      */
     static getMedia(options: any, onSuccess: Handler, onError: Handler): void {
         if (ILaya.Browser.window.navigator.getUserMedia) {
-            ILaya.Browser.window.navigator.getUserMedia(options, function (stream: string): void {
-                onSuccess.runWith(ILaya.Browser.window.URL.createObjectURL(stream));
-            }, function (err: Error): void {
+            ILaya.Browser.window.navigator.getUserMedia(
+                options,
+                function (stream: string): void {
+                    onSuccess.runWith(
+                        ILaya.Browser.window.URL.createObjectURL(stream),
+                    );
+                },
+                function (err: Error): void {
                     onError.runWith(err);
-                });
+                },
+            );
         }
     }
 }
-

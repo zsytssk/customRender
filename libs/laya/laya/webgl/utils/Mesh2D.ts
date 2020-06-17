@@ -1,6 +1,6 @@
 import { LayaGL } from "../../layagl/LayaGL";
 import { BufferState2D } from "../BufferState2D";
-import { Config } from "./../../../Config";
+import { Config } from "../../../../Config";
 import { IndexBuffer2D } from "./IndexBuffer2D";
 import { VertexBuffer2D } from "./VertexBuffer2D";
 
@@ -22,7 +22,7 @@ export class Mesh2D {
     canReuse = false;	//用完以后，是删除还是回收。
 
     /**
-     * 
+     *
      * @param	stride
      * @param	vballoc  vb预分配的大小。主要是用来提高效率。防止不断的resizebfufer
      * @param	iballoc
@@ -178,7 +178,7 @@ export class Mesh2D {
 
         //var attribNum:int = _attribInfo.length / 3;
         //var bindedAttributeBuffer:Array = Buffer._bindedAtributeBuffer;
-        //for ( var i:int = 0; i < attribNum; i++) 
+        //for ( var i:int = 0; i < attribNum; i++)
         //(bindedAttributeBuffer[i]) || (gl.enableVertexAttribArray(i), bindedAttributeBuffer[i] = _vb);
 
         //WebGLContext.bindVertexArray(gl, null);

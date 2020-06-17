@@ -10,7 +10,7 @@ import { Shader3D } from "../../shader/Shader3D";
 import { ShaderData } from "../../shader/ShaderData";
 import { IClone } from "../IClone";
 import { ClassUtils } from "../../../utils/ClassUtils";
-import { Laya } from "../../../../Laya";
+import { Laya } from "../../../../../Laya";
 import { ShaderDefine } from "../../shader/ShaderDefine";
 
 /**
@@ -111,7 +111,7 @@ export class Material extends Resource implements IClone {
 								material._shaderValues.addDefine(define);
 							}
 							break;
-						case "renderStates"://"LAYAMATERIAL:02" 
+						case "renderStates"://"LAYAMATERIAL:02"
 							var renderStatesData: any[] = props[key];
 							var renderStateData: any = renderStatesData[0];
 							var mat: any = (<any>material);//TODO:临时兼容
@@ -128,13 +128,13 @@ export class Material extends Resource implements IClone {
 						case "blend"://"LAYAMATERIAL:01"
 							((<any>material)).blend = props[key];
 							break;
-						case "depthWrite"://"LAYAMATERIAL:01" 
+						case "depthWrite"://"LAYAMATERIAL:01"
 							((<any>material)).depthWrite = props[key];
 							break;
-						case "srcBlend"://"LAYAMATERIAL:01" 
+						case "srcBlend"://"LAYAMATERIAL:01"
 							((<any>material)).blendSrc = props[key];
 							break;
-						case "dstBlend"://"LAYAMATERIAL:01" 
+						case "dstBlend"://"LAYAMATERIAL:01"
 							((<any>material)).blendDst = props[key];
 							break;
 						default:

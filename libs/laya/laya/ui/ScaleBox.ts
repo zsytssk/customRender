@@ -1,6 +1,6 @@
-import { Box } from "./Box"
-import { ILaya } from "../../ILaya";
-import { ClassUtils } from "../utils/ClassUtils";
+import { Box } from './Box';
+import { ILaya } from '../../../ILaya';
+import { ClassUtils } from '../utils/ClassUtils';
 
 /**
  * 自适应缩放容器，容器设置大小后，容器大小始终保持stage大小，子内容按照原始最小宽高比缩放
@@ -12,20 +12,23 @@ export class ScaleBox extends Box {
      * @override
      */
     onEnable(): void {
-        ILaya.stage.on("resize", this, this.onResize);
+        ILaya.stage.on('resize', this, this.onResize);
         this.onResize();
     }
     /**
      * @override
      */
     onDisable(): void {
-        ILaya.stage.off("resize", this, this.onResize);
+        ILaya.stage.off('resize', this, this.onResize);
     }
 
     private onResize(): void {
         let stage = ILaya.stage;
         if (this.width > 0 && this.height > 0) {
-            var scale: number = Math.min(stage.width / this._oldW, stage.height / this._oldH);
+            var scale: number = Math.min(
+                stage.width / this._oldW,
+                stage.height / this._oldH,
+            );
             super.width = stage.width;
             super.height = stage.height;
             this.scale(scale, scale);
@@ -55,7 +58,6 @@ export class ScaleBox extends Box {
     }
 }
 
-
 ILaya.regClass(ScaleBox);
-ClassUtils.regClass("laya.ui.ScaleBox", ScaleBox);
-ClassUtils.regClass("Laya.ScaleBox", ScaleBox);
+ClassUtils.regClass('laya.ui.ScaleBox', ScaleBox);
+ClassUtils.regClass('Laya.ScaleBox', ScaleBox);

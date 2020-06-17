@@ -1,4 +1,4 @@
-import { Laya } from "../../Laya";
+import { Laya } from "../../../Laya";
 import { Graphics } from "../display/Graphics"
 import { Sprite } from "../display/Sprite"
 import { Context } from "../resource/Context"
@@ -67,7 +67,7 @@ export class PhysicsDebugDraw extends Sprite {
         this.addChild(this._textSp);
     }
 
-    /**@private 
+    /**@private
      * @override
     */
     render(ctx: Context, x: number, y: number): void {

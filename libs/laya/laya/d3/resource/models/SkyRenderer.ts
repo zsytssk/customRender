@@ -1,4 +1,4 @@
-import { ILaya } from "../../../../ILaya";
+import { ILaya } from "../../../../../ILaya";
 import { LayaGL } from "../../../layagl/LayaGL";
 import { Stat } from "../../../utils/Stat";
 import { WebGLContext } from "../../../webgl/WebGLContext";
@@ -123,15 +123,15 @@ export class SkyRenderer {
 				//0       0     -znear*zfar /(zfar-znear)  0
 
 				//xScale  0     0       0        mul   [x,y,z,0] =[xScale*x,yScale*y,-z,-z]
-				//0     yScale  0       0		
-				//0       0    	-1      -1.0	
+				//0     yScale  0       0
+				//0       0    	-1      -1.0
 				//0       0     -0      0
 
 				//[xScale*x,yScale*y,-z,-z]=>[-xScale*x/z,-yScale*y/z,1]
 
-				//xScale  0     0       0      
-				//0     yScale  0       0		
-				//0       0    	-1+e    -1.0	
+				//xScale  0     0       0
+				//0     yScale  0       0
+				//0       0    	-1+e    -1.0
 				//0       0     -0  0
 
 				var epsilon: number = 1e-6;

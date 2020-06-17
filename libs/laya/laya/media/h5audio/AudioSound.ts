@@ -1,20 +1,19 @@
-import { AudioSoundChannel } from "./AudioSoundChannel";
-import { Event } from "../../events/Event"
-import { EventDispatcher } from "../../events/EventDispatcher"
-import { SoundChannel } from "../SoundChannel"
+import { AudioSoundChannel } from './AudioSoundChannel';
+import { Event } from '../../events/Event';
+import { EventDispatcher } from '../../events/EventDispatcher';
+import { SoundChannel } from '../SoundChannel';
 //import { SoundManager } from "../SoundManager"
-import { URL } from "../../net/URL"
-import { Render } from "../../renders/Render"
-import { Browser } from "../../utils/Browser"
-import { Pool } from "../../utils/Pool"
-import { ILaya } from "../../../ILaya";
+import { URL } from '../../net/URL';
+import { Render } from '../../renders/Render';
+import { Browser } from '../../utils/Browser';
+import { Pool } from '../../utils/Pool';
+import { ILaya } from '../../../../ILaya';
 
 /**
  * @private
  * 使用Audio标签播放声音
  */
 export class AudioSound extends EventDispatcher {
-
     /**@private */
     private static _audioCache: any = {};
     /**
@@ -37,10 +36,10 @@ export class AudioSound extends EventDispatcher {
      */
     dispose(): void {
         var ad: HTMLAudioElement = AudioSound._audioCache[this.url];
-        Pool.clearBySign("audio:" + this.url);
+        Pool.clearBySign('audio:' + this.url);
         if (ad) {
             if (!Render.isConchApp) {
-                ad.src = "";
+                ad.src = '';
             }
             delete AudioSound._audioCache[this.url];
         }
@@ -49,23 +48,31 @@ export class AudioSound extends EventDispatcher {
     /**@internal */
     static _initMusicAudio(): void {
         if (AudioSound._musicAudio) return;
-        if (!AudioSound._musicAudio) AudioSound._musicAudio = (<HTMLAudioElement>Browser.createElement("audio"));
+        if (!AudioSound._musicAudio)
+            AudioSound._musicAudio = <HTMLAudioElement>(
+                Browser.createElement('audio')
+            );
         if (!Render.isConchApp) {
-            Browser.document.addEventListener("mousedown", AudioSound._makeMusicOK);
+            Browser.document.addEventListener(
+                'mousedown',
+                AudioSound._makeMusicOK,
+            );
         }
     }
 
     /**@private */
     private static _makeMusicOK(): void {
-        Browser.document.removeEventListener("mousedown", AudioSound._makeMusicOK);
+        Browser.document.removeEventListener(
+            'mousedown',
+            AudioSound._makeMusicOK,
+        );
         if (!AudioSound._musicAudio.src) {
-            AudioSound._musicAudio.src = "";
+            AudioSound._musicAudio.src = '';
             AudioSound._musicAudio.load();
         } else {
             AudioSound._musicAudio.play();
         }
     }
-
 
     /**
      * 加载声音
@@ -95,14 +102,14 @@ export class AudioSound extends EventDispatcher {
                 AudioSound._initMusicAudio();
                 ad = AudioSound._musicAudio;
             } else {
-                ad = (<HTMLAudioElement>Browser.createElement("audio"));
+                ad = <HTMLAudioElement>Browser.createElement('audio');
             }
             AudioSound._audioCache[url] = ad;
             ad.src = url;
         }
 
-        ad.addEventListener("canplaythrough", onLoaded);
-        ad.addEventListener("error", onErr);
+        ad.addEventListener('canplaythrough', onLoaded);
+        ad.addEventListener('error', onErr);
         var me: AudioSound = this;
         function onLoaded(): void {
             offs();
@@ -117,8 +124,8 @@ export class AudioSound extends EventDispatcher {
         }
 
         function offs(): void {
-            ad.removeEventListener("canplaythrough", onLoaded);
-            ad.removeEventListener("error", onErr);
+            ad.removeEventListener('canplaythrough', onLoaded);
+            ad.removeEventListener('error', onErr);
         }
 
         this.audio = ad;
@@ -127,7 +134,6 @@ export class AudioSound extends EventDispatcher {
         } else {
             onErr();
         }
-
     }
 
     /**
@@ -150,21 +156,20 @@ export class AudioSound extends EventDispatcher {
         if (!ad) return null;
         var tAd: HTMLAudioElement;
 
-        tAd = Pool.getItem("audio:" + this.url);
+        tAd = Pool.getItem('audio:' + this.url);
 
         if (Render.isConchApp) {
             if (!tAd) {
-                tAd = (<HTMLAudioElement>Browser.createElement("audio"));
+                tAd = <HTMLAudioElement>Browser.createElement('audio');
                 tAd.src = this.url;
             }
-        }
-        else {
+        } else {
             if (this.url == ILaya.SoundManager._bgMusic) {
                 AudioSound._initMusicAudio();
                 tAd = AudioSound._musicAudio;
                 tAd.src = this.url;
             } else {
-                tAd = tAd ? tAd : ad.cloneNode(true) as HTMLAudioElement;
+                tAd = tAd ? tAd : (ad.cloneNode(true) as HTMLAudioElement);
             }
         }
         var channel: AudioSoundChannel = new AudioSoundChannel(tAd);
@@ -182,11 +187,7 @@ export class AudioSound extends EventDispatcher {
     get duration(): number {
         var ad: HTMLAudioElement;
         ad = AudioSound._audioCache[this.url];
-        if (!ad)
-            return 0;
+        if (!ad) return 0;
         return ad.duration;
     }
-
 }
-
-

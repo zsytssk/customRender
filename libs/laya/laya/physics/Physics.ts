@@ -4,7 +4,7 @@ import { CircleCollider } from "./CircleCollider";
 import { PolygonCollider } from "./PolygonCollider";
 import { RigidBody } from "./RigidBody";
 import { PhysicsDebugDraw } from "./PhysicsDebugDraw";
-import { Laya } from "../../Laya";
+import { Laya } from "../../../Laya";
 import { Sprite } from "../display/Sprite"
 import { Event } from "../events/Event"
 import { EventDispatcher } from "../events/EventDispatcher"
@@ -261,7 +261,7 @@ ClassUtils.regClass("Laya.Physics", Physics);
 class ContactListener {
     BeginContact(contact: any): void {
         Physics.I._eventList.push(0, contact);
-        //console.log("BeginContact", contact);	
+        //console.log("BeginContact", contact);
     }
 
     EndContact(contact: any): void {

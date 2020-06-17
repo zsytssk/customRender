@@ -1,7 +1,7 @@
-import { Templet } from 'laya/laya/ani/bone/Templet';
-import { loader } from 'laya/Laya';
-import { Animation } from 'laya/laya/display/Animation';
-import { Image } from 'laya/laya/ui/Image';
+import { Templet } from 'laya/ani/bone/Templet';
+import { loader } from 'Laya';
+import { Animation } from 'laya/display/Animation';
+import { Image } from 'laya/ui/Image';
 
 const temple_pool: {
     [key: string]: Templet;

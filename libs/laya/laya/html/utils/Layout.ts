@@ -1,5 +1,5 @@
 import { HTMLStyle } from "./HTMLStyle";
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { ILayout } from "./ILayout";
 import { LayoutLine } from "./LayoutLine";
 import { HTMLChar } from "../../utils/HTMLChar";
@@ -68,7 +68,7 @@ export class Layout {
        public static function _singleLineTextLayout(element:HTMLElement, txtWidth:int, txtHeight:int):Array
        {
        var style:CSSStyle = element._getCSSStyle();
-	
+
        if (txtWidth < 0)
        {
        var txt:String = element.text;
@@ -76,27 +76,27 @@ export class Layout {
        txtWidth = sz.width;
        txtHeight = sz.height;
        }
-	
+
        if (style.italic)
        txtWidth += txtHeight / 3;
-	
+
        var elements:Vector.<HTMLChar> = element._getWords() as Vector.<HTMLChar>;
        var x:int = 0;
        var y:int = 0;
-	
+
        var letterSpacing:Number = style.letterSpacing;
        var align:int = style._getAlign();
        var lineHeight:Number = style.lineHeight;
        var valign:int = style._getValign();
-	
+
        (lineHeight > 0) && valign === 0 && (valign = CSSStyle.VALIGN_MIDDLE);
-	
+
        (align === CSSStyle.ALIGN_CENTER) && (x = (element.width - txtWidth) / 2);
        (align === CSSStyle.ALIGN_RIGHT) && (x = (element.width - txtWidth));
-	
+
        (valign === CSSStyle.VALIGN_MIDDLE) && (y = (element.height - txtHeight) / 2);
        (valign === CSSStyle.VALIGN_BOTTOM) && (y = (element.height - txtHeight));
-	
+
        for (var i:int = 0, n:int = elements.length; i < n; i++)
        {
        var one:ILayout = elements[i];

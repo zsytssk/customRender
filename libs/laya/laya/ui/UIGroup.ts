@@ -6,7 +6,7 @@ import { Event } from "../events/Event"
 import { Loader } from "../net/Loader"
 import { Button } from "./Button"
 import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -80,7 +80,7 @@ export class UIGroup extends Box implements IItem {
 	}
 
 	/**
-	 * @inheritDoc 
+	 * @inheritDoc
 	 * @override
 	*/
 	destroy(destroyChild: boolean = true): void {
@@ -461,7 +461,7 @@ export class UIGroup extends Box implements IItem {
 	}
 
 	/**
-	 * @inheritDoc 
+	 * @inheritDoc
 	 * @override
 	*/
 	protected commitMeasure(): void {
@@ -487,7 +487,7 @@ export class UIGroup extends Box implements IItem {
 	}
 
 	/**
-	 * @inheritDoc 
+	 * @inheritDoc
 	 * @override
 	*/
 	set dataSource(value: any) {

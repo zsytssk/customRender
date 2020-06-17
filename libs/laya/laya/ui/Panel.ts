@@ -1,13 +1,13 @@
-import { Box } from "./Box";
-import { VScrollBar } from "./VScrollBar";
-import { HScrollBar } from "./HScrollBar";
-import { ScrollBar } from "./ScrollBar";
-import { Node } from "../display/Node"
-import { Sprite } from "../display/Sprite"
-import { Event } from "../events/Event"
-import { Rectangle } from "../maths/Rectangle"
-import { ILaya } from "../../ILaya";
-import { ClassUtils } from "../utils/ClassUtils";
+import { Box } from './Box';
+import { VScrollBar } from './VScrollBar';
+import { HScrollBar } from './HScrollBar';
+import { ScrollBar } from './ScrollBar';
+import { Node } from '../display/Node';
+import { Sprite } from '../display/Sprite';
+import { Event } from '../events/Event';
+import { Rectangle } from '../maths/Rectangle';
+import { ILaya } from '../../../ILaya';
+import { ClassUtils } from '../utils/ClassUtils';
 
 /**
  * <code>Panel</code> 是一个面板容器类。
@@ -55,7 +55,7 @@ export class Panel extends Box {
 
     /**@inheritDoc @override*/
     protected createChildren(): void {
-        super.addChild(this._content = new Box());
+        super.addChild((this._content = new Box()));
     }
 
     /**@inheritDoc @override*/
@@ -95,7 +95,10 @@ export class Panel extends Box {
     }
 
     /**@inheritDoc @override*/
-    removeChildren(beginIndex: number = 0, endIndex: number = 0x7fffffff): Node {
+    removeChildren(
+        beginIndex: number = 0,
+        endIndex: number = 0x7fffffff,
+    ): Node {
         this._content.removeChildren(beginIndex, endIndex);
         this._setScrollChanged();
         return this;
@@ -132,8 +135,12 @@ export class Panel extends Box {
 
         var vShow: boolean = vscroll && contentH > this._height;
         var hShow: boolean = hscroll && contentW > this._width;
-        var showWidth: number = vShow ? this._width - vscroll.width : this._width;
-        var showHeight: number = hShow ? this._height - hscroll.height : this._height;
+        var showWidth: number = vShow
+            ? this._width - vscroll.width
+            : this._width;
+        var showHeight: number = hShow
+            ? this._height - hscroll.height
+            : this._height;
 
         if (vscroll) {
             vscroll.x = this._width - vscroll.width;
@@ -166,8 +173,11 @@ export class Panel extends Box {
     get contentWidth(): number {
         var max: number = 0;
         for (var i: number = this._content.numChildren - 1; i > -1; i--) {
-            var comp: Sprite = (<Sprite>this._content.getChildAt(i));
-            max = Math.max(comp._x + comp.width * comp.scaleX - comp.pivotX, max);
+            var comp: Sprite = <Sprite>this._content.getChildAt(i);
+            max = Math.max(
+                comp._x + comp.width * comp.scaleX - comp.pivotX,
+                max,
+            );
         }
         return max;
     }
@@ -179,8 +189,11 @@ export class Panel extends Box {
     get contentHeight(): number {
         var max: number = 0;
         for (var i: number = this._content.numChildren - 1; i > -1; i--) {
-            var comp: Sprite = (<Sprite>this._content.getChildAt(i));
-            max = Math.max(comp._y + comp.height * comp.scaleY - comp.pivotY, max);
+            var comp: Sprite = <Sprite>this._content.getChildAt(i);
+            max = Math.max(
+                comp._y + comp.height * comp.scaleY - comp.pivotY,
+                max,
+            );
         }
         return max;
     }
@@ -232,8 +245,10 @@ export class Panel extends Box {
 
     set vScrollBarSkin(value: string) {
         if (this._vScrollBar == null) {
-            super.addChild(this._vScrollBar = new VScrollBar());
-            this._vScrollBar.on(Event.CHANGE, this, this.onScrollBarChange, [this._vScrollBar]);
+            super.addChild((this._vScrollBar = new VScrollBar()));
+            this._vScrollBar.on(Event.CHANGE, this, this.onScrollBarChange, [
+                this._vScrollBar,
+            ]);
             this._vScrollBar.target = this._content;
             this._vScrollBar.elasticDistance = this._elasticEnabled ? 200 : 0;
             this._setScrollChanged();
@@ -250,8 +265,10 @@ export class Panel extends Box {
 
     set hScrollBarSkin(value: string) {
         if (this._hScrollBar == null) {
-            super.addChild(this._hScrollBar = new HScrollBar());
-            this._hScrollBar.on(Event.CHANGE, this, this.onScrollBarChange, [this._hScrollBar]);
+            super.addChild((this._hScrollBar = new HScrollBar()));
+            this._hScrollBar.on(Event.CHANGE, this, this.onScrollBarChange, [
+                this._hScrollBar,
+            ]);
             this._hScrollBar.target = this._content;
             this._hScrollBar.elasticDistance = this._elasticEnabled ? 200 : 0;
             this._setScrollChanged();
@@ -290,7 +307,7 @@ export class Panel extends Box {
         var rect: Rectangle = this._content._style.scrollRect;
         if (rect) {
             var start: number = Math.round(scrollBar.value);
-            scrollBar.isVertical ? rect.y = start : rect.x = start;
+            scrollBar.isVertical ? (rect.y = start) : (rect.x = start);
             this._content.scrollRect = rect;
         }
     }
@@ -316,12 +333,16 @@ export class Panel extends Box {
     set cacheAs(value: string) {
         super.cacheAs = value;
         this._usedCache = null;
-        if (value !== "none") {
-            this._hScrollBar && this._hScrollBar.on(Event.START, this, this.onScrollStart);
-            this._vScrollBar && this._vScrollBar.on(Event.START, this, this.onScrollStart);
+        if (value !== 'none') {
+            this._hScrollBar &&
+                this._hScrollBar.on(Event.START, this, this.onScrollStart);
+            this._vScrollBar &&
+                this._vScrollBar.on(Event.START, this, this.onScrollStart);
         } else {
-            this._hScrollBar && this._hScrollBar.off(Event.START, this, this.onScrollStart);
-            this._vScrollBar && this._vScrollBar.off(Event.START, this, this.onScrollStart);
+            this._hScrollBar &&
+                this._hScrollBar.off(Event.START, this, this.onScrollStart);
+            this._vScrollBar &&
+                this._vScrollBar.off(Event.START, this, this.onScrollStart);
         }
     }
 
@@ -346,9 +367,11 @@ export class Panel extends Box {
 
     private onScrollStart(): void {
         this._usedCache || (this._usedCache = super.cacheAs);
-        super.cacheAs = "none";
-        this._hScrollBar && this._hScrollBar.once(Event.END, this, this.onScrollEnd);
-        this._vScrollBar && this._vScrollBar.once(Event.END, this, this.onScrollEnd);
+        super.cacheAs = 'none';
+        this._hScrollBar &&
+            this._hScrollBar.once(Event.END, this, this.onScrollEnd);
+        this._vScrollBar &&
+            this._vScrollBar.once(Event.END, this, this.onScrollEnd);
     }
 
     private onScrollEnd(): void {
@@ -365,5 +388,5 @@ export class Panel extends Box {
 }
 
 ILaya.regClass(Panel);
-ClassUtils.regClass("laya.ui.Panel", Panel);
-ClassUtils.regClass("Laya.Panel", Panel);
+ClassUtils.regClass('laya.ui.Panel', Panel);
+ClassUtils.regClass('Laya.Panel', Panel);

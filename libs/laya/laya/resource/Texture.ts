@@ -1,10 +1,10 @@
-import { Texture2D } from "./Texture2D";
-import { Event } from "../events/Event"
-import { EventDispatcher } from "../events/EventDispatcher"
-import { Rectangle } from "../maths/Rectangle"
-import { Handler } from "../utils/Handler"
-import { LoaderManager } from "../net/LoaderManager";
-import { ILaya } from "../../ILaya";
+import { Texture2D } from './Texture2D';
+import { Event } from '../events/Event';
+import { EventDispatcher } from '../events/EventDispatcher';
+import { Rectangle } from '../maths/Rectangle';
+import { Handler } from '../utils/Handler';
+import { LoaderManager } from '../net/LoaderManager';
+import { ILaya } from '../../../ILaya';
 /**
  * 资源加载完成后调度。
  * @eventType Event.READY
@@ -15,7 +15,6 @@ import { ILaya } from "../../ILaya";
  * <code>Texture</code> 是一个纹理处理类。
  */
 export class Texture extends EventDispatcher {
-
     /**@private 默认 UV 信息。*/
     static DEF_UV = new Float32Array([0, 0, 1.0, 0, 1.0, 1.0, 0, 1.0]);
     /**@private */
@@ -88,8 +87,28 @@ export class Texture extends EventDispatcher {
      * @param	sourceHeight 原始高度，包括被裁剪的透明区域（可选）。
      * @return  <code>Texture</code> 对象。
      */
-    static create(source: Texture2D | Texture, x: number, y: number, width: number, height: number, offsetX: number = 0, offsetY: number = 0, sourceWidth: number = 0, sourceHeight: number = 0): Texture {
-        return Texture._create(source, x, y, width, height, offsetX, offsetY, sourceWidth, sourceHeight);
+    static create(
+        source: Texture2D | Texture,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        offsetX: number = 0,
+        offsetY: number = 0,
+        sourceWidth: number = 0,
+        sourceHeight: number = 0,
+    ): Texture {
+        return Texture._create(
+            source,
+            x,
+            y,
+            width,
+            height,
+            offsetX,
+            offsetY,
+            sourceWidth,
+            sourceHeight,
+        );
     }
 
     /**
@@ -107,21 +126,43 @@ export class Texture extends EventDispatcher {
      * @param	outTexture 返回的Texture对象。
      * @return  <code>Texture</code> 对象。
      */
-    static _create(source: Texture2D | Texture, x: number, y: number, width: number, height: number, offsetX: number = 0, offsetY: number = 0, sourceWidth: number = 0, sourceHeight: number = 0, outTexture: Texture = null): Texture {
+    static _create(
+        source: Texture2D | Texture,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        offsetX: number = 0,
+        offsetY: number = 0,
+        sourceWidth: number = 0,
+        sourceHeight: number = 0,
+        outTexture: Texture = null,
+    ): Texture {
         var btex: boolean = source instanceof Texture;
-        var uv = btex ? ((<Texture>source)).uv : Texture.DEF_UV;
-        var bitmap: Texture2D | Texture = btex ? ((<Texture>source)).bitmap : source as Texture2D;
+        var uv = btex ? (<Texture>source).uv : Texture.DEF_UV;
+        var bitmap: Texture2D | Texture = btex
+            ? (<Texture>source).bitmap
+            : (source as Texture2D);
 
-        if (bitmap.width && (x + width) > bitmap.width)
-            width = bitmap.width - x;
-        if (bitmap.height && (y + height) > bitmap.height)
+        if (bitmap.width && x + width > bitmap.width) width = bitmap.width - x;
+        if (bitmap.height && y + height > bitmap.height)
             height = bitmap.height - y;
         var tex: Texture;
         if (outTexture) {
             tex = outTexture;
-            tex.setTo(bitmap, null, sourceWidth || width, sourceHeight || height);
+            tex.setTo(
+                bitmap,
+                null,
+                sourceWidth || width,
+                sourceHeight || height,
+            );
         } else {
-            tex = new Texture(bitmap, null, sourceWidth || width, sourceHeight || height)
+            tex = new Texture(
+                bitmap,
+                null,
+                sourceWidth || width,
+                sourceHeight || height,
+            );
         }
         tex.width = width;
         tex.height = height;
@@ -135,15 +176,34 @@ export class Texture extends EventDispatcher {
         width *= dwidth;
         height *= dheight;
 
-        var u1: number = tex.uv[0], v1: number = tex.uv[1], u2: number = tex.uv[4], v2: number = tex.uv[5];
-        var inAltasUVWidth: number = (u2 - u1), inAltasUVHeight: number = (v2 - v1);
-        var oriUV: any[] = Texture.moveUV(uv[0], uv[1], [x, y, x + width, y, x + width, y + height, x, y + height]);
-        tex.uv = new Float32Array([u1 + oriUV[0] * inAltasUVWidth, v1 + oriUV[1] * inAltasUVHeight,
-        u2 - (1 - oriUV[2]) * inAltasUVWidth, v1 + oriUV[3] * inAltasUVHeight,
-        u2 - (1 - oriUV[4]) * inAltasUVWidth, v2 - (1 - oriUV[5]) * inAltasUVHeight,
-        u1 + oriUV[6] * inAltasUVWidth, v2 - (1 - oriUV[7]) * inAltasUVHeight]);
+        var u1: number = tex.uv[0],
+            v1: number = tex.uv[1],
+            u2: number = tex.uv[4],
+            v2: number = tex.uv[5];
+        var inAltasUVWidth: number = u2 - u1,
+            inAltasUVHeight: number = v2 - v1;
+        var oriUV: any[] = Texture.moveUV(uv[0], uv[1], [
+            x,
+            y,
+            x + width,
+            y,
+            x + width,
+            y + height,
+            x,
+            y + height,
+        ]);
+        tex.uv = new Float32Array([
+            u1 + oriUV[0] * inAltasUVWidth,
+            v1 + oriUV[1] * inAltasUVHeight,
+            u2 - (1 - oriUV[2]) * inAltasUVWidth,
+            v1 + oriUV[3] * inAltasUVHeight,
+            u2 - (1 - oriUV[4]) * inAltasUVWidth,
+            v2 - (1 - oriUV[5]) * inAltasUVHeight,
+            u1 + oriUV[6] * inAltasUVWidth,
+            v2 - (1 - oriUV[7]) * inAltasUVHeight,
+        ]);
 
-        var bitmapScale: number = ((<Texture>(bitmap as any))).scaleRate;
+        var bitmapScale: number = (<Texture>(bitmap as any)).scaleRate;
         if (bitmapScale && bitmapScale != 1) {
             tex.sourceWidth /= bitmapScale;
             tex.sourceHeight /= bitmapScale;
@@ -165,7 +225,13 @@ export class Texture extends EventDispatcher {
      * @param	height	截取的高度。
      * @return 返回一个新的Texture。
      */
-    static createFromTexture(texture: Texture, x: number, y: number, width: number, height: number): Texture {
+    static createFromTexture(
+        texture: Texture,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+    ): Texture {
         var texScaleRate: number = texture.scaleRate;
         if (texScaleRate != 1) {
             x *= texScaleRate;
@@ -173,15 +239,31 @@ export class Texture extends EventDispatcher {
             width *= texScaleRate;
             height *= texScaleRate;
         }
-        var rect: Rectangle = Rectangle.TEMP.setTo(x - texture.offsetX, y - texture.offsetY, width, height);
-        var result = rect.intersection(Texture._rect1.setTo(0, 0, texture.width, texture.height), Texture._rect2);
+        var rect: Rectangle = Rectangle.TEMP.setTo(
+            x - texture.offsetX,
+            y - texture.offsetY,
+            width,
+            height,
+        );
+        var result = rect.intersection(
+            Texture._rect1.setTo(0, 0, texture.width, texture.height),
+            Texture._rect2,
+        );
         if (result)
-            var tex: Texture = Texture.create(((<Texture2D>(texture as any))), result.x, result.y, result.width, result.height, result.x - rect.x, result.y - rect.y, width, height);
-        else
-            return null;
+            var tex: Texture = Texture.create(
+                <Texture2D>(texture as any),
+                result.x,
+                result.y,
+                result.width,
+                result.height,
+                result.x - rect.x,
+                result.y - rect.y,
+                width,
+                height,
+            );
+        else return null;
         return tex;
     }
-
 
     get uv(): ArrayLike<number> {
         return this._uv;
@@ -190,17 +272,20 @@ export class Texture extends EventDispatcher {
     set uv(value: ArrayLike<number>) {
         this.uvrect[0] = Math.min(value[0], value[2], value[4], value[6]);
         this.uvrect[1] = Math.min(value[1], value[3], value[5], value[7]);
-        this.uvrect[2] = Math.max(value[0], value[2], value[4], value[6]) - this.uvrect[0];
-        this.uvrect[3] = Math.max(value[1], value[3], value[5], value[7]) - this.uvrect[1];
+        this.uvrect[2] =
+            Math.max(value[0], value[2], value[4], value[6]) - this.uvrect[0];
+        this.uvrect[3] =
+            Math.max(value[1], value[3], value[5], value[7]) - this.uvrect[1];
         this._uv = value;
     }
 
     /** 实际宽度。*/
     get width(): number {
-        if (this._w)
-            return this._w;
+        if (this._w) return this._w;
         if (!this.bitmap) return 0;
-        return (this.uv && this.uv !== Texture.DEF_UV) ? (this.uv[2] - this.uv[0]) * this.bitmap.width : this.bitmap.width;
+        return this.uv && this.uv !== Texture.DEF_UV
+            ? (this.uv[2] - this.uv[0]) * this.bitmap.width
+            : this.bitmap.width;
     }
 
     set width(value: number) {
@@ -210,10 +295,11 @@ export class Texture extends EventDispatcher {
 
     /** 实际高度。*/
     get height(): number {
-        if (this._h)
-            return this._h;
+        if (this._h) return this._h;
         if (!this.bitmap) return 0;
-        return (this.uv && this.uv !== Texture.DEF_UV) ? (this.uv[5] - this.uv[1]) * this.bitmap.height : this.bitmap.height;
+        return this.uv && this.uv !== Texture.DEF_UV
+            ? (this.uv[5] - this.uv[1]) * this.bitmap.height
+            : this.bitmap.height;
     }
 
     set height(value: number) {
@@ -236,7 +322,7 @@ export class Texture extends EventDispatcher {
     set bitmap(value: Texture2D | Texture) {
         this._bitmap && this._bitmap._removeReference(this._referenceCount);
         this._bitmap = value;
-        value && (value._addReference(this._referenceCount));
+        value && value._addReference(this._referenceCount);
     }
 
     /**
@@ -252,7 +338,12 @@ export class Texture extends EventDispatcher {
      * @param	bitmap 位图资源。
      * @param	uv UV 数据信息。
      */
-    constructor(bitmap: Texture2D | Texture = null, uv: ArrayLike<number> = null, sourceWidth: number = 0, sourceHeight: number = 0) {
+    constructor(
+        bitmap: Texture2D | Texture = null,
+        uv: ArrayLike<number> = null,
+        sourceWidth: number = 0,
+        sourceHeight: number = 0,
+    ) {
         super();
         this.setTo(bitmap, uv, sourceWidth, sourceHeight);
     }
@@ -277,8 +368,7 @@ export class Texture extends EventDispatcher {
      * @internal
      */
     _getSource(cb: Function = null): any {
-        if (this._destroyed || !this._bitmap)
-            return null;
+        if (this._destroyed || !this._bitmap) return null;
         this.recoverBitmap(cb);
         return this._bitmap.destroyed ? null : this.bitmap._getSource();
     }
@@ -289,10 +379,20 @@ export class Texture extends EventDispatcher {
     private _onLoaded(complete: Handler, context: any): void {
         if (!context) {
         } else if (context == this) {
-
         } else if (context instanceof Texture) {
             var tex: Texture = context;
-            Texture._create(context, 0, 0, tex.width, tex.height, 0, 0, tex.sourceWidth, tex.sourceHeight, this);
+            Texture._create(
+                context,
+                0,
+                0,
+                tex.width,
+                tex.height,
+                0,
+                0,
+                tex.sourceWidth,
+                tex.sourceHeight,
+                this,
+            );
         } else {
             this.bitmap = context;
             this.sourceWidth = this._w = context.width;
@@ -306,7 +406,7 @@ export class Texture extends EventDispatcher {
      * 获取是否可以使用。
      */
     getIsReady(): boolean {
-        return this._destroyed ? false : (this._bitmap ? true : false);
+        return this._destroyed ? false : this._bitmap ? true : false;
     }
 
     /**
@@ -314,7 +414,12 @@ export class Texture extends EventDispatcher {
      * @param	bitmap 位图资源
      * @param	uv UV数据信息
      */
-    setTo(bitmap: Texture2D | Texture = null, uv: ArrayLike<number> = null, sourceWidth: number = 0, sourceHeight: number = 0): void {
+    setTo(
+        bitmap: Texture2D | Texture = null,
+        uv: ArrayLike<number> = null,
+        sourceWidth: number = 0,
+        sourceHeight: number = 0,
+    ): void {
         this.bitmap = bitmap;
         this.sourceWidth = sourceWidth;
         this.sourceHeight = sourceHeight;
@@ -323,7 +428,7 @@ export class Texture extends EventDispatcher {
             this._w = bitmap.width;
             this._h = bitmap.height;
             this.sourceWidth = this.sourceWidth || bitmap.width;
-            this.sourceHeight = this.sourceHeight || bitmap.height
+            this.sourceHeight = this.sourceHeight || bitmap.height;
         }
         this.uv = uv || Texture.DEF_UV;
     }
@@ -335,27 +440,37 @@ export class Texture extends EventDispatcher {
      */
     load(url: string, complete: Handler = null): void {
         if (!this._destroyed)
-            ILaya.loader.load(url, Handler.create(this, this._onLoaded, [complete]), null, "htmlimage", 1, true);
+            ILaya.loader.load(
+                url,
+                Handler.create(this, this._onLoaded, [complete]),
+                null,
+                'htmlimage',
+                1,
+                true,
+            );
     }
 
-    getTexturePixels(x: number, y: number, width: number, height: number): Uint8Array {
+    getTexturePixels(
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+    ): Uint8Array {
         var st: number, dst: number, i: number;
         var tex2d: Texture2D | Texture = this.bitmap;
         var texw: number = tex2d.width;
         var texh: number = tex2d.height;
-        if (x + width > texw) width -= (x + width) - texw;
-        if (y + height > texh) height -= (y + height) - texh;
+        if (x + width > texw) width -= x + width - texw;
+        if (y + height > texh) height -= y + height - texh;
         if (width <= 0 || height <= 0) return null;
 
         var wstride: number = width * 4;
         var pix: Uint8Array = null;
         try {
             pix = <Uint8Array>(tex2d as Texture2D).getPixels();
-        } catch (e) {
-        }
+        } catch (e) {}
         if (pix) {
-            if (x == 0 && y == 0 && width == texw && height == texh)
-                return pix;
+            if (x == 0 && y == 0 && width == texw && height == texh) return pix;
             //否则只取一部分
             var ret: Uint8Array = new Uint8Array(width * height * 4);
             wstride = texw * 4;
@@ -375,17 +490,23 @@ export class Texture extends EventDispatcher {
         ctx.asBitmap = true;
         var uv: any[] = null;
         if (x != 0 || y != 0 || width != texw || height != texh) {
-            uv = (this._uv as Array<number>).slice();	// 复制一份uv
+            uv = (this._uv as Array<number>).slice(); // 复制一份uv
             var stu: number = uv[0];
             var stv: number = uv[1];
             var uvw: number = uv[2] - stu;
             var uvh: number = uv[7] - stv;
             var uk: number = uvw / texw;
             var vk: number = uvh / texh;
-            uv = [stu + x * uk, stv + y * vk,
-            stu + (x + width) * uk, stv + y * vk,
-            stu + (x + width) * uk, stv + (y + height) * vk,
-            stu + x * uk, stv + (y + height) * vk];
+            uv = [
+                stu + x * uk,
+                stv + y * vk,
+                stu + (x + width) * uk,
+                stv + y * vk,
+                stu + (x + width) * uk,
+                stv + (y + height) * vk,
+                stu + x * uk,
+                stv + (y + height) * vk,
+            ];
         }
         ctx._drawTextureM(this, 0, 0, width, height, null, 1.0, uv);
         //ctx.drawTexture(value, -x, -y, x + width, y + height);
@@ -420,7 +541,7 @@ export class Texture extends EventDispatcher {
             return this._nativeObj.getImageData(x, y, width, height);
         } else {
             return this.getTexturePixels(x, y, width, height);
-        }// canvas 不支持
+        } // canvas 不支持
     }
 
     /**
@@ -428,11 +549,22 @@ export class Texture extends EventDispatcher {
      */
     recoverBitmap(onok: Function = null): void {
         var url: string = this._bitmap.url;
-        if (!this._destroyed && (!this._bitmap || this._bitmap.destroyed) && url) {
-            ILaya.loader.load(url, Handler.create(this, function (bit: any): void {
-                this.bitmap = bit;
-                onok && onok();
-            }), null, "htmlimage", 1, true);
+        if (
+            !this._destroyed &&
+            (!this._bitmap || this._bitmap.destroyed) &&
+            url
+        ) {
+            ILaya.loader.load(
+                url,
+                Handler.create(this, function (bit: any): void {
+                    this.bitmap = bit;
+                    onok && onok();
+                }),
+                null,
+                'htmlimage',
+                1,
+                true,
+            );
         }
     }
 
@@ -454,8 +586,7 @@ export class Texture extends EventDispatcher {
             var bit = this._bitmap;
             if (bit) {
                 bit._removeReference(this._referenceCount);
-                if ((bit as any).referenceCount === 0 || force)
-                    bit.destroy();
+                if ((bit as any).referenceCount === 0 || force) bit.destroy();
                 bit = null;
             }
             if (this.url && this === ILaya.loader.getRes(this.url))
@@ -463,4 +594,3 @@ export class Texture extends EventDispatcher {
         }
     }
 }
-

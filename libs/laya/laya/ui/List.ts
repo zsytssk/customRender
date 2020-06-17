@@ -13,7 +13,7 @@ import { Rectangle } from "../maths/Rectangle"
 import { Handler } from "../utils/Handler"
 import { SceneUtils } from "../utils/SceneUtils"
 import { Tween } from "../utils/Tween"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -95,18 +95,18 @@ import { ClassUtils } from "../utils/ClassUtils";
  *     };
  *     Laya.class(Item,"mypackage.listExample.Item",_super);//注册类 Item 。
  * })(laya.ui.Box);
-	
+
  * Laya.init(640, 800);//设置游戏画布宽高、渲染模式。
  * Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
  * var res = ["resource/ui/vscroll.png", "resource/ui/vscroll$bar.png", "resource/ui/vscroll$down.png", "resource/ui/vscroll$up.png"];
  * Laya.loader.load(res, new laya.utils.Handler(this, onLoadComplete));//加载资源。
-	
+
  * function onLoadComplete() {
  *     var arr = [];//创建一个数组，用于存贮列表的数据信息。
  *     for (var i = 0; i &lt; 20; i++) {
  *         arr.push({label: "item" + i});
  *     }
-	
+
  *     var list = new laya.ui.List();//创建一个 List 类的实例对象 list 。
  *     list.itemRender = mypackage.listExample.Item;//设置 list 的单元格渲染器。
  *     list.repeatX = 1;//设置 list 的水平方向单元格数量。
@@ -118,7 +118,7 @@ import { ClassUtils } from "../utils/ClassUtils";
  *     list.selectHandler = new laya.utils.Handler(this, onSelect);//设置 list 改变选择项执行的处理器。
  *     Laya.stage.addChild(list);//将 list 添加到显示列表。
  * }
-	
+
  * function onSelect(index)
  * {
  *     console.log("当前选择的项目索引： index= ", index);
@@ -232,7 +232,7 @@ export class List extends Box implements IRender, IItem {
 	protected _elasticEnabled: boolean = false;
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  destroy(destroyChild: boolean = true): void {
@@ -248,7 +248,7 @@ export class List extends Box implements IRender, IItem {
 	}
 
 	/**
-	 * @inheritDoc 
+	 * @inheritDoc
 	 * @override
 	 */
 	protected createChildren(): void {
@@ -256,7 +256,7 @@ export class List extends Box implements IRender, IItem {
 	}
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set cacheAs(value: string) {
@@ -376,7 +376,7 @@ export class List extends Box implements IRender, IItem {
 	}
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set width(value: number) {
@@ -391,7 +391,7 @@ export class List extends Box implements IRender, IItem {
 	}
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set height(value: number) {
@@ -464,7 +464,7 @@ export class List extends Box implements IRender, IItem {
 			//获取滚动条
 			this.scrollBar = (<ScrollBar>this.getChildByName("scrollBar"));
 
-			//自适应宽高				
+			//自适应宽高
 			var cell: Box = this._getOneCell();
 
 			var cellWidth: number = (cell.width + this._spaceX) || 1;
@@ -481,7 +481,7 @@ export class List extends Box implements IRender, IItem {
 			else if (!this._isVertical && this.hScrollBarSkin) this._scrollBar.width = listWidth;
 			this.setContentSize(listWidth, listHeight);
 
-			//创建新单元格				
+			//创建新单元格
 			var numX: number = this._isVertical ? this.repeatX : this.repeatY;
 			var numY: number = (this._isVertical ? this.repeatY : this.repeatX) + (this._scrollBar ? 1 : 0);
 			this._createItems(0, numX, numY);
@@ -655,8 +655,8 @@ export class List extends Box implements IRender, IItem {
 		}
 	}
 
-		/** 
-		 * @inheritDoc 
+		/**
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected _sizeChanged(): void {
@@ -934,7 +934,7 @@ export class List extends Box implements IRender, IItem {
 	}
 
 	/**
-	 * @inheritDoc 
+	 * @inheritDoc
 	 * @override
 	*/
 	set dataSource(value: any) {

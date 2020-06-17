@@ -1,7 +1,6 @@
-import { GeolocationInfo } from "./GeolocationInfo";
-import { ILaya } from "../../../ILaya";
-import { Handler } from "../../utils/Handler";
-
+import { GeolocationInfo } from './GeolocationInfo';
+import { ILaya } from '../../../../ILaya';
+import { Handler } from '../../utils/Handler';
 
 /**
  * 使用前可用<code>supported</code>查看浏览器支持。
@@ -39,7 +38,7 @@ export class Geolocation {
      * 表示允许设备获取位置的最长时间。默认为Infinity，意味着getCurentPosition()直到位置可用时才会返回信息。
      */
 
-    static timeout: number = 1E10;
+    static timeout: number = 1e10;
     /**
      * 表示可被返回的缓存位置信息的最大时限。
      * 如果设置为0，意味着设备不使用缓存位置，并且尝试获取实时位置。
@@ -47,27 +46,31 @@ export class Geolocation {
      */
     static maximumAge: number = 0;
 
-    constructor() {
-    }
+    constructor() {}
 
     /**
      * 获取设备当前位置。
      * @param	onSuccess	带有唯一<code>Position</code>参数的回调处理器。
      * @param	onError		可选的。带有错误信息的回调处理器。错误代码为Geolocation.PERMISSION_DENIED、Geolocation.POSITION_UNAVAILABLE和Geolocation.TIMEOUT之一。
      */
-    static getCurrentPosition(onSuccess: Handler, onError: Handler = null): void {
-        Geolocation.navigator.geolocation.getCurrentPosition(function (pos: any): void {
-            Geolocation.position.setPosition(pos);
-            onSuccess.runWith(Geolocation.position);
-        },
+    static getCurrentPosition(
+        onSuccess: Handler,
+        onError: Handler = null,
+    ): void {
+        Geolocation.navigator.geolocation.getCurrentPosition(
+            function (pos: any): void {
+                Geolocation.position.setPosition(pos);
+                onSuccess.runWith(Geolocation.position);
+            },
             function (error: any): void {
                 onError.runWith(error);
             },
             {
                 enableHighAccuracy: Geolocation.enableHighAccuracy,
                 timeout: Geolocation.timeout,
-                maximumAge: Geolocation.maximumAge
-            });
+                maximumAge: Geolocation.maximumAge,
+            },
+        );
     }
 
     /**
@@ -76,18 +79,20 @@ export class Geolocation {
      * @param	onError		可选的。带有错误信息的回调处理器。错误代码为Geolocation.PERMISSION_DENIED、Geolocation.POSITION_UNAVAILABLE和Geolocation.TIMEOUT之一。
      */
     static watchPosition(onSuccess: Handler, onError: Handler): number {
-        return Geolocation.navigator.geolocation.watchPosition(function (pos: any): void {
-            Geolocation.position.setPosition(pos);
-            onSuccess.runWith(Geolocation.position);
-        },
+        return Geolocation.navigator.geolocation.watchPosition(
+            function (pos: any): void {
+                Geolocation.position.setPosition(pos);
+                onSuccess.runWith(Geolocation.position);
+            },
             function (error: any): void {
                 onError.runWith(error);
             },
             {
                 enableHighAccuracy: Geolocation.enableHighAccuracy,
                 timeout: Geolocation.timeout,
-                maximumAge: Geolocation.maximumAge
-            });
+                maximumAge: Geolocation.maximumAge,
+            },
+        );
     }
 
     /**
@@ -98,4 +103,3 @@ export class Geolocation {
         Geolocation.navigator.geolocation.clearWatch(id);
     }
 }
-

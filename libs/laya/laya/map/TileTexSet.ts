@@ -1,8 +1,6 @@
-import { TileAniSprite } from "./TileAniSprite";
-import { Texture } from "../resource/Texture";
-import { ILaya } from "../../ILaya";
-
-
+import { TileAniSprite } from './TileAniSprite';
+import { Texture } from '../resource/Texture';
+import { ILaya } from '../../../ILaya';
 
 /**
  * 此类是子纹理类，也包括同类动画的管理
@@ -12,7 +10,6 @@ import { ILaya } from "../../ILaya";
  * @author ...
  */
 export class TileTexSet {
-
     /**唯一标识*/
     gid: number = -1;
     /**子纹理的引用*/
@@ -32,13 +29,13 @@ export class TileTexSet {
     /**true表示当前纹理，是一组动画，false表示当前只有一个纹理*/
     isAnimation: boolean = false;
 
-    private _spriteNum: number = 0;				//当前动画有多少个显示对象
-    private _aniDic: any = null;			//通过显示对象的唯一名字，去保存显示显示对象
-    private _frameIndex: number = 0;			//当前动画播放到第几帧
+    private _spriteNum: number = 0; //当前动画有多少个显示对象
+    private _aniDic: any = null; //通过显示对象的唯一名字，去保存显示显示对象
+    private _frameIndex: number = 0; //当前动画播放到第几帧
 
-    private _time: number = 0;					//距离上次动画刷新，过了多少长时间
-    private _interval: number = 0;				//每帧刷新的时间间隔
-    private _preFrameTime: number = 0;			//上一帧刷新的时间戳
+    private _time: number = 0; //距离上次动画刷新，过了多少长时间
+    private _interval: number = 0; //每帧刷新的时间间隔
+    private _preFrameTime: number = 0; //上一帧刷新的时间戳
 
     /**
      * 加入一个动画显示对象到此动画中
@@ -63,7 +60,9 @@ export class TileTexSet {
         this._spriteNum++;
         this._aniDic[aniName] = sprite;
         if (this.textureArray && this._frameIndex < this.textureArray.length) {
-            var tTileTextureSet: TileTexSet = this.textureArray[this._frameIndex];
+            var tTileTextureSet: TileTexSet = this.textureArray[
+                this._frameIndex
+            ];
             this.drawTexture(sprite, tTileTextureSet);
         }
     }
@@ -72,7 +71,12 @@ export class TileTexSet {
      * 把动画画到所有注册的SPRITE上
      */
     private animate(): void {
-        if (this.textureArray && this.textureArray.length > 0 && this.durationTimeArray && this.durationTimeArray.length > 0) {
+        if (
+            this.textureArray &&
+            this.textureArray.length > 0 &&
+            this.durationTimeArray &&
+            this.durationTimeArray.length > 0
+        ) {
             var tNow: number = ILaya.Browser.now();
             this._interval = tNow - this._preFrameTime;
             this._preFrameTime = tNow;
@@ -84,10 +88,15 @@ export class TileTexSet {
             while (this._time > tTime) {
                 this._time -= tTime;
                 this._frameIndex++;
-                if (this._frameIndex >= this.durationTimeArray.length || this._frameIndex >= this.textureArray.length) {
+                if (
+                    this._frameIndex >= this.durationTimeArray.length ||
+                    this._frameIndex >= this.textureArray.length
+                ) {
                     this._frameIndex = 0;
                 }
-                var tTileTextureSet: TileTexSet = this.textureArray[this._frameIndex];
+                var tTileTextureSet: TileTexSet = this.textureArray[
+                    this._frameIndex
+                ];
                 var tSprite: TileAniSprite;
                 for (var p in this._aniDic) {
                     tSprite = this._aniDic[p];
@@ -101,7 +110,11 @@ export class TileTexSet {
     private drawTexture(sprite: TileAniSprite, tileTextSet: TileTexSet): void {
         sprite.graphics.clear(true);
         //sprite.graphics.drawImage(tileTextSet.texture, tileTextSet.offX, tileTextSet.offY, tileTextSet.texture.width, tileTextSet.texture.height);
-        sprite.graphics.drawImage(tileTextSet.texture, tileTextSet.offX, tileTextSet.offY);
+        sprite.graphics.drawImage(
+            tileTextSet.texture,
+            tileTextSet.offX,
+            tileTextSet.offY,
+        );
     }
 
     /**
@@ -111,7 +124,7 @@ export class TileTexSet {
     removeAniSprite(_name: string): void {
         if (this._aniDic && this._aniDic[_name]) {
             delete this._aniDic[_name];
-            this._spriteNum--
+            this._spriteNum--;
             if (this._spriteNum == 0) {
                 ILaya.timer.clear(this, this.animate);
             }
@@ -124,7 +137,11 @@ export class TileTexSet {
     showDebugInfo(): string {
         var tInfo: string = null;
         if (this._spriteNum > 0) {
-            tInfo = "TileTextureSet::gid:" + this.gid.toString() + " 动画数:" + this._spriteNum.toString();
+            tInfo =
+                'TileTextureSet::gid:' +
+                this.gid.toString() +
+                ' 动画数:' +
+                this._spriteNum.toString();
         }
         return tInfo;
     }
@@ -133,7 +150,7 @@ export class TileTexSet {
      * 清理
      */
     clearAll(): void {
-        this.gid = -1;//唯一标识
+        this.gid = -1; //唯一标识
         if (this.texture) {
             this.texture.destroy();
             this.texture = null;
@@ -151,7 +168,4 @@ export class TileTexSet {
         this._time = 0;
         this._interval = 0;
     }
-
 }
-
-

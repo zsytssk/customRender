@@ -1,4 +1,4 @@
-import { ILaya3D } from "../../../ILaya3D";
+import { ILaya3D } from "../../../../ILaya3D";
 import { DefineDatas } from "./DefineDatas";
 import { Shader3D } from "./Shader3D";
 import { ShaderPass } from "./ShaderPass";
@@ -48,7 +48,7 @@ export class ShaderVariant {
     /**
      * 创建着色器变种。
      * @param shader 着色器
-     * @param subShaderIndex 子着色器索引 
+     * @param subShaderIndex 子着色器索引
      * @param passIndex 通道索引
      * @param defines 宏定义集合
      */
@@ -59,7 +59,7 @@ export class ShaderVariant {
     /**
      * 给着色器变种赋值。
      * @param shader 着色器
-     * @param subShaderIndex 子着色器索引 
+     * @param subShaderIndex 子着色器索引
      * @param passIndex 通道索引
      * @param defineNames 宏定义集合
      */
@@ -117,7 +117,7 @@ export class ShaderVariant {
 
     /**
      * 克隆。
-     * @return 着色器变种。 
+     * @return 着色器变种。
      */
     clone(): ShaderVariant {
         var dest: ShaderVariant = new ShaderVariant(this._shader, this._subShaderIndex, this._passIndex, this._defineNames.slice());

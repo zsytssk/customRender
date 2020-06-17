@@ -2,7 +2,7 @@ import { Bitmap } from "./Bitmap";
 import { Texture } from "./Texture";
 import { Texture2D } from "./Texture2D";
 import { Context } from "./Context";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { Browser } from "../utils/Browser";
 
 
@@ -22,7 +22,7 @@ export class HTMLCanvas extends Bitmap {
     get source() {
         return this._source;
     }
-    /**@internal 
+    /**@internal
      * @override
     */
     _getSource() {

@@ -1,6 +1,6 @@
-import { Utils } from 'laya/laya/utils/Utils';
-import { Laya } from 'laya/Laya';
-import { Sprite } from 'laya/laya/display/Sprite';
+import { Utils } from 'laya/utils/Utils';
+import { Laya } from 'Laya';
+import { Sprite } from 'laya/display/Sprite';
 
 export function sleep(time: number) {
     return new Promise((resolve, reject) => {

@@ -1,12 +1,12 @@
 import { Event } from "../events/Event"
 import { Button } from "./Button"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 
 /**
  * <code>Radio</code> 控件使用户可在一组互相排斥的选择中做出一种选择。
- * 用户一次只能选择 <code>Radio</code> 组中的一个成员。选择未选中的组成员将取消选择该组中当前所选的 <code>Radio</code> 控件。 
+ * 用户一次只能选择 <code>Radio</code> 组中的一个成员。选择未选中的组成员将取消选择该组中当前所选的 <code>Radio</code> 控件。
  * @see laya.ui.RadioGroup
  */
 export class Radio extends Button {
@@ -16,7 +16,7 @@ export class Radio extends Button {
 
 
     /**
-     * 创建一个新的 <code>Radio</code> 类实例。 
+     * 创建一个新的 <code>Radio</code> 类实例。
      * @param skin 皮肤。
      * @param label 标签。
      */
@@ -28,7 +28,7 @@ export class Radio extends Button {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		 * */
 		/*override*/  destroy(destroyChild: boolean = true): void {
@@ -45,7 +45,7 @@ export class Radio extends Button {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
      * */
     protected initialize(): void {
@@ -59,7 +59,7 @@ export class Radio extends Button {
 
     /**
      * @private
-     * 对象的<code>Event.CLICK</code>事件侦听处理函数。 
+     * 对象的<code>Event.CLICK</code>事件侦听处理函数。
      */
     protected onClick(e: Event): void {
         this.selected = true;

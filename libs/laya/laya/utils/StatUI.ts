@@ -8,7 +8,7 @@ import { Context } from "../resource/Context"
 import { HTMLCanvas } from "../resource/HTMLCanvas"
 import { Resource } from "../resource/Resource"
 import { Stat } from "./Stat";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 /**
  * 显示Stat的结果。由于stat会引入很多的循环引用，所以把显示部分拆开
  * @author laya
@@ -125,7 +125,7 @@ export class StatUI extends IStatRender {
 		}
 		this._leftText.text = text;
 
-		//调整为合适大小和字体			
+		//调整为合适大小和字体
 		var width: number = pixel * 138;
 		var height: number = pixel * (this._view.length * 12 + 3 * pixel) + 4;
 		this._txt.fontSize = StatUI._fontSize * pixel;
@@ -265,11 +265,11 @@ export class StatUI extends IStatRender {
 	isCanvasRender(): boolean {
 		return this._useCanvas;
 	}
-	
+
 	/**
 	 * @override
 	 * 非canvas模式的渲染
-	 * */ 
+	 * */
 	renderNotCanvas(ctx: any, x: number, y: number) {
 		this._show && this._sp && this._sp.render(ctx, 0, 0);
 	}

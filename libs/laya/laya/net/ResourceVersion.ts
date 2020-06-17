@@ -1,7 +1,7 @@
-import { Loader } from "./Loader";
-import { URL } from "./URL";
-import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { Loader } from './Loader';
+import { URL } from './URL';
+import { Handler } from '../utils/Handler';
+import { ILaya } from '../../../ILaya';
 
 /**
  * <p>资源版本的生成由layacmd或IDE完成，使用 <code>ResourceVersion</code> 简化使用过程。</p>
@@ -24,9 +24,18 @@ export class ResourceVersion {
      * @param   callback		清单（json）文件加载完成后执行。
      * @param   type			FOLDER_VERSION为基于文件夹管理方式（老版本IDE默认类型），FILENAME_VERSION为基于文件名映射管理（新版本IDE默认类型
      */
-    static enable(manifestFile: string, callback: Handler, type: number = 2): void {
+    static enable(
+        manifestFile: string,
+        callback: Handler,
+        type: number = 2,
+    ): void {
         ResourceVersion.type = type;
-        ILaya.loader.load(manifestFile, Handler.create(null, ResourceVersion.onManifestLoaded, [callback]), null, Loader.JSON);
+        ILaya.loader.load(
+            manifestFile,
+            Handler.create(null, ResourceVersion.onManifestLoaded, [callback]),
+            null,
+            Loader.JSON,
+        );
     }
 
     private static onManifestLoaded(callback: Handler, data: any): void {
@@ -34,7 +43,9 @@ export class ResourceVersion {
         URL.customFormat = ResourceVersion.addVersionPrefix;
         callback.run();
         if (!data) {
-            console.warn("资源版本清单文件不存在，不使用资源版本管理。忽略ERR_FILE_NOT_FOUND错误。");
+            console.warn(
+                '资源版本清单文件不存在，不使用资源版本管理。忽略ERR_FILE_NOT_FOUND错误。',
+            );
         }
     }
 
@@ -46,11 +57,11 @@ export class ResourceVersion {
     static addVersionPrefix(originURL: string): string {
         originURL = URL.getAdptedFilePath(originURL);
         if (ResourceVersion.manifest && ResourceVersion.manifest[originURL]) {
-            if (ResourceVersion.type == ResourceVersion.FILENAME_VERSION) return ResourceVersion.manifest[originURL];
-            return ResourceVersion.manifest[originURL] + "/" + originURL;
+            if (ResourceVersion.type == ResourceVersion.FILENAME_VERSION)
+                return ResourceVersion.manifest[originURL];
+            return ResourceVersion.manifest[originURL] + '/' + originURL;
         }
 
         return originURL;
     }
 }
-

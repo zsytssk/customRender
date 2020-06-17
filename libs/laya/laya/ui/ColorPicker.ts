@@ -8,7 +8,7 @@ import { Sprite } from "../display/Sprite"
 import { Event } from "../events/Event"
 import { Point } from "../maths/Point"
 import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -162,7 +162,7 @@ export class ColorPicker extends UIComponent {
     protected _panelChanged: boolean;
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  destroy(destroyChild: boolean = true): void {
@@ -179,7 +179,7 @@ export class ColorPicker extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
          * @override
 		*/
 		/*override*/ protected createChildren(): void {
@@ -192,7 +192,7 @@ export class ColorPicker extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
          * @override
 		*/
 		/*override*/ protected initialize(): void {

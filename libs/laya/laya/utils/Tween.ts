@@ -2,7 +2,7 @@ import { Handler } from "./Handler";
 import { Pool } from "./Pool";
 import { Browser } from "./Browser";
 import { Utils } from "./Utils";
-import { ILaya } from "./../../ILaya";
+import { ILaya } from "../../../ILaya";
 /**
 	 * <code>Tween</code>  是一个缓动类。使用此类能够实现对目标对象属性的渐变。
 	 */
@@ -117,7 +117,7 @@ export class Tween {
         this._delayParam = null;
         this.update = props.update;
 
-        //判断是否覆盖			
+        //判断是否覆盖
         var gid: number = (target.$_GID || (target.$_GID = Utils.getGID()));
         if (!Tween.tweenMap[gid]) {
             Tween.tweenMap[gid] = [this];

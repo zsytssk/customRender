@@ -4,12 +4,12 @@ import { RotationInfo } from "./motion/RotationInfo"
 import { EventDispatcher } from "../events/EventDispatcher";
 import { Handler } from "../utils/Handler";
 import { Event } from "../events/Event";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 
 
 /**
  * Shake只能在支持此操作的设备上有效。
- * 
+ *
  */
 export class Shake extends EventDispatcher {
     private throushold: number;

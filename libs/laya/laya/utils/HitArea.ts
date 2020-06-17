@@ -1,14 +1,13 @@
-import { Graphics } from "../display/Graphics"
-import { Point } from "../maths/Point"
-import { Rectangle } from "../maths/Rectangle"
-import { ILaya } from "../../ILaya";
+import { Graphics } from '../display/Graphics';
+import { Point } from '../maths/Point';
+import { Rectangle } from '../maths/Rectangle';
+import { ILaya } from '../../../ILaya';
 
 /**
  * 鼠标点击区域，可以设置绘制一系列矢量图作为点击区域和非点击区域（目前只支持圆形，矩形，多边形）
  *
  */
 export class HitArea {
-
     /**@private */
     private static _cmds: any[] = [];
     /**@private */
@@ -51,7 +50,7 @@ export class HitArea {
             cmd = cmds[i];
             if (!cmd) continue;
             switch (cmd.cmdID) {
-                case "Translate":
+                case 'Translate':
                     x -= cmd.tx;
                     y -= cmd.ty;
             }
@@ -68,18 +67,18 @@ export class HitArea {
         if (!cmd) return false;
         var rst: boolean = false;
         switch (cmd.cmdID) {
-            case "DrawRect":
+            case 'DrawRect':
                 HitArea._rect.setTo(cmd.x, cmd.y, cmd.width, cmd.height);
                 rst = HitArea._rect.contains(x, y);
                 break;
-            case "DrawCircle":
+            case 'DrawCircle':
                 var d: number;
                 x -= cmd.x;
                 y -= cmd.y;
                 d = x * x + y * y;
                 rst = d < cmd.radius * cmd.radius;
                 break;
-            case "DrawPoly":
+            case 'DrawPoly':
                 x -= cmd.x;
                 y -= cmd.y;
                 rst = HitArea._ptInPolygon(x, y, cmd.points);
@@ -111,12 +110,12 @@ export class HitArea {
             if (p.y < Math.min(p1y, p2y)) continue;
             if (p.y >= Math.max(p1y, p2y)) continue;
             // 求交点的x坐标
-            var tx: number = (p.y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x;
+            var tx: number = ((p.y - p1y) * (p2x - p1x)) / (p2y - p1y) + p1x;
             // 只统计p1p2与p向右射线的交点
             if (tx > p.x) nCross++;
         }
         // 交点为偶数，点在多边形之外
-        return (nCross % 2 == 1);
+        return nCross % 2 == 1;
     }
 
     /**
@@ -143,4 +142,3 @@ export class HitArea {
         this._unHit = value;
     }
 }
-

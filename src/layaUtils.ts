@@ -1,9 +1,9 @@
-import { Laya, loader } from 'laya/Laya';
-import { AtlasInfoManager } from 'laya/laya/net/AtlasInfoManager';
-import { Handler } from 'laya/laya/utils/Handler';
+import { Laya, loader } from 'Laya';
+import { AtlasInfoManager } from 'laya/net/AtlasInfoManager';
+import { Handler } from 'laya/utils/Handler';
 
 export function layaInit() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         Laya.init(1130, 750);
         Laya.stage.scaleMode = 'fixedheight';
         Laya.stage.screenMode = 'horizontal';

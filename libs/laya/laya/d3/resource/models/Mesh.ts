@@ -1,4 +1,4 @@
-import { ILaya } from "../../../../ILaya";
+import { ILaya } from "../../../../../ILaya";
 import { Physics3D } from "../../../d3/physics/Physics3D";
 import { Resource } from "../../../resource/Resource";
 import { Handler } from "../../../utils/Handler";
@@ -543,7 +543,7 @@ export class Mesh extends Resource implements IClone {
 
 	/**
 	 * 设置法线数据。
-	 * @param normals 法线。 
+	 * @param normals 法线。
 	 */
 	setNormals(normals: Vector3[]): void {
 		if (this._isReadable)

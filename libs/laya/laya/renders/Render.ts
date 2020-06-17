@@ -1,18 +1,18 @@
-import { ILaya } from "./../../ILaya";
-import { Config } from "./../../Config";
-import { LayaGL } from "../layagl/LayaGL"
-import { Context } from "../resource/Context"
-import { HTMLCanvas } from "../resource/HTMLCanvas"
-import { WebGL } from "../webgl/WebGL"
-import { WebGLContext } from "../webgl/WebGLContext"
-import { BlendMode } from "../webgl/canvas/BlendMode"
-import { Shader2D } from "../webgl/shader/d2/Shader2D"
-import { ShaderDefines2D } from "../webgl/shader/d2/ShaderDefines2D"
-import { Value2D } from "../webgl/shader/d2/value/Value2D"
-import { Buffer2D } from "../webgl/utils/Buffer2D"
-import { SubmitBase } from "../webgl/submit/SubmitBase";
-import { LayaGPU } from "../webgl/LayaGPU";
-import { Browser } from "../utils/Browser";
+import { ILaya } from '../../../ILaya';
+import { Config } from '../../../Config';
+import { LayaGL } from '../layagl/LayaGL';
+import { Context } from '../resource/Context';
+import { HTMLCanvas } from '../resource/HTMLCanvas';
+import { WebGL } from '../webgl/WebGL';
+import { WebGLContext } from '../webgl/WebGLContext';
+import { BlendMode } from '../webgl/canvas/BlendMode';
+import { Shader2D } from '../webgl/shader/d2/Shader2D';
+import { ShaderDefines2D } from '../webgl/shader/d2/ShaderDefines2D';
+import { Value2D } from '../webgl/shader/d2/value/Value2D';
+import { Buffer2D } from '../webgl/utils/Buffer2D';
+import { SubmitBase } from '../webgl/submit/SubmitBase';
+import { LayaGPU } from '../webgl/LayaGPU';
+import { Browser } from '../utils/Browser';
 
 /**
  * <code>Render</code> 是渲染管理类。它是一个单例，可以使用 Laya.render 访问。
@@ -31,16 +31,17 @@ export class Render {
     /** 表示是否是 3D 模式。*/
     static is3DMode: boolean;
 
-	/**
-	 * 初始化引擎。
-	 * @param	width 游戏窗口宽度。
-	 * @param	height	游戏窗口高度。
-	 */
+    /**
+     * 初始化引擎。
+     * @param	width 游戏窗口宽度。
+     * @param	height	游戏窗口高度。
+     */
     constructor(width: number, height: number, mainCanv: HTMLCanvas) {
-		Render._mainCanvas = mainCanv;
-		let source:HTMLCanvasElement = Render._mainCanvas.source as HTMLCanvasElement;
+        Render._mainCanvas = mainCanv;
+        let source: HTMLCanvasElement = Render._mainCanvas
+            .source as HTMLCanvasElement;
         //创建主画布。改到Browser中了，因为为了runtime，主画布必须是第一个
-        source.id = "layaCanvas";
+        source.id = 'layaCanvas';
         source.width = width;
         source.height = height;
         if (Render.isConchApp) {
@@ -53,7 +54,7 @@ export class Render {
             ILaya.stage._loop();
             window.requestAnimationFrame(loop);
         }
-        ILaya.stage.on("visibilitychange", this, this._onVisibilitychange);
+        ILaya.stage.on('visibilitychange', this, this._onVisibilitychange);
     }
 
     /**@private */
@@ -71,31 +72,44 @@ export class Render {
     initRender(canvas: HTMLCanvas, w: number, h: number): boolean {
         function getWebGLContext(canvas: any): WebGLRenderingContext {
             var gl: WebGLRenderingContext;
-            var names: any[] = ["webgl2", "webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
-            if (!Config.useWebGL2 || Browser.onBDMiniGame) {//TODO:反向兼容百度
+            var names: any[] = [
+                'webgl2',
+                'webgl',
+                'experimental-webgl',
+                'webkit-3d',
+                'moz-webgl',
+            ];
+            if (!Config.useWebGL2 || Browser.onBDMiniGame) {
+                //TODO:反向兼容百度
                 names.shift();
             }
             for (var i: number = 0; i < names.length; i++) {
                 try {
-                    gl = canvas.getContext(names[i], { stencil: Config.isStencil, alpha: Config.isAlpha, antialias: Config.isAntialias, premultipliedAlpha: Config.premultipliedAlpha, preserveDrawingBuffer: Config.preserveDrawingBuffer });//antialias为true,premultipliedAlpha为false,IOS和部分安卓QQ浏览器有黑屏或者白屏底色BUG
-                } catch (e) {
-                }
+                    gl = canvas.getContext(names[i], {
+                        stencil: Config.isStencil,
+                        alpha: Config.isAlpha,
+                        antialias: Config.isAntialias,
+                        premultipliedAlpha: Config.premultipliedAlpha,
+                        preserveDrawingBuffer: Config.preserveDrawingBuffer,
+                    }); //antialias为true,premultipliedAlpha为false,IOS和部分安卓QQ浏览器有黑屏或者白屏底色BUG
+                } catch (e) {}
                 if (gl) {
-                    (names[i] === 'webgl2') && (WebGL._isWebGL2 = true);
+                    names[i] === 'webgl2' && (WebGL._isWebGL2 = true);
                     new LayaGL();
                     return gl;
                 }
             }
             return null;
         }
-        var gl: WebGLRenderingContext = LayaGL.instance = WebGLContext.mainContext = getWebGLContext(Render._mainCanvas.source);
-        if (!gl)
-            return false;
+        var gl: WebGLRenderingContext = (LayaGL.instance = WebGLContext.mainContext = getWebGLContext(
+            Render._mainCanvas.source,
+        ));
+        if (!gl) return false;
 
         LayaGL.instance = gl;
         LayaGL.layaGPUInstance = new LayaGPU(gl, WebGL._isWebGL2);
 
-        canvas.size(w, h);	//在ctx之后调用。
+        canvas.size(w, h); //在ctx之后调用。
         Context.__init__();
         SubmitBase.__init__();
 
@@ -129,18 +143,17 @@ export class Render {
     }
 }
 {
-    Render.isConchApp = ((window as any).conch != null);
+    Render.isConchApp = (window as any).conch != null;
     if (Render.isConchApp) {
         Render.supportWebGLPlusCulling = false;
         Render.supportWebGLPlusAnimation = true;
         Render.supportWebGLPlusRendering = true;
-    }
-    else if((window as any).qq != null && (window as any).qq.webglPlus != null)
-    {
+    } else if (
+        (window as any).qq != null &&
+        (window as any).qq.webglPlus != null
+    ) {
         Render.supportWebGLPlusCulling = false;
         Render.supportWebGLPlusAnimation = true;
         Render.supportWebGLPlusRendering = true;
     }
 }
-
-

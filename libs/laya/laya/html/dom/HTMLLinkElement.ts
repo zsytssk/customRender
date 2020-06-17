@@ -4,7 +4,7 @@ import { Graphics } from "../../display/Graphics";
 import { Event } from "../../events/Event";
 import { HTMLStyle } from "../utils/HTMLStyle";
 import { URL } from "../../net/URL";
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { ClassUtils } from "../../utils/ClassUtils";
 
 /**
@@ -21,11 +21,11 @@ export class HTMLLinkElement extends HTMLElement {
     protected _creates(): void {
     }
     /**
-     * 
-     * @param graphic 
-     * @param gX 
-     * @param gY 
-     * @param recList 
+     *
+     * @param graphic
+     * @param gX
+     * @param gY
+     * @param recList
      * @override
      */
     drawToGraphic(graphic: Graphics, gX: number, gY: number, recList: any[]): void {

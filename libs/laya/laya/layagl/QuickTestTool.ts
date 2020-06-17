@@ -1,15 +1,14 @@
-import { Sprite } from "../display/Sprite"
-import { SpriteConst } from "../display/SpriteConst"
-import { Stage } from "../display/Stage"
-import { RenderSprite } from "../renders/RenderSprite"
-import { Context } from "../resource/Context"
-import { ILaya } from "../../ILaya";
+import { Sprite } from '../display/Sprite';
+import { SpriteConst } from '../display/SpriteConst';
+import { Stage } from '../display/Stage';
+import { RenderSprite } from '../renders/RenderSprite';
+import { Context } from '../resource/Context';
+import { ILaya } from '../../../ILaya';
 /**
  * ...
  * @author ww
  */
 export class QuickTestTool {
-
     private static showedDic: any = {};
     private static _rendertypeToStrDic: any = {};
     private static _typeToNameDic: any = {};
@@ -21,8 +20,7 @@ export class QuickTestTool {
 
     //TODO:coverage
     static showRenderTypeInfo(type: any, force: boolean = false): void {
-        if (!force && QuickTestTool.showedDic[type])
-            return;
+        if (!force && QuickTestTool.showedDic[type]) return;
         QuickTestTool.showedDic[type] = true;
         if (!QuickTestTool._rendertypeToStrDic[type]) {
             var arr: any[] = [];
@@ -34,38 +32,36 @@ export class QuickTestTool {
                 }
                 tType = tType << 1;
             }
-            QuickTestTool._rendertypeToStrDic[type] = arr.join(",");
+            QuickTestTool._rendertypeToStrDic[type] = arr.join(',');
         }
-        console.log("cmd:", QuickTestTool._rendertypeToStrDic[type]);
-
+        console.log('cmd:', QuickTestTool._rendertypeToStrDic[type]);
     }
 
     //TODO:coverage
     static __init__(): void {
+        QuickTestTool._typeToNameDic[SpriteConst.ALPHA] = 'ALPHA';
+        QuickTestTool._typeToNameDic[SpriteConst.TRANSFORM] = 'TRANSFORM';
+        QuickTestTool._typeToNameDic[SpriteConst.TEXTURE] = 'TEXTURE';
+        QuickTestTool._typeToNameDic[SpriteConst.GRAPHICS] = 'GRAPHICS';
+        QuickTestTool._typeToNameDic[SpriteConst.ONECHILD] = 'ONECHILD';
+        QuickTestTool._typeToNameDic[SpriteConst.CHILDS] = 'CHILDS';
+        QuickTestTool._typeToNameDic[
+            SpriteConst.TRANSFORM | SpriteConst.ALPHA
+        ] = 'TRANSFORM|ALPHA';
 
-        QuickTestTool._typeToNameDic[SpriteConst.ALPHA] = "ALPHA";
-        QuickTestTool._typeToNameDic[SpriteConst.TRANSFORM] = "TRANSFORM";
-        QuickTestTool._typeToNameDic[SpriteConst.TEXTURE] = "TEXTURE";
-        QuickTestTool._typeToNameDic[SpriteConst.GRAPHICS] = "GRAPHICS";
-        QuickTestTool._typeToNameDic[SpriteConst.ONECHILD] = "ONECHILD";
-        QuickTestTool._typeToNameDic[SpriteConst.CHILDS] = "CHILDS";
-        QuickTestTool._typeToNameDic[SpriteConst.TRANSFORM | SpriteConst.ALPHA] = "TRANSFORM|ALPHA";
-
-        QuickTestTool._typeToNameDic[SpriteConst.CANVAS] = "CANVAS";
-        QuickTestTool._typeToNameDic[SpriteConst.BLEND] = "BLEND";
-        QuickTestTool._typeToNameDic[SpriteConst.FILTERS] = "FILTERS";
-        QuickTestTool._typeToNameDic[SpriteConst.MASK] = "MASK";
-        QuickTestTool._typeToNameDic[SpriteConst.CLIP] = "CLIP";
-        QuickTestTool._typeToNameDic[SpriteConst.LAYAGL3D] = "LAYAGL3D";
+        QuickTestTool._typeToNameDic[SpriteConst.CANVAS] = 'CANVAS';
+        QuickTestTool._typeToNameDic[SpriteConst.BLEND] = 'BLEND';
+        QuickTestTool._typeToNameDic[SpriteConst.FILTERS] = 'FILTERS';
+        QuickTestTool._typeToNameDic[SpriteConst.MASK] = 'MASK';
+        QuickTestTool._typeToNameDic[SpriteConst.CLIP] = 'CLIP';
+        QuickTestTool._typeToNameDic[SpriteConst.LAYAGL3D] = 'LAYAGL3D';
     }
     _renderType: number;
     _repaint: number;
     _x: number;
     _y: number;
     //TODO:coverage
-    constructor() {
-
-    }
+    constructor() {}
     /**
      * 更新、呈现显示对象。由系统调用。
      * @param	context 渲染的上下文引用。
@@ -80,7 +76,12 @@ export class QuickTestTool {
         //{
         //debugger;
         //}
-        RenderSprite.renders[this._renderType]._fun(this, context, x + this._x, y + this._y);
+        RenderSprite.renders[this._renderType]._fun(
+            this,
+            context,
+            x + this._x,
+            y + this._y,
+        );
         this._repaint = 0;
     }
 
@@ -90,7 +91,7 @@ export class QuickTestTool {
     //TODO:coverage
     _stageRender(context: Context, x: number, y: number): void {
         QuickTestTool._countStart();
-        QuickTestTool._PreStageRender.call(ILaya.stage, context, x, y);//TODO TS
+        QuickTestTool._PreStageRender.call(ILaya.stage, context, x, y); //TODO TS
         QuickTestTool._countEnd();
     }
     private static _countDic: any = {};
@@ -124,10 +125,10 @@ export class QuickTestTool {
 
     //TODO:coverage
     static showCountInfo(): void {
-        console.log("===================");
+        console.log('===================');
         var key: string;
         for (key in QuickTestTool._countDic) {
-            console.log("count:" + QuickTestTool._countDic[key]);
+            console.log('count:' + QuickTestTool._countDic[key]);
             QuickTestTool.showRenderTypeInfo(key, true);
         }
     }
@@ -135,10 +136,9 @@ export class QuickTestTool {
     //TODO:coverage
     static enableQuickTest(): void {
         QuickTestTool.__init__();
-        Sprite["prototype"]["render"] = QuickTestTool["prototype"]["render"];
-        QuickTestTool._PreStageRender = Stage["prototype"]["render"];
-        Stage["prototype"]["render"] = QuickTestTool["prototype"]["_stageRender"];
+        Sprite['prototype']['render'] = QuickTestTool['prototype']['render'];
+        QuickTestTool._PreStageRender = Stage['prototype']['render'];
+        Stage['prototype']['render'] =
+            QuickTestTool['prototype']['_stageRender'];
     }
 }
-
-

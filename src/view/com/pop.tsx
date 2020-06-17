@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'customRenderer';
-import { Laya } from 'laya/Laya';
+import { Laya } from 'Laya';
 
 type PopProps = {
     width: number;

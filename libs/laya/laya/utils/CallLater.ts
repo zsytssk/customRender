@@ -1,4 +1,4 @@
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 /**
 	 * @private
 	 */
@@ -51,7 +51,7 @@ export class CallLater {
             let handler:LaterHandler;
             if (this._pool.length)
                 handler  = this._pool.pop();
-            else 
+            else
                 handler = new LaterHandler();
             //设置属性
             handler.caller = caller;

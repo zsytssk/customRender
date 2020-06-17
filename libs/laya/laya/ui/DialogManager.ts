@@ -1,16 +1,16 @@
-import { UIConfig } from "./../../UIConfig";
-import { Const } from "../Const"
-import { Sprite } from "../display/Sprite"
-import { Event } from "../events/Event"
-import { Box } from "./Box"
-import { Dialog } from "./Dialog"
-import { UIComponent } from "./UIComponent"
-import { Ease } from "../utils/Ease"
-import { Handler } from "../utils/Handler"
-import { Tween } from "../utils/Tween"
-import { IUI } from "./IUI";
-import { ClassUtils } from "../utils/ClassUtils";
-import { ILaya } from "../../ILaya";
+import { UIConfig } from '../../../UIConfig';
+import { Const } from '../Const';
+import { Sprite } from '../display/Sprite';
+import { Event } from '../events/Event';
+import { Box } from './Box';
+import { Dialog } from './Dialog';
+import { UIComponent } from './UIComponent';
+import { Ease } from '../utils/Ease';
+import { Handler } from '../utils/Handler';
+import { Tween } from '../utils/Tween';
+import { IUI } from './IUI';
+import { ClassUtils } from '../utils/ClassUtils';
+import { ILaya } from '../../../ILaya';
 
 /**打开任意窗口后调度。
  * @eventType Event.OPEN
@@ -34,15 +34,43 @@ export class DialogManager extends Sprite {
     lockLayer: Sprite;
 
     /**@private 全局默认弹出对话框效果，可以设置一个效果代替默认的弹出效果，如果不想有任何效果，可以赋值为null*/
-    popupEffect = (dialog: Dialog)=>{
+    popupEffect = (dialog: Dialog) => {
         dialog.scale(1, 1);
-        dialog._effectTween = Tween.from(dialog, { x: ILaya.stage.width / 2, y: ILaya.stage.height / 2, scaleX: 0, scaleY: 0 }, 300, Ease.backOut, Handler.create(this, this.doOpen, [dialog]), 0, false, false);
-    }
+        dialog._effectTween = Tween.from(
+            dialog,
+            {
+                x: ILaya.stage.width / 2,
+                y: ILaya.stage.height / 2,
+                scaleX: 0,
+                scaleY: 0,
+            },
+            300,
+            Ease.backOut,
+            Handler.create(this, this.doOpen, [dialog]),
+            0,
+            false,
+            false,
+        );
+    };
 
     /**@private 全局默认关闭对话框效果，可以设置一个效果代替默认的关闭效果，如果不想有任何效果，可以赋值为null*/
-    closeEffect = (dialog: Dialog)=>{
-        dialog._effectTween = Tween.to(dialog, { x: ILaya.stage.width / 2, y: ILaya.stage.height / 2, scaleX: 0, scaleY: 0 }, 300, Ease.strongOut, Handler.create(this, this.doClose, [dialog]), 0, false, false);
-    }
+    closeEffect = (dialog: Dialog) => {
+        dialog._effectTween = Tween.to(
+            dialog,
+            {
+                x: ILaya.stage.width / 2,
+                y: ILaya.stage.height / 2,
+                scaleX: 0,
+                scaleY: 0,
+            },
+            300,
+            Ease.strongOut,
+            Handler.create(this, this.doClose, [dialog]),
+            0,
+            false,
+            false,
+        );
+    };
 
     /**全局默认关闭对话框效果，可以设置一个效果代替默认的关闭效果，如果不想有任何效果，可以赋值为null*/
     popupEffectHandler: Handler = new Handler(this, this.popupEffect);
@@ -58,12 +86,13 @@ export class DialogManager extends Sprite {
         this.zOrder = 1000;
         ILaya.stage.addChild(this);
         ILaya.stage.on(Event.RESIZE, this, this._onResize);
-        if (UIConfig.closeDialogOnSide) this.maskLayer.on("click", this, this._closeOnSide);
+        if (UIConfig.closeDialogOnSide)
+            this.maskLayer.on('click', this, this._closeOnSide);
         this._onResize(null);
     }
 
     private _closeOnSide(): void {
-        var dialog: Dialog = (<Dialog>this.getChildAt(this.numChildren - 1));
+        var dialog: Dialog = <Dialog>this.getChildAt(this.numChildren - 1);
         if (dialog instanceof IUI.Dialog) dialog.close();
     }
 
@@ -83,23 +112,33 @@ export class DialogManager extends Sprite {
 
     /**@private */
     private _onResize(e: Event = null): void {
-        var width: number = this.maskLayer.width = ILaya.stage.width;
-        var height: number = this.maskLayer.height = ILaya.stage.height;
+        var width: number = (this.maskLayer.width = ILaya.stage.width);
+        var height: number = (this.maskLayer.height = ILaya.stage.height);
         if (this.lockLayer) this.lockLayer.size(width, height);
 
         this.maskLayer.graphics.clear(true);
-        this.maskLayer.graphics.drawRect(0, 0, width, height, UIConfig.popupBgColor);
+        this.maskLayer.graphics.drawRect(
+            0,
+            0,
+            width,
+            height,
+            UIConfig.popupBgColor,
+        );
         this.maskLayer.alpha = UIConfig.popupBgAlpha;
 
         for (var i: number = this.numChildren - 1; i > -1; i--) {
-            var item: Dialog = (<Dialog>this.getChildAt(i));
+            var item: Dialog = <Dialog>this.getChildAt(i);
             if (item.isPopupCenter) this._centerDialog(item);
         }
     }
 
     private _centerDialog(dialog: Dialog): void {
-        dialog.x = Math.round(((ILaya.stage.width - dialog.width) >> 1) + dialog.pivotX);
-        dialog.y = Math.round(((ILaya.stage.height - dialog.height) >> 1) + dialog.pivotY);
+        dialog.x = Math.round(
+            ((ILaya.stage.width - dialog.width) >> 1) + dialog.pivotX,
+        );
+        dialog.y = Math.round(
+            ((ILaya.stage.height - dialog.height) >> 1) + dialog.pivotY,
+        );
     }
 
     /**
@@ -108,13 +147,19 @@ export class DialogManager extends Sprite {
      * @param closeOther 是否关闭其它对话框，若值为ture，则关闭其它的对话框。
      * @param showEffect 是否显示弹出效果
      */
-    open(dialog: Dialog, closeOther: boolean = false, showEffect: boolean = false): void {
+    open(
+        dialog: Dialog,
+        closeOther: boolean = false,
+        showEffect: boolean = false,
+    ): void {
         if (closeOther) this._closeAll();
         this._clearDialogEffect(dialog);
         if (dialog.isPopupCenter) this._centerDialog(dialog);
         this.addChild(dialog);
-        if (dialog.isModal || this._getBit(Const.HAS_ZORDER)) ILaya.timer.callLater(this, this._checkMask);
-        if (showEffect && dialog.popupEffect != null) dialog.popupEffect.runWith(dialog);
+        if (dialog.isModal || this._getBit(Const.HAS_ZORDER))
+            ILaya.timer.callLater(this, this._checkMask);
+        if (showEffect && dialog.popupEffect != null)
+            dialog.popupEffect.runWith(dialog);
         else this.doOpen(dialog);
         this.event(Event.OPEN);
     }
@@ -151,7 +196,8 @@ export class DialogManager extends Sprite {
      */
     close(dialog: Dialog): void {
         this._clearDialogEffect(dialog);
-        if (dialog.isShowEffect && dialog.closeEffect != null) dialog.closeEffect.runWith([dialog]);
+        if (dialog.isShowEffect && dialog.closeEffect != null)
+            dialog.closeEffect.runWith([dialog]);
         else this.doClose(dialog);
         this.event(Event.CLOSE);
     }
@@ -179,7 +225,7 @@ export class DialogManager extends Sprite {
     /**@private */
     private _closeAll(): void {
         for (var i: number = this.numChildren - 1; i > -1; i--) {
-            var item: Dialog = (<Dialog>this.getChildAt(i));
+            var item: Dialog = <Dialog>this.getChildAt(i);
             if (item && item.close != null) {
                 this.doClose(item);
             }
@@ -194,7 +240,7 @@ export class DialogManager extends Sprite {
     getDialogsByGroup(group: string): any[] {
         var arr: any[] = [];
         for (var i: number = this.numChildren - 1; i > -1; i--) {
-            var item: Dialog = (<Dialog>this.getChildAt(i));
+            var item: Dialog = <Dialog>this.getChildAt(i);
             if (item && item.group === group) {
                 arr.push(item);
             }
@@ -210,7 +256,7 @@ export class DialogManager extends Sprite {
     closeByGroup(group: string): any[] {
         var arr: any[] = [];
         for (var i: number = this.numChildren - 1; i > -1; i--) {
-            var item: Dialog = (<Dialog>this.getChildAt(i));
+            var item: Dialog = <Dialog>this.getChildAt(i);
             if (item && item.group === group) {
                 item.close();
                 arr.push(item);
@@ -223,7 +269,7 @@ export class DialogManager extends Sprite {
     _checkMask(): void {
         this.maskLayer.removeSelf();
         for (var i: number = this.numChildren - 1; i > -1; i--) {
-            var dialog: Dialog = (<Dialog>this.getChildAt(i));
+            var dialog: Dialog = <Dialog>this.getChildAt(i);
             if (dialog && dialog.isModal) {
                 //trace(numChildren,i);
                 this.addChildAt(this.maskLayer, i);
@@ -233,6 +279,5 @@ export class DialogManager extends Sprite {
     }
 }
 
-
-ClassUtils.regClass("laya.ui.DialogManager", DialogManager);
-ClassUtils.regClass("Laya.DialogManager", DialogManager);
+ClassUtils.regClass('laya.ui.DialogManager', DialogManager);
+ClassUtils.regClass('Laya.DialogManager', DialogManager);

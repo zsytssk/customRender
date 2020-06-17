@@ -1,15 +1,15 @@
-import { Component } from "../components/Component"
-import { Sprite } from "../display/Sprite"
-import { Event } from "../events/Event"
-import { ILaya } from "../../ILaya";
-import { ClassUtils } from "../utils/ClassUtils";
+import { Component } from '../components/Component';
+import { Sprite } from '../display/Sprite';
+import { Event } from '../events/Event';
+import { ILaya } from '../../../ILaya';
+import { ClassUtils } from '../utils/ClassUtils';
 
 /**
  * 相对布局插件
  */
 export class Widget extends Component {
     /**一个已初始化的 <code>Widget</code> 实例。*/
-    static EMPTY: Widget = null;// new Widget();
+    static EMPTY: Widget = null; // new Widget();
 
     private _top: number = NaN;
     private _bottom: number = NaN;
@@ -17,35 +17,36 @@ export class Widget extends Component {
     private _right: number = NaN;
     private _centerX: number = NaN;
     private _centerY: number = NaN;
-		/**
-		 * @override
-		 */
-		/*override*/  onReset(): void {
+    /**
+     * @override
+     */
+    /*override*/ onReset(): void {
         this._top = this._bottom = this._left = this._right = this._centerX = this._centerY = NaN;
     }
-		/**
-		 * @override
-         * @internal
-		 */
-		protected _onEnable(): void {
+    /**
+     * @override
+     * @internal
+     */
+    protected _onEnable(): void {
         if (this.owner.parent) this._onAdded();
         else this.owner.once(Event.ADDED, this, this._onAdded);
     }
-		/**
-		 * @override
-         * @internal
-		 */
-		protected _onDisable(): void {
+    /**
+     * @override
+     * @internal
+     */
+    protected _onDisable(): void {
         this.owner.off(Event.ADDED, this, this._onAdded);
-        if (this.owner.parent) this.owner.parent.off(Event.RESIZE, this, this._onParentResize);
+        if (this.owner.parent)
+            this.owner.parent.off(Event.RESIZE, this, this._onParentResize);
     }
 
-		/**
-		 * @internal
-		 * 对象被添加到显示列表的事件侦听处理函数。
-		 * @override
-		 */
-		/*override*/  _onAdded(): void {
+    /**
+     * @internal
+     * 对象被添加到显示列表的事件侦听处理函数。
+     * @override
+     */
+    /*override*/ _onAdded(): void {
         if (this.owner.parent)
             this.owner.parent.on(Event.RESIZE, this, this._onParentResize);
         this.resetLayoutX();
@@ -66,24 +67,35 @@ export class Widget extends Component {
      * @private
      */
     resetLayoutX(): boolean {
-        var owner: Sprite = (<Sprite>this.owner);
+        var owner: Sprite = <Sprite>this.owner;
         if (!owner) return false;
-        var parent: Sprite = (<Sprite>owner.parent);
+        var parent: Sprite = <Sprite>owner.parent;
         if (parent) {
             if (!isNaN(this.centerX)) {
-                owner.x = Math.round((parent.width - owner.displayWidth) * 0.5 + this.centerX + owner.pivotX * owner.scaleX);
+                owner.x = Math.round(
+                    (parent.width - owner.displayWidth) * 0.5 +
+                        this.centerX +
+                        owner.pivotX * owner.scaleX,
+                );
             } else if (!isNaN(this.left)) {
                 owner.x = Math.round(this.left + owner.pivotX * owner.scaleX);
                 if (!isNaN(this.right)) {
                     //TODO:如果用width，会死循环
-                    var temp: number = (parent._width - this.left - this.right) / (owner.scaleX || 0.01);
+                    var temp: number =
+                        (parent._width - this.left - this.right) /
+                        (owner.scaleX || 0.01);
                     if (temp != owner.width) {
                         owner.width = temp;
                         return true;
                     }
                 }
             } else if (!isNaN(this.right)) {
-                owner.x = Math.round(parent.width - owner.displayWidth - this.right + owner.pivotX * owner.scaleX);
+                owner.x = Math.round(
+                    parent.width -
+                        owner.displayWidth -
+                        this.right +
+                        owner.pivotX * owner.scaleX,
+                );
             }
         }
         return false;
@@ -94,24 +106,35 @@ export class Widget extends Component {
      * @private
      */
     resetLayoutY(): boolean {
-        var owner: Sprite = (<Sprite>this.owner);
+        var owner: Sprite = <Sprite>this.owner;
         if (!owner) return false;
-        var parent: Sprite = (<Sprite>owner.parent);
+        var parent: Sprite = <Sprite>owner.parent;
         if (parent) {
             if (!isNaN(this.centerY)) {
-                owner.y = Math.round((parent.height - owner.displayHeight) * 0.5 + this.centerY + owner.pivotY * owner.scaleY);
+                owner.y = Math.round(
+                    (parent.height - owner.displayHeight) * 0.5 +
+                        this.centerY +
+                        owner.pivotY * owner.scaleY,
+                );
             } else if (!isNaN(this.top)) {
                 owner.y = Math.round(this.top + owner.pivotY * owner.scaleY);
                 if (!isNaN(this.bottom)) {
                     //TODO:
-                    var temp: number = (parent._height - this.top - this.bottom) / (owner.scaleY || 0.01);
+                    var temp: number =
+                        (parent._height - this.top - this.bottom) /
+                        (owner.scaleY || 0.01);
                     if (temp != owner.height) {
                         owner.height = temp;
                         return true;
                     }
                 }
             } else if (!isNaN(this.bottom)) {
-                owner.y = Math.round(parent.height - owner.displayHeight - this.bottom + owner.pivotY * owner.scaleY);
+                owner.y = Math.round(
+                    parent.height -
+                        owner.displayHeight -
+                        this.bottom +
+                        owner.pivotY * owner.scaleY,
+                );
             }
         }
         return false;
@@ -202,5 +225,5 @@ export class Widget extends Component {
 
 ILaya.regClass(Widget);
 Widget.EMPTY = new Widget();
-ClassUtils.regClass("laya.ui.Widget", Widget);
-ClassUtils.regClass("Laya.Widget", Widget);
+ClassUtils.regClass('laya.ui.Widget', Widget);
+ClassUtils.regClass('Laya.Widget', Widget);

@@ -1,13 +1,13 @@
-import { ILaya } from "../../ILaya";
+import { ILaya } from '../../../ILaya';
 
 /**
-	 * <p><code>URL</code> 提供URL格式化，URL版本管理的类。</p>
-	 * <p>引擎加载资源的时候，会自动调用formatURL函数格式化URL路径</p>
-	 * <p>通过basePath属性可以设置网络基础路径</p>
-	 * <p>通过设置customFormat函数，可以自定义URL格式化的方式</p>
-	 * <p>除了默认的通过增加后缀的格式化外，通过VersionManager类，可以开启IDE提供的，基于目录的管理方式来替代 "?v=" 的管理方式</p>
-	 * @see laya.net.VersionManager
-	 */
+ * <p><code>URL</code> 提供URL格式化，URL版本管理的类。</p>
+ * <p>引擎加载资源的时候，会自动调用formatURL函数格式化URL路径</p>
+ * <p>通过basePath属性可以设置网络基础路径</p>
+ * <p>通过设置customFormat函数，可以自定义URL格式化的方式</p>
+ * <p>除了默认的通过增加后缀的格式化外，通过VersionManager类，可以开启IDE提供的，基于目录的管理方式来替代 "?v=" 的管理方式</p>
+ * @see laya.net.VersionManager
+ */
 export class URL {
     /**URL地址版本映射表，比如{"aaa/bb.png":99,"aaa/bb.png":12}，默认情况下，通过formatURL格式化后，会自动生成为"aaa/bb.png?v=99"的一个地址*/
     static version: any = {};
@@ -35,12 +35,12 @@ export class URL {
     }
 
     /**@internal 基础路径。如果不设置，默认为当前网页的路径。最终地址将被格式化为 basePath+相对URL地址，*/
-    static _basePath: string = "";
+    static _basePath: string = '';
     /**root路径。只针对'~'类型的url路径有效*/
-    static rootPath: string = "";
+    static rootPath: string = '';
 
     static set basePath(value: string) {
-        URL._basePath = ILaya.Laya._getUrlPath();//还原BaseURL为Index目录
+        URL._basePath = ILaya.Laya._getUrlPath(); //还原BaseURL为Index目录
         URL._basePath = URL.formatURL(value);
     }
 
@@ -52,9 +52,9 @@ export class URL {
     /** 自定义URL格式化的方式。例如： customFormat = function(url:String):String{} */
     static customFormat: Function = function (url: string): string {
         var newUrl: string = URL.version[url];
-        if (!((<any>window)).conch && newUrl) url += "?v=" + newUrl;
+        if (!(<any>window).conch && newUrl) url += '?v=' + newUrl;
         return url;
-    }
+    };
 
     /**
      * 格式化指定的地址并返回。
@@ -63,22 +63,22 @@ export class URL {
      * @return	格式化处理后的地址。
      */
     static formatURL(url: string): string {
-        if (!url) return "null path";
+        if (!url) return 'null path';
         //如果是全路径，直接返回，提高性能
-        if (url.indexOf(":") > 0) return url;
+        if (url.indexOf(':') > 0) return url;
         //自定义路径格式化
         if (URL.customFormat != null) url = URL.customFormat(url);
         //如果是全路径，直接返回，提高性能
-        if (url.indexOf(":") > 0) return url;
+        if (url.indexOf(':') > 0) return url;
 
         var char1: string = url.charAt(0);
-        if (char1 === ".") {
+        if (char1 === '.') {
             return URL._formatRelativePath(URL._basePath + url);
         } else if (char1 === '~') {
             return URL.rootPath + url.substring(1);
-        } else if (char1 === "d") {
-            if (url.indexOf("data:image") === 0) return url;
-        } else if (char1 === "/") {
+        } else if (char1 === 'd') {
+            if (url.indexOf('data:image') === 0) return url;
+        } else if (char1 === '/') {
             return url;
         }
         return URL._basePath + url;
@@ -89,7 +89,7 @@ export class URL {
      * 格式化相对路径。
      */
     static _formatRelativePath(value: string): string {
-        var parts: any[] = value.split("/");
+        var parts: any[] = value.split('/');
         for (var i: number = 0, len: number = parts.length; i < len; i++) {
             if (parts[i] == '..') {
                 parts.splice(i - 1, 2);
@@ -107,7 +107,7 @@ export class URL {
      */
     static getPath(url: string): string {
         var ofs: number = url.lastIndexOf('/');
-        return ofs > 0 ? url.substr(0, ofs + 1) : "";
+        return ofs > 0 ? url.substr(0, ofs + 1) : '';
     }
 
     /**
@@ -123,7 +123,12 @@ export class URL {
     /**
      * @private
      */
-    private static _adpteTypeList: any[] = [[".scene3d", ".json"], [".scene", ".json"], [".taa", ".json"], [".prefab", ".json"]];
+    private static _adpteTypeList: any[] = [
+        ['.scene3d', '.json'],
+        ['.scene', '.json'],
+        ['.taa', '.json'],
+        ['.prefab', '.json'],
+    ];
 
     /**
      * @private 兼容微信
@@ -140,4 +145,3 @@ export class URL {
         return url;
     }
 }
-

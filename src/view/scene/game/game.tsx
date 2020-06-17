@@ -9,10 +9,11 @@ import {
 import React from 'react';
 import { Scene } from 'view/com/scene';
 import { Loading } from 'view/loading';
-import { SceneState } from '../sceneManager';
+import { SceneState } from '../../com/sceneManager';
 import { SkillBox } from './skillBox';
 import { Pool } from './pool';
 import { GunWrap } from './gunWrap/gunBoxWrap';
+import { Hall } from '../hall/hall';
 
 const res = [
     'image/game/normal_bg/bg1.jpg',
@@ -28,6 +29,7 @@ const res = [
 ];
 
 export const Game = Loading(res, GameCom);
+// export const Game = GameCom;
 
 export function GameCom() {
     return (
@@ -73,7 +75,7 @@ export function GameCom() {
                     stateNum={1}
                     skin="image/game/btn_quit.png"
                     onClick={() => {
-                        SceneState.setCurScene('hall');
+                        SceneState.switchScene(Hall);
                     }}
                 />
                 <Button

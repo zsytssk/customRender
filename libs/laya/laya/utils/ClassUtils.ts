@@ -1,22 +1,154 @@
-import { Matrix } from "../maths/Matrix"
-import { Handler } from "./Handler";
-import { Sprite } from "../display/Sprite";
-import { Node } from "../display/Node";
-import { Graphics } from "../display/Graphics";
-import { ILaya } from "../../ILaya";
-import { HitArea } from "../utils/HitArea";
-
+import { Matrix } from '../maths/Matrix';
+import { Handler } from './Handler';
+import { Sprite } from '../display/Sprite';
+import { Node } from '../display/Node';
+import { Graphics } from '../display/Graphics';
+import { ILaya } from '../../../ILaya';
+import { HitArea } from '../utils/HitArea';
 
 /**
  * <code>ClassUtils</code> 是一个类工具类。
  */
 export class ClassUtils {
     /**@private */
-    private static DrawTypeDic: any = { "Rect": ["drawRect", [["x", 0], ["y", 0], ["width", 0], ["height", 0], ["fillColor", null], ["lineColor", null], ["lineWidth", 1]]], "Circle": ["drawCircle", [["x", 0], ["y", 0], ["radius", 0], ["fillColor", null], ["lineColor", null], ["lineWidth", 1]]], "Pie": ["drawPie", [["x", 0], ["y", 0], ["radius", 0], ["startAngle", 0], ["endAngle", 0], ["fillColor", null], ["lineColor", null], ["lineWidth", 1]]], "Image": ["drawTexture", [["x", 0], ["y", 0], ["width", 0], ["height", 0]]], "Texture": ["drawTexture", [["skin", null], ["x", 0], ["y", 0], ["width", 0], ["height", 0]], 1, "_adptTextureData"], "FillTexture": ["fillTexture", [["skin", null], ["x", 0], ["y", 0], ["width", 0], ["height", 0], ["repeat", null]], 1, "_adptTextureData"], "FillText": ["fillText", [["text", ""], ["x", 0], ["y", 0], ["font", null], ["color", null], ["textAlign", null]], 1], "Line": ["drawLine", [["x", 0], ["y", 0], ["toX", 0], ["toY", 0], ["lineColor", null], ["lineWidth", 0]], 0, "_adptLineData"], "Lines": ["drawLines", [["x", 0], ["y", 0], ["points", ""], ["lineColor", null], ["lineWidth", 0]], 0, "_adptLinesData"], "Curves": ["drawCurves", [["x", 0], ["y", 0], ["points", ""], ["lineColor", null], ["lineWidth", 0]], 0, "_adptLinesData"], "Poly": ["drawPoly", [["x", 0], ["y", 0], ["points", ""], ["fillColor", null], ["lineColor", null], ["lineWidth", 1]], 0, "_adptLinesData"] };
+    private static DrawTypeDic: any = {
+        Rect: [
+            'drawRect',
+            [
+                ['x', 0],
+                ['y', 0],
+                ['width', 0],
+                ['height', 0],
+                ['fillColor', null],
+                ['lineColor', null],
+                ['lineWidth', 1],
+            ],
+        ],
+        Circle: [
+            'drawCircle',
+            [
+                ['x', 0],
+                ['y', 0],
+                ['radius', 0],
+                ['fillColor', null],
+                ['lineColor', null],
+                ['lineWidth', 1],
+            ],
+        ],
+        Pie: [
+            'drawPie',
+            [
+                ['x', 0],
+                ['y', 0],
+                ['radius', 0],
+                ['startAngle', 0],
+                ['endAngle', 0],
+                ['fillColor', null],
+                ['lineColor', null],
+                ['lineWidth', 1],
+            ],
+        ],
+        Image: [
+            'drawTexture',
+            [
+                ['x', 0],
+                ['y', 0],
+                ['width', 0],
+                ['height', 0],
+            ],
+        ],
+        Texture: [
+            'drawTexture',
+            [
+                ['skin', null],
+                ['x', 0],
+                ['y', 0],
+                ['width', 0],
+                ['height', 0],
+            ],
+            1,
+            '_adptTextureData',
+        ],
+        FillTexture: [
+            'fillTexture',
+            [
+                ['skin', null],
+                ['x', 0],
+                ['y', 0],
+                ['width', 0],
+                ['height', 0],
+                ['repeat', null],
+            ],
+            1,
+            '_adptTextureData',
+        ],
+        FillText: [
+            'fillText',
+            [
+                ['text', ''],
+                ['x', 0],
+                ['y', 0],
+                ['font', null],
+                ['color', null],
+                ['textAlign', null],
+            ],
+            1,
+        ],
+        Line: [
+            'drawLine',
+            [
+                ['x', 0],
+                ['y', 0],
+                ['toX', 0],
+                ['toY', 0],
+                ['lineColor', null],
+                ['lineWidth', 0],
+            ],
+            0,
+            '_adptLineData',
+        ],
+        Lines: [
+            'drawLines',
+            [
+                ['x', 0],
+                ['y', 0],
+                ['points', ''],
+                ['lineColor', null],
+                ['lineWidth', 0],
+            ],
+            0,
+            '_adptLinesData',
+        ],
+        Curves: [
+            'drawCurves',
+            [
+                ['x', 0],
+                ['y', 0],
+                ['points', ''],
+                ['lineColor', null],
+                ['lineWidth', 0],
+            ],
+            0,
+            '_adptLinesData',
+        ],
+        Poly: [
+            'drawPoly',
+            [
+                ['x', 0],
+                ['y', 0],
+                ['points', ''],
+                ['fillColor', null],
+                ['lineColor', null],
+                ['lineWidth', 1],
+            ],
+            0,
+            '_adptLinesData',
+        ],
+    };
     /**@private */
     private static _temParam: any[] = [];
     /**@private */
-    private static _classMap: any = {}
+    private static _classMap: any = {};
     /**@private */
     private static _tM: Matrix;
     /**@private */
@@ -57,9 +189,13 @@ export class ClassUtils {
      * @return 类对象
      */
     static getClass(className: string): any {
-        var classObject = ClassUtils._classMap[className] || ClassUtils._classMap['Laya.' + className] || className;
-        var glaya: any = ILaya.Laya
-        if (typeof (classObject) == 'string') return (ILaya.__classMap[classObject as string] || glaya[className]);
+        var classObject =
+            ClassUtils._classMap[className] ||
+            ClassUtils._classMap['Laya.' + className] ||
+            className;
+        var glaya: any = ILaya.Laya;
+        if (typeof classObject == 'string')
+            return ILaya.__classMap[classObject as string] || glaya[className];
         return classObject;
     }
 
@@ -71,7 +207,7 @@ export class ClassUtils {
     static getInstance(className: string): any {
         var compClass: any = ClassUtils.getClass(className);
         if (compClass) return new compClass();
-        else console.warn("[error] Undefined class:", className);
+        else console.warn('[error] Undefined class:', className);
         return null;
     }
 
@@ -108,12 +244,20 @@ export class ClassUtils {
      * @param	root 根节点，用来设置var定义。
      * @return	生成的节点。
      */
-    static createByJson(json: any, node: any = null, root: Node = null, customHandler: Handler = null, instanceHandler: Handler = null): any {
-        if (typeof (json) == 'string') json = JSON.parse((<string>json));
+    static createByJson(
+        json: any,
+        node: any = null,
+        root: Node = null,
+        customHandler: Handler = null,
+        instanceHandler: Handler = null,
+    ): any {
+        if (typeof json == 'string') json = JSON.parse(<string>json);
         var props: any = json.props;
 
         if (!node) {
-            node = instanceHandler ? instanceHandler.runWith(json) : ClassUtils.getInstance(props.runtime || json.type);
+            node = instanceHandler
+                ? instanceHandler.runWith(json)
+                : ClassUtils.getInstance(props.runtime || json.type);
             if (!node) return null;
         }
 
@@ -121,22 +265,32 @@ export class ClassUtils {
         if (child) {
             for (var i: number = 0, n: number = child.length; i < n; i++) {
                 var data: any = child[i];
-                if ((data.props.name === "render" || data.props.renderType === "render") && node["_$set_itemRender"])
+                if (
+                    (data.props.name === 'render' ||
+                        data.props.renderType === 'render') &&
+                    node['_$set_itemRender']
+                )
                     node.itemRender = data;
                 else {
-                    if (data.type == "Graphic") {
+                    if (data.type == 'Graphic') {
                         ClassUtils._addGraphicsToSprite(data, node);
                     } else if (ClassUtils._isDrawType(data.type)) {
                         ClassUtils._addGraphicToSprite(data, node, true);
                     } else {
-                        var tChild: any = ClassUtils.createByJson(data, null, root, customHandler, instanceHandler)
-                        if (data.type === "Script") {
-                            if ("owner" in tChild) {
-                                tChild["owner"] = node;
-                            } else if ("target" in tChild) {
-                                tChild["target"] = node;
+                        var tChild: any = ClassUtils.createByJson(
+                            data,
+                            null,
+                            root,
+                            customHandler,
+                            instanceHandler,
+                        );
+                        if (data.type === 'Script') {
+                            if ('owner' in tChild) {
+                                tChild['owner'] = node;
+                            } else if ('target' in tChild) {
+                                tChild['target'] = node;
                             }
-                        } else if (data.props.renderType == "mask") {
+                        } else if (data.props.renderType == 'mask') {
                             node.mask = tChild;
                         } else {
                             node.addChild(tChild);
@@ -149,9 +303,12 @@ export class ClassUtils {
         if (props) {
             for (var prop in props) {
                 var value: any = props[prop];
-                if (prop === "var" && root) {
+                if (prop === 'var' && root) {
                     root[value] = node;
-                } else if (value instanceof Array && node[prop] instanceof Function) {
+                } else if (
+                    value instanceof Array &&
+                    node[prop] instanceof Function
+                ) {
                     node[prop].apply(node, value);
                 } else {
                     node[prop] = value;
@@ -163,7 +320,7 @@ export class ClassUtils {
             customHandler.runWith([node, json]);
         }
 
-        if (node["created"]) node.created();
+        if (node['created']) node.created();
 
         return node;
     }
@@ -180,8 +337,8 @@ export class ClassUtils {
         var ox: number = 0;
         var oy: number = 0;
         if (graphicO.props) {
-            ox = ClassUtils._getObjVar(graphicO.props, "x", 0);
-            oy = ClassUtils._getObjVar(graphicO.props, "y", 0);
+            ox = ClassUtils._getObjVar(graphicO.props, 'x', 0);
+            oy = ClassUtils._getObjVar(graphicO.props, 'y', 0);
         }
         if (ox != 0 && oy != 0) {
             g.translate(ox, oy);
@@ -201,19 +358,29 @@ export class ClassUtils {
      * 将graphic绘图指令添加到sprite上
      * @param graphicO 绘图指令描述
      */
-    static _addGraphicToSprite(graphicO: any, sprite: Sprite, isChild: boolean = false): void {
-        var g: Graphics = isChild ? ClassUtils._getGraphicsFromSprite(graphicO, sprite) : sprite.graphics;
+    static _addGraphicToSprite(
+        graphicO: any,
+        sprite: Sprite,
+        isChild: boolean = false,
+    ): void {
+        var g: Graphics = isChild
+            ? ClassUtils._getGraphicsFromSprite(graphicO, sprite)
+            : sprite.graphics;
         ClassUtils._addGraphicToGraphics(graphicO, g);
     }
 
     /**
      * @private
      */
-    private static _getGraphicsFromSprite(dataO: any, sprite: Sprite): Graphics {
+    private static _getGraphicsFromSprite(
+        dataO: any,
+        sprite: Sprite,
+    ): Graphics {
         if (!dataO || !dataO.props) return sprite.graphics;
         var propsName: string = dataO.props.renderType;
-        if (propsName === "hit" || propsName === "unHit") {
-            var hitArea: HitArea = sprite._style.hitArea || (sprite.hitArea = new HitArea());
+        if (propsName === 'hit' || propsName === 'unHit') {
+            var hitArea: HitArea =
+                sprite._style.hitArea || (sprite.hitArea = new HitArea());
             if (!hitArea[propsName]) {
                 hitArea[propsName] = new Graphics();
             }
@@ -229,15 +396,19 @@ export class ClassUtils {
     private static _getTransformData(propsO: any): Matrix {
         var m: Matrix;
 
-        if ("pivotX" in propsO || "pivotY" in propsO) {
+        if ('pivotX' in propsO || 'pivotY' in propsO) {
             m = m || new Matrix();
-            m.translate(-ClassUtils._getObjVar(propsO, "pivotX", 0), -ClassUtils._getObjVar(propsO, "pivotY", 0));
+            m.translate(
+                -ClassUtils._getObjVar(propsO, 'pivotX', 0),
+                -ClassUtils._getObjVar(propsO, 'pivotY', 0),
+            );
         }
 
-        var sx: number = ClassUtils._getObjVar(propsO, "scaleX", 1), sy: number = ClassUtils._getObjVar(propsO, "scaleY", 1);
-        var rotate: number = ClassUtils._getObjVar(propsO, "rotation", 0);
-        var skewX: number = ClassUtils._getObjVar(propsO, "skewX", 0);
-        var skewY: number = ClassUtils._getObjVar(propsO, "skewY", 0);
+        var sx: number = ClassUtils._getObjVar(propsO, 'scaleX', 1),
+            sy: number = ClassUtils._getObjVar(propsO, 'scaleY', 1);
+        var rotate: number = ClassUtils._getObjVar(propsO, 'rotation', 0);
+        var skewX: number = ClassUtils._getObjVar(propsO, 'skewX', 0);
+        var skewY: number = ClassUtils._getObjVar(propsO, 'skewY', 0);
 
         if (sx != 1 || sy != 1 || rotate != 0) {
             m = m || new Matrix();
@@ -251,7 +422,10 @@ export class ClassUtils {
     /**
      * @private
      */
-    private static _addGraphicToGraphics(graphicO: any, graphic: Graphics): void {
+    private static _addGraphicToGraphics(
+        graphicO: any,
+        graphic: Graphics,
+    ): void {
         var propsO: any;
         propsO = graphicO.props;
         if (!propsO) return;
@@ -260,7 +434,12 @@ export class ClassUtils {
         if (!drawConfig) return;
 
         var g: Graphics = graphic;
-        var params: any = ClassUtils._getParams(propsO, drawConfig[1], drawConfig[2], drawConfig[3]);
+        var params: any = ClassUtils._getParams(
+            propsO,
+            drawConfig[1],
+            drawConfig[2],
+            drawConfig[3],
+        );
         var m: Matrix = ClassUtils._tM;
         if (m || ClassUtils._alpha != 1) {
             g.save();
@@ -302,14 +481,19 @@ export class ClassUtils {
      * @internal
      */
     static _isDrawType(type: string): boolean {
-        if (type === "Image") return false;
+        if (type === 'Image') return false;
         return type in ClassUtils.DrawTypeDic;
     }
 
     /**
      * @private
      */
-    private static _getParams(obj: any, params: any[], xPos: number = 0, adptFun: string = null): any[] {
+    private static _getParams(
+        obj: any,
+        params: any[],
+        xPos: number = 0,
+        adptFun: string = null,
+    ): any[] {
         var rst: any = ClassUtils._temParam;
         rst.length = params.length;
         var i: number, len: number;
@@ -317,7 +501,7 @@ export class ClassUtils {
         for (i = 0; i < len; i++) {
             rst[i] = ClassUtils._getObjVar(obj, params[i][0], params[i][1]);
         }
-        ClassUtils._alpha = ClassUtils._getObjVar(obj, "alpha", 1);
+        ClassUtils._alpha = ClassUtils._getObjVar(obj, 'alpha', 1);
         var m: Matrix;
         m = ClassUtils._getTransformData(obj);
         if (m) {
@@ -339,7 +523,7 @@ export class ClassUtils {
      * @internal
      */
     static _getPointListByStr(str: string): any[] {
-        var pointArr: any[] = str.split(",");
+        var pointArr: any[] = str.split(',');
         var i: number, len: number;
         len = pointArr.length;
         for (i = 0; i < len; i++) {
@@ -358,4 +542,3 @@ export class ClassUtils {
         return noValue;
     }
 }
-

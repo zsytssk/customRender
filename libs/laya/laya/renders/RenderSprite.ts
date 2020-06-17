@@ -22,7 +22,7 @@ import { Value2D } from "../webgl/shader/d2/value/Value2D";
 import { SubmitCMD } from "../webgl/submit/SubmitCMD";
 import { WebGLContext } from "../webgl/WebGLContext";
 import { LayaGLQuickRunner } from "./LayaGLQuickRunner";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 
 /**
  * @private
@@ -123,7 +123,7 @@ export class RenderSprite {
 			case 0:
 				this._fun = this._no;
 				return;
-			//case SpriteConst.IMAGE: 
+			//case SpriteConst.IMAGE:
 			//_fun = this._image;
 			//return;
 			case SpriteConst.ALPHA:
@@ -159,10 +159,10 @@ export class RenderSprite {
 			case SpriteConst.TEXTURE:
 				this._fun = this._texture;
 				return;
-			//case SpriteConst.IMAGE | SpriteConst.GRAPHICS: 
+			//case SpriteConst.IMAGE | SpriteConst.GRAPHICS:
 			//_fun = this._image2;
 			//return;
-			//case SpriteConst.IMAGE | SpriteConst.TRANSFORM | SpriteConst.GRAPHICS: 
+			//case SpriteConst.IMAGE | SpriteConst.TRANSFORM | SpriteConst.GRAPHICS:
 			//_fun = this._image2;
 			//return;
 			case SpriteConst.FILTERS:

@@ -4,7 +4,7 @@ import { Matrix } from "../maths/Matrix"
 import { Point } from "../maths/Point"
 import { Rectangle } from "../maths/Rectangle"
 import { Texture } from "../resource/Texture"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 
 /**
  * <code>Utils</code> 是工具类。
@@ -364,9 +364,9 @@ export class Utils {
             cmd = cmds[i];
             //switch(cmd.callee)
             //{
-            //case context._drawTexture: 
-            //case context._fillTexture: 
-            //case context._drawTextureWithTransform: 
+            //case context._drawTexture:
+            //case context._fillTexture:
+            //case context._drawTextureWithTransform:
             //tex = cmd[0];
             //if (!tex || !tex.source) return false;
             //

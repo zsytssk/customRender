@@ -1,5 +1,6 @@
 import { AppModel } from 'model/appModel';
-import { SceneState } from './scene/sceneManager';
+import { SceneState } from './com/sceneManager';
+import { Game } from './scene/game/game';
 
 export const ViewState = {
     app_model: undefined as AppModel,
@@ -13,5 +14,5 @@ export function initAppModel() {
 export function enterGame() {
     const { app_model } = ViewState;
     app_model.enterGame();
-    SceneState.setCurScene('game');
+    SceneState.switchScene(Game, {});
 }

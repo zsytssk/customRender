@@ -4,7 +4,7 @@ import { UIUtils } from "./UIUtils";
 import { Node } from "../display/Node"
 import { Sprite } from "../display/Sprite"
 import { Event } from "../events/Event"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -42,7 +42,7 @@ export class UIComponent extends Sprite {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     destroy(destroyChild: boolean = true): void {
@@ -375,7 +375,7 @@ export class UIComponent extends Sprite {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set scaleX(value: number) {
@@ -395,7 +395,7 @@ export class UIComponent extends Sprite {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set scaleY(value: number) {
@@ -420,7 +420,7 @@ export class UIComponent extends Sprite {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set width(value: number) {
@@ -436,7 +436,7 @@ export class UIComponent extends Sprite {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set height(value: number) {
@@ -491,8 +491,8 @@ export class UIComponent extends Sprite {
         }
     }
     /**
-     * 
-     * @param child 
+     *
+     * @param child
      * @override
      */
     protected _childChanged(child: Node = null): void {

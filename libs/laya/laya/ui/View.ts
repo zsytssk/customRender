@@ -33,7 +33,7 @@ import { Tree } from "./Tree";
 import { HBox } from "./HBox";
 import { VBox } from "./VBox";
 import { FontClip } from "./FontClip";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 
@@ -99,8 +99,8 @@ export class View extends Scene {
         ILaya.loader.cacheRes(url, json);
     }
 
-		/** 
-		 * @inheritDoc 
+		/**
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  destroy(destroyChild: boolean = true): void {
@@ -221,7 +221,7 @@ export class View extends Scene {
     }
 
 		/**
-		 * @private 
+		 * @private
 		 * @override
 		*/
 		/*override*/ protected _sizeChanged(): void {

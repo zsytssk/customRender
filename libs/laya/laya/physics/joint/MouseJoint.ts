@@ -1,5 +1,5 @@
 import { JointBase } from "./JointBase";
-import { Laya } from "../../../Laya";
+import { Laya } from "../../../../Laya";
 import { Sprite } from "../../display/Sprite"
 import { Event } from "../../events/Event"
 import { Point } from "../../maths/Point"
@@ -46,7 +46,7 @@ export class MouseJoint extends JointBase {
     }
     /**
      * @override
-     * 
+     *
      */
     protected _createJoint(): void {
         if (!this._joint) {

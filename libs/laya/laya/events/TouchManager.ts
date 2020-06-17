@@ -1,16 +1,15 @@
-import { Event } from "./Event";
-import { Node } from "../display/Node"
+import { Event } from './Event';
+import { Node } from '../display/Node';
 //import { Sprite } from "../display/Sprite"
-import { Browser } from "../utils/Browser"
-import { Pool } from "../utils/Pool"
-import { ILaya } from "../../ILaya";
+import { Browser } from '../utils/Browser';
+import { Pool } from '../utils/Pool';
+import { ILaya } from '../../../ILaya';
 
 /**
  * @private
  * Touch事件管理类，处理多点触控下的鼠标事件
  */
 export class TouchManager {
-
     static I: TouchManager = new TouchManager();
     private static _oldArr: any[] = [];
     private static _newArr: any[] = [];
@@ -89,7 +88,7 @@ export class TouchManager {
      */
     private createTouchO(ele: any, touchID: number): any {
         var rst: any;
-        rst = Pool.getItem("TouchData") || {};
+        rst = Pool.getItem('TouchData') || {};
         rst.id = touchID;
         rst.tar = ele;
 
@@ -103,8 +102,7 @@ export class TouchManager {
      * @param isLeft	（可选）是否为左键
      */
     onMouseDown(ele: any, touchID: number, isLeft: boolean = false): void {
-        if (!this.enable)
-            return;
+        if (!this.enable) return;
         var preO: any;
         var tO: any;
         var arrs: any[];
@@ -118,8 +116,7 @@ export class TouchManager {
             //理论上不会发生，相同触摸事件必然不会在end之前再次出发
             preO.tar = ele;
         }
-        if (Browser.onMobile)
-            this.sendEvents(arrs, Event.MOUSE_OVER);
+        if (Browser.onMobile) this.sendEvents(arrs, Event.MOUSE_OVER);
 
         var preDowns: any[];
         preDowns = isLeft ? this.preDowns : this.preRightDowns;
@@ -130,11 +127,12 @@ export class TouchManager {
         } else {
             //理论上不会发生，相同触摸事件必然不会在end之前再次出发
             preO.tar = ele;
-
         }
-        this.sendEvents(arrs, isLeft ? Event.MOUSE_DOWN : Event.RIGHT_MOUSE_DOWN);
+        this.sendEvents(
+            arrs,
+            isLeft ? Event.MOUSE_DOWN : Event.RIGHT_MOUSE_DOWN,
+        );
         this._clearTempArrs();
-
     }
 
     /**
@@ -152,8 +150,7 @@ export class TouchManager {
             var tE = eles[i];
             if (tE.destroyed) return;
             tE.event(type, this._event.setTo(type, tE, _target));
-            if (this._event._stoped)
-                break;
+            if (this._event._stoped) break;
         }
     }
 
@@ -183,9 +180,12 @@ export class TouchManager {
      * @param elePre	旧的根节点。
      * @param touchID	（可选）touchID，默认为0。
      */
-    private checkMouseOutAndOverOfMove(eleNew: Node, elePre: Node, touchID: number = 0): void {
-        if (elePre == eleNew)
-            return;
+    private checkMouseOutAndOverOfMove(
+        eleNew: Node,
+        elePre: Node,
+        touchID: number = 0,
+    ): void {
+        if (elePre == eleNew) return;
         var tar: Node;
         var arrs: any[];
         var i: number, len: number;
@@ -211,7 +211,6 @@ export class TouchManager {
                 if (tIndex >= 0) {
                     newArr.splice(tIndex, newArr.length - tIndex);
                     break;
-
                 } else {
                     arrs.push(tar);
                 }
@@ -233,8 +232,7 @@ export class TouchManager {
      *
      */
     onMouseMove(ele: any, touchID: number): void {
-        if (!this.enable)
-            return;
+        if (!this.enable) return;
         //DebugTxt.dTrace("onMouseMove:"+touchID);
         var preO: any;
         preO = this.getTouchFromArr(touchID, this.preOvers);
@@ -259,7 +257,11 @@ export class TouchManager {
     getLastOvers(): any[] {
         TouchManager._tEleArr.length = 0;
         if (this.preOvers.length > 0 && this.preOvers[0].tar) {
-            return this.getEles(this.preOvers[0].tar, null, TouchManager._tEleArr);
+            return this.getEles(
+                this.preOvers[0].tar,
+                null,
+                TouchManager._tEleArr,
+            );
         }
         TouchManager._tEleArr.push(ILaya.stage);
         return TouchManager._tEleArr;
@@ -279,8 +281,7 @@ export class TouchManager {
      * @param isLeft	是否为左键
      */
     onMouseUp(ele: any, touchID: number, isLeft: boolean = false): void {
-        if (!this.enable)
-            return;
+        if (!this.enable) return;
         var preO: any;
         var tO: any;
         var arrs: any[];
@@ -300,7 +301,6 @@ export class TouchManager {
         preDowns = isLeft ? this.preDowns : this.preRightDowns;
         preO = this.getTouchFromArr(touchID, preDowns);
         if (!preO) {
-
         } else {
             var isDouble: boolean;
             var now: number = Browser.now();
@@ -322,14 +322,17 @@ export class TouchManager {
             }
 
             if (sendArr.length > 0) {
-                this.sendEvents(sendArr, isLeft ? Event.CLICK : Event.RIGHT_CLICK);
+                this.sendEvents(
+                    sendArr,
+                    isLeft ? Event.CLICK : Event.RIGHT_CLICK,
+                );
             }
             if (isLeft && isDouble) {
                 this.sendEvents(sendArr, Event.DOUBLE_CLICK);
             }
             this.removeTouchFromArr(touchID, preDowns);
             preO.tar = null;
-            Pool.recover("TouchData", preO);
+            Pool.recover('TouchData', preO);
         }
 
         //处理out
@@ -344,10 +347,9 @@ export class TouchManager {
                 }
                 this.removeTouchFromArr(touchID, this.preOvers);
                 preO.tar = null;
-                Pool.recover("TouchData", preO);
+                Pool.recover('TouchData', preO);
             }
         }
         this._clearTempArrs();
     }
 }
-

@@ -2,7 +2,7 @@ import { ParticleTemplateBase } from "./ParticleTemplateBase";
 import { Sprite } from "../display/Sprite";
 import { ParticleSetting } from "./ParticleSetting";
 import { Handler } from "../utils/Handler";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { Context } from "../resource/Context";
 import { ParticleTemplate2D } from "./ParticleTemplate2D"
 import { EmitterBase } from "./emitter/EmitterBase"
@@ -116,10 +116,10 @@ export class Particle2D extends Sprite {
     }
 
     /**
-     * 
-     * @param context 
-     * @param x 
-     * @param y 
+     *
+     * @param context
+     * @param x
+     * @param y
      * @override
      */
     customRender(context: Context, x: number, y: number): void {
@@ -137,8 +137,8 @@ export class Particle2D extends Sprite {
         }
     }
     /**
-     * 
-     * @param destroyChild 
+     *
+     * @param destroyChild
      * @override
      */
     destroy(destroyChild: boolean = true): void {

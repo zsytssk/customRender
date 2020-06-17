@@ -3,7 +3,7 @@ import { Loader } from "../net/Loader"
 import { UIComponent } from "./UIComponent"
 import { Image } from "./Image"
 import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -135,7 +135,7 @@ export class ProgressBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     destroy(destroyChild: boolean = true): void {
@@ -147,7 +147,7 @@ export class ProgressBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     protected createChildren(): void {
@@ -183,7 +183,7 @@ export class ProgressBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     protected measureWidth(): number {
@@ -191,7 +191,7 @@ export class ProgressBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     protected measureHeight(): number {
@@ -263,7 +263,7 @@ export class ProgressBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set width(value: number) {
@@ -277,7 +277,7 @@ export class ProgressBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set height(value: number) {
@@ -291,7 +291,7 @@ export class ProgressBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

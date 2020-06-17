@@ -2,7 +2,7 @@ import { Event } from "../events/Event"
 import { Texture } from "../resource/Texture"
 import { AutoBitmap } from "./AutoBitmap"
 import { Clip } from "./Clip"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -226,8 +226,8 @@ export class FontClip extends Clip {
         return this._wordsH;
     }
 		/**
-		 * 
-		 * @param destroyChild 
+		 *
+		 * @param destroyChild
 		 * @override
 		 */
 		/*override*/  destroy(destroyChild: boolean = true): void {

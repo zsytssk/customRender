@@ -7,7 +7,7 @@ import { Node } from "../display/Node"
 import { Sprite } from "../display/Sprite"
 import { Box } from "./Box"
 import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -136,7 +136,7 @@ export class ViewStack extends Box implements IItem {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

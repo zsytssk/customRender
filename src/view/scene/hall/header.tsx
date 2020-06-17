@@ -7,19 +7,18 @@ import {
     View,
 } from 'customRenderer/layaCom';
 import React, { useState } from 'react';
+import { genRandomStr } from 'utils/utils';
+import { alert } from 'view/pop/alert';
+import { enterGame } from 'view/viewState';
 import { CoinMenu } from './coinMenu';
 import { FlagMenu } from './flagMenu';
-import { PopState } from 'view/pop/popManager';
-import { Alert } from 'view/pop/alert';
-import { genRandomStr } from 'utils/utils';
-import { SceneState } from '../sceneManager';
-import { enterGame } from 'view/viewState';
 
 export function Header(props: ComProps) {
     const [flagMenuVisible, setFlagMenuVisible] = useState(false);
     const toggleFlagMenu = () => {
         setFlagMenuVisible(!flagMenuVisible);
     };
+
     return (
         <View
             width={1920}
@@ -114,7 +113,7 @@ export function Header(props: ComProps) {
                         skin="image/hall/btn_get.png"
                         onClick={() => {
                             const id = genRandomStr();
-                            PopState.showPop(Alert, `this is a test! ${id}`);
+                            alert('this is a test ' + id);
                         }}
                         var="testAlert"
                     >

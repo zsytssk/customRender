@@ -3,7 +3,7 @@ import { SlotData } from "./SlotData";
 import { SkinSlotDisplayData } from "./SkinSlotDisplayData";
 import { UVTools } from "./UVTools";
 import { SkinMeshForGraphic } from "./canvasmesh/SkinMeshForGraphic"
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { GraphicsAni } from "../GraphicsAni";
 import { Matrix } from "../../maths/Matrix";
 import { Graphics } from "../../display/Graphics";
@@ -170,7 +170,7 @@ export class BoneSlot {
 	}
 	/**@internal */
 	private static _tempResultMatrix: Matrix = new Matrix();
-	/**@internal */	
+	/**@internal */
 	private _preGraphicVerticle: any[];
 
 	//TODO:coverage
@@ -355,7 +355,7 @@ export class BoneSlot {
 		}
 	}
 
-	/**@internal */ 
+	/**@internal */
 	private static _tempVerticleArr: any[] = [];
 	/**
 	 * 显示蒙皮动画

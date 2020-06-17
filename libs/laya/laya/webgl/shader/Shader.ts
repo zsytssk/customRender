@@ -1,4 +1,4 @@
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { Stat } from "../../utils/Stat";
 import { StringKey } from "../../utils/StringKey";
 import { ShaderCompile } from "../utils/ShaderCompile";
@@ -199,10 +199,10 @@ export class Shader extends BaseShader {
 
 		/*
 		var attribNum:int = customCompile ? result.attributes.length : gl.getProgramParameter(_program, WebGLContext.ACTIVE_ATTRIBUTES); //得到attribute的个数
-		
+
 		for (i = 0; i < attribNum; i++) {
 			var attrib:* = customCompile ? result.attributes[i] : gl.getActiveAttrib(_program, i); //attrib对象，{name,size,type}
-			location = gl.getAttribLocation(_program, attrib.name); //用名字来得到location	
+			location = gl.getAttribLocation(_program, attrib.name); //用名字来得到location
 			one = {vartype: "attribute", glfun:null, ivartype: 0, attrib: attrib, location: location, name: attrib.name, type: attrib.type, isArray: false, isSame: false, preValue: null, indexOfParams: 0};
 			_params.push(one);
 		}

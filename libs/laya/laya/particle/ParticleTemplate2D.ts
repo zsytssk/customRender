@@ -4,7 +4,7 @@ import { ISubmit } from "../webgl/submit/ISubmit";
 import { ParticleShaderValue } from "./shader/value/ParticleShaderValue";
 import { Handler } from "../utils/Handler";
 import { Texture } from "../resource/Texture";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { BlendMode } from "../webgl/canvas/BlendMode";
 import { MeshParticle2D } from "../webgl/utils/MeshParticle2D";
 import { VertexBuffer2D } from "../webgl/utils/VertexBuffer2D";
@@ -14,7 +14,7 @@ import { Loader } from "../net/Loader";
 
 
 /**
- *  @internal 
+ *  @internal
  */
 export class ParticleTemplate2D extends ParticleTemplateWebGL implements ISubmit {
     //private var _vertexBuffer2D:VertexBuffer2D;
@@ -55,9 +55,9 @@ export class ParticleTemplate2D extends ParticleTemplateWebGL implements ISubmit
 
     releaseRender(): void { }
     /**
-     * 
-     * @param position 
-     * @param velocity 
+     *
+     * @param position
+     * @param velocity
      * @override
      */
     addParticleArray(position: Float32Array, velocity: Float32Array): void {
@@ -68,20 +68,20 @@ export class ParticleTemplate2D extends ParticleTemplateWebGL implements ISubmit
     }
 
     /*
-    override protected function loadContent():void 
+    override protected function loadContent():void
     {
         var indexes:Uint16Array = new Uint16Array(settings.maxPartices * 6);
-    	
+
         for (var i:int = 0; i < settings.maxPartices; i++) {
             indexes[i * 6 + 0] = (i * 4 + 0);
             indexes[i * 6 + 1] = (i * 4 + 1);
             indexes[i * 6 + 2] = (i * 4 + 2);
-        	
+
             indexes[i * 6 + 3] = (i * 4 + 0);
             indexes[i * 6 + 4] = (i * 4 + 2);
             indexes[i * 6 + 5] = (i * 4 + 3);
         }
-    	
+
         _indexBuffer2D.clear();
         _indexBuffer2D.append(indexes);
         _indexBuffer2D.upload();

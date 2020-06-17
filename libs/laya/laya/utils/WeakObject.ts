@@ -1,11 +1,11 @@
 import { Utils } from "./Utils";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 
 /**
 	 * 封装弱引用WeakMap
 	 * 如果支持WeakMap，则使用WeakMap，如果不支持，则用Object代替
 	 * 注意：如果采用Object，为了防止内存泄漏，则采用定时清理缓存策略
-	 * 
+	 *
 	 * 这里的设计是错误的，为了兼容，先不删掉这个类，直接采用Object
 	 */
 export class WeakObject {

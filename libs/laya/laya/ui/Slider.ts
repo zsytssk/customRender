@@ -6,7 +6,7 @@ import { Event } from "../events/Event"
 import { Point } from "../maths/Point"
 import { Loader } from "../net/Loader"
 import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -108,7 +108,7 @@ export class Slider extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
          * @override
 		*/
 		protected createChildren(): void {
@@ -117,7 +117,7 @@ export class Slider extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
          * @override
 		*/
 		protected initialize(): void {
@@ -278,7 +278,7 @@ export class Slider extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected measureHeight(): number {
@@ -286,7 +286,7 @@ export class Slider extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected _sizeChanged(): void {
@@ -436,7 +436,7 @@ export class Slider extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

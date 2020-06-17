@@ -1,8 +1,8 @@
-import { CallLater } from "./CallLater";
-import { ILaya } from "../../ILaya";
+import { CallLater } from './CallLater';
+import { ILaya } from '../../../ILaya';
 /**
-	 * <code>Timer</code> 是时钟管理类。它是一个单例，不要手动实例化此类，应该通过 Laya.timer 访问。
-	 */
+ * <code>Timer</code> 是时钟管理类。它是一个单例，不要手动实例化此类，应该通过 Laya.timer 访问。
+ */
 export class Timer {
     /**@private */
     static gSysTimer: Timer = null;
@@ -11,7 +11,6 @@ export class Timer {
     private static _pool: any[] = [];
     /**@private */
     static _mid: number = 1;
-
 
     /** 时针缩放。*/
     scale: number = 1;
@@ -36,7 +35,9 @@ export class Timer {
      * 创建 <code>Timer</code> 类的一个实例。
      */
     constructor(autoActive: boolean = true) {
-        autoActive && Timer.gSysTimer && Timer.gSysTimer.frameLoop(1, this, this._update);
+        autoActive &&
+            Timer.gSysTimer &&
+            Timer.gSysTimer.frameLoop(1, this, this._update);
     }
 
     /**两帧之间的时间间隔,单位毫秒。*/
@@ -54,11 +55,11 @@ export class Timer {
             this._delta = 0;
             return;
         }
-        var frame: number = this.currFrame = this.currFrame + this.scale;
+        var frame: number = (this.currFrame = this.currFrame + this.scale);
         var now: number = Date.now();
-        var awake: boolean = (now - this._lastTimer) > 30000;
+        var awake: boolean = now - this._lastTimer > 30000;
         this._delta = (now - this._lastTimer) * this.scale;
-        var timer: number = this.currTimer = this.currTimer + this._delta;
+        var timer: number = (this.currTimer = this.currTimer + this._delta);
         this._lastTimer = now;
 
         //处理handler
@@ -75,7 +76,10 @@ export class Timer {
                             handler.run(false);
                             if (t > handler.exeTime) {
                                 //如果执行一次后还能再执行，做跳出处理，如果想用多次执行，需要设置jumpFrame=true
-                                handler.exeTime += Math.ceil((t - handler.exeTime) / handler.delay) * handler.delay;
+                                handler.exeTime +=
+                                    Math.ceil(
+                                        (t - handler.exeTime) / handler.delay,
+                                    ) * handler.delay;
                             }
                         } else {
                             while (t >= handler.exeTime) {
@@ -116,7 +120,15 @@ export class Timer {
     }
 
     /** @internal */
-    _create(useFrame: boolean, repeat: boolean, delay: number, caller: any, method: Function, args: any[], coverBefore: boolean): TimerHandler {
+    _create(
+        useFrame: boolean,
+        repeat: boolean,
+        delay: number,
+        caller: any,
+        method: Function,
+        args: any[],
+        coverBefore: boolean,
+    ): TimerHandler {
         //如果延迟为0，则立即执行
         if (!delay) {
             method.apply(caller, args);
@@ -133,20 +145,29 @@ export class Timer {
                 handler.caller = caller;
                 handler.method = method;
                 handler.args = args;
-                handler.exeTime = delay + (useFrame ? this.currFrame : this.currTimer + Date.now() - this._lastTimer);
+                handler.exeTime =
+                    delay +
+                    (useFrame
+                        ? this.currFrame
+                        : this.currTimer + Date.now() - this._lastTimer);
                 return handler;
             }
         }
 
         //找到一个空闲的timerHandler
-        handler = Timer._pool.length > 0 ? Timer._pool.pop() : new TimerHandler();
+        handler =
+            Timer._pool.length > 0 ? Timer._pool.pop() : new TimerHandler();
         handler.repeat = repeat;
         handler.userFrame = useFrame;
         handler.delay = delay;
         handler.caller = caller;
         handler.method = method;
         handler.args = args;
-        handler.exeTime = delay + (useFrame ? this.currFrame : this.currTimer + Date.now() - this._lastTimer);
+        handler.exeTime =
+            delay +
+            (useFrame
+                ? this.currFrame
+                : this.currTimer + Date.now() - this._lastTimer);
 
         //索引handler
         this._indexHandler(handler);
@@ -161,8 +182,11 @@ export class Timer {
     private _indexHandler(handler: TimerHandler): void {
         var caller: any = handler.caller;
         var method: any = handler.method;
-        var cid: number = caller ? caller.$_GID || (caller.$_GID = ILaya.Utils.getGID()) : 0;
-        var mid: number = method.$_TID || (method.$_TID = (Timer._mid++) * 100000);
+        var cid: number = caller
+            ? caller.$_GID || (caller.$_GID = ILaya.Utils.getGID())
+            : 0;
+        var mid: number =
+            method.$_TID || (method.$_TID = Timer._mid++ * 100000);
         handler.key = cid + mid;
         this._map[handler.key] = handler;
     }
@@ -175,7 +199,13 @@ export class Timer {
      * @param	args	回调参数。
      * @param	coverBefore	是否覆盖之前的延迟执行，默认为 true 。
      */
-    once(delay: number, caller: any, method: Function, args: any[] = null, coverBefore: boolean = true): void {
+    once(
+        delay: number,
+        caller: any,
+        method: Function,
+        args: any[] = null,
+        coverBefore: boolean = true,
+    ): void {
         this._create(false, false, delay, caller, method, args, coverBefore);
     }
 
@@ -188,8 +218,23 @@ export class Timer {
      * @param	coverBefore	是否覆盖之前的延迟执行，默认为 true 。
      * @param	jumpFrame 时钟是否跳帧。基于时间的循环回调，单位时间间隔内，如能执行多次回调，出于性能考虑，引擎默认只执行一次，设置jumpFrame=true后，则回调会连续执行多次
      */
-    loop(delay: number, caller: any, method: Function, args: any[] = null, coverBefore: boolean = true, jumpFrame: boolean = false): void {
-        var handler: TimerHandler = this._create(false, true, delay, caller, method, args, coverBefore);
+    loop(
+        delay: number,
+        caller: any,
+        method: Function,
+        args: any[] = null,
+        coverBefore: boolean = true,
+        jumpFrame: boolean = false,
+    ): void {
+        var handler: TimerHandler = this._create(
+            false,
+            true,
+            delay,
+            caller,
+            method,
+            args,
+            coverBefore,
+        );
         if (handler) handler.jumpFrame = jumpFrame;
     }
 
@@ -201,7 +246,13 @@ export class Timer {
      * @param	args	回调参数。
      * @param	coverBefore	是否覆盖之前的延迟执行，默认为 true 。
      */
-    frameOnce(delay: number, caller: any, method: Function, args: any[] = null, coverBefore: boolean = true): void {
+    frameOnce(
+        delay: number,
+        caller: any,
+        method: Function,
+        args: any[] = null,
+        coverBefore: boolean = true,
+    ): void {
         this._create(true, false, delay, caller, method, args, coverBefore);
     }
 
@@ -213,13 +264,21 @@ export class Timer {
      * @param	args	回调参数。
      * @param	coverBefore	是否覆盖之前的延迟执行，默认为 true 。
      */
-    frameLoop(delay: number, caller: any, method: Function, args: any[] = null, coverBefore: boolean = true): void {
+    frameLoop(
+        delay: number,
+        caller: any,
+        method: Function,
+        args: any[] = null,
+        coverBefore: boolean = true,
+    ): void {
         this._create(true, true, delay, caller, method, args, coverBefore);
     }
 
     /** 返回统计信息。*/
     toString(): string {
-        return " handlers:" + this._handlers.length + " pool:" + Timer._pool.length;
+        return (
+            ' handlers:' + this._handlers.length + ' pool:' + Timer._pool.length
+        );
     }
 
     /**
@@ -254,8 +313,11 @@ export class Timer {
 
     /** @private */
     private _getHandler(caller: any, method: any): TimerHandler {
-        var cid: number = caller ? caller.$_GID || (caller.$_GID = ILaya.Utils.getGID()) : 0;
-        var mid: number = method.$_TID || (method.$_TID = (Timer._mid++) * 100000);
+        var cid: number = caller
+            ? caller.$_GID || (caller.$_GID = ILaya.Utils.getGID())
+            : 0;
+        var mid: number =
+            method.$_TID || (method.$_TID = Timer._mid++ * 100000);
         return this._map[cid + mid];
     }
 
@@ -306,8 +368,6 @@ export class Timer {
     }
 }
 
-
-
 /** @private */
 class TimerHandler {
     key: number;
@@ -315,7 +375,7 @@ class TimerHandler {
     delay: number;
     userFrame: boolean;
     exeTime: number;
-    caller: any
+    caller: any;
     method: Function;
     args: any[];
     jumpFrame: boolean;

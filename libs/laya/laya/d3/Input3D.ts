@@ -15,7 +15,7 @@ import { Viewport } from "./math/Viewport";
 import { HitResult } from "./physics/HitResult";
 import { PhysicsSimulation } from "./physics/PhysicsSimulation";
 import { Physics3D } from "./physics/Physics3D";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 
 /**
  * <code>Input3D</code> 类用于实现3D输入。
@@ -247,21 +247,21 @@ export class Input3D {
 			var pos: Vector2 = touch._position;
 			var mousePoint: Point = Input3D._tempPoint;
 			mousePoint.setTo(nativeTouch.pageX, nativeTouch.pageY);
-			ILaya.stage._canvasTransform.invertTransformPoint(mousePoint);//考虑画布缩放	
+			ILaya.stage._canvasTransform.invertTransformPoint(mousePoint);//考虑画布缩放
 			var posX: number = mousePoint.x;
 			var posY: number = mousePoint.y;
 			switch (flag) {
-				case 0://add 
+				case 0://add
 					this._touches.add(touch);
 					offsetX += posX;
 					offsetY += posY;
 					break;
-				case 1://remove 
+				case 1://remove
 					this._touches.remove(touch);
 					offsetX -= posX;
 					offsetY -= posY;
 					break;
-				case 2://change 
+				case 2://change
 					offsetX = posX - pos.x;
 					offsetY = posY - pos.y;
 					break;

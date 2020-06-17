@@ -1,6 +1,6 @@
 import { Sprite } from "./Sprite";
 import { Node } from "./Node";
-import { Config } from "./../../Config";
+import { Config } from "../../../Config";
 import { Input } from "./Input";
 import { SpriteConst } from "./SpriteConst";
 import { Const } from "../Const"
@@ -21,7 +21,7 @@ import { RenderState2D } from "../webgl/utils/RenderState2D";
 import { WebGLContext } from "../webgl/WebGLContext";
 import { Stat } from "../utils/Stat";
 import { Timer } from "../utils/Timer";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { LayaGL } from "../layagl/LayaGL";
 import { ClassUtils } from "../utils/ClassUtils";
 
@@ -190,7 +190,7 @@ export class Stage extends Sprite {
 		this.useRetinalCanvas = Config.useRetinalCanvas;
 
 		var window: any = Browser.window;
-		//var _me = this;	
+		//var _me = this;
 
 		window.addEventListener("focus", ()=>{
 			this._isFocused = true;
@@ -417,7 +417,7 @@ export class Stage extends Sprite {
 			this.transform.d = this._formatData(scaleY / (realHeight / canvasHeight));
 		}
 
-		//处理canvas大小			
+		//处理canvas大小
 		canvas.size(canvasWidth, canvasHeight);
 		RunDriver.changeWebGLSize(canvasWidth, canvasHeight);
 		mat.scale(realWidth / canvasWidth / pixelRatio, realHeight / canvasHeight / pixelRatio);

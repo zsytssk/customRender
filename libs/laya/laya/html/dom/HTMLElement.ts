@@ -1,27 +1,26 @@
-import { HTMLDocument } from "./HTMLDocument";
-import { HTMLHitRect } from "./HTMLHitRect";
-import { Graphics } from "../../display/Graphics"
-import { HTMLStyle } from "../utils/HTMLStyle"
-import { ILayout } from "../utils/ILayout"
-import { Layout } from "../utils/Layout"
-import { URL } from "../../net/URL"
-import { HTMLChar } from "../../utils/HTMLChar"
-import { Pool } from "../../utils/Pool"
-import { ILaya } from "../../../ILaya";
-import { IHtml } from "../utils/IHtml";
-import { ClassUtils } from "../../utils/ClassUtils";
+import { HTMLDocument } from './HTMLDocument';
+import { HTMLHitRect } from './HTMLHitRect';
+import { Graphics } from '../../display/Graphics';
+import { HTMLStyle } from '../utils/HTMLStyle';
+import { ILayout } from '../utils/ILayout';
+import { Layout } from '../utils/Layout';
+import { URL } from '../../net/URL';
+import { HTMLChar } from '../../utils/HTMLChar';
+import { Pool } from '../../utils/Pool';
+import { ILaya } from '../../../../ILaya';
+import { IHtml } from '../utils/IHtml';
+import { ClassUtils } from '../../utils/ClassUtils';
 
 export enum HTMLElementType {
     BASE = 0,
-    IMAGE = 1
+    IMAGE = 1,
 }
 /**
  * @private
  */
 export class HTMLElement {
-
     private static _EMPTYTEXT: any = { text: null, words: null };
-    eletype: HTMLElementType = HTMLElementType.BASE;      // 用type来避免 instance判断引起的import问题
+    eletype: HTMLElementType = HTMLElementType.BASE; // 用type来避免 instance判断引起的import问题
     URI: URL;
     parent: HTMLElement;
     _style: HTMLStyle;
@@ -40,23 +39,23 @@ export class HTMLElement {
      * @return	格式化处理后的地址。
      */
     static formatURL1(url: string, basePath: string = null): string {
-        if (!url) return "null path";
+        if (!url) return 'null path';
         if (!basePath) basePath = URL.basePath;
         //如果是全路径，直接返回，提高性能
-        if (url.indexOf(":") > 0) return url;
+        if (url.indexOf(':') > 0) return url;
         //自定义路径格式化
         if (URL.customFormat != null) url = URL.customFormat(url);
         //如果是全路径，直接返回，提高性能
-        if (url.indexOf(":") > 0) return url;
+        if (url.indexOf(':') > 0) return url;
 
         var char1: string = url.charAt(0);
-        if (char1 === ".") {
+        if (char1 === '.') {
             return URL._formatRelativePath(basePath + url);
         } else if (char1 === '~') {
             return URL.rootPath + url.substring(1);
-        } else if (char1 === "d") {
-            if (url.indexOf("data:image") === 0) return url;
-        } else if (char1 === "/") {
+        } else if (char1 === 'd') {
+            if (url.indexOf('data:image') === 0) return url;
+        } else if (char1 === '/') {
             return url;
         }
         return basePath + url;
@@ -79,7 +78,7 @@ export class HTMLElement {
         this.parent = null;
         this._style.reset();
         this._style.ower = this;
-        this._style.valign = "middle";
+        this._style.valign = 'middle';
         if (this._text && this._text.words) {
             var words: any[] = this._text.words;
             var i: number, len: number;
@@ -98,7 +97,7 @@ export class HTMLElement {
 
     /**@internal */
     _getCSSStyle(): HTMLStyle {
-        return (<HTMLStyle>this._style);
+        return <HTMLStyle>this._style;
     }
 
     /**@internal */
@@ -112,9 +111,15 @@ export class HTMLElement {
             }
         }
         if (this._children)
-            this._children.forEach(function (o: HTMLElement, index: number, array: any[]): void {
-                var _style: HTMLStyle = (<HTMLStyle>o._style);
-                _style._enableLayout && _style._enableLayout() && o._addToLayout(out);
+            this._children.forEach(function (
+                o: HTMLElement,
+                index: number,
+                array: any[],
+            ): void {
+                var _style: HTMLStyle = <HTMLStyle>o._style;
+                _style._enableLayout &&
+                    _style._enableLayout() &&
+                    o._addToLayout(out);
             });
         return true;
     }
@@ -122,9 +127,11 @@ export class HTMLElement {
     /**@internal */
     _addToLayout(out: ILayout[]): void {
         if (!this._style) return;
-        var style: HTMLStyle = (<HTMLStyle>this._style);
+        var style: HTMLStyle = <HTMLStyle>this._style;
         if (style.absolute) return;
-        style.block ? out.push(this) : (this._addChildsToLayout(out) && (this.x = this.y = 0));
+        style.block
+            ? out.push(this)
+            : this._addChildsToLayout(out) && (this.x = this.y = 0);
     }
 
     set id(value: string) {
@@ -155,15 +162,14 @@ export class HTMLElement {
 
     protected _setParent(value: HTMLElement): void {
         if (value instanceof HTMLElement) {
-            var p: HTMLElement = (<HTMLElement>value);
+            var p: HTMLElement = <HTMLElement>value;
             this.URI || (this.URI = p.URI);
-            if (this.style)
-                this.style.inherit(p.style);
+            if (this.style) this.style.inherit(p.style);
         }
     }
 
     appendChild(c: HTMLElement): HTMLElement {
-        return (<HTMLElement>this.addChild(c));
+        return <HTMLElement>this.addChild(c);
     }
 
     addChild(c: HTMLElement): HTMLElement {
@@ -191,7 +197,7 @@ export class HTMLElement {
 
     static getClassName(tar: any): string {
         if (tar instanceof Function) return tar.name;
-        return tar["constructor"].name;
+        return tar['constructor'].name;
     }
 
     /**
@@ -228,12 +234,10 @@ export class HTMLElement {
     _getWords(): HTMLChar[] {
         if (!this._text) return null;
         var txt: string = this._text.text;
-        if (!txt || txt.length === 0)
-            return null;
+        if (!txt || txt.length === 0) return null;
 
         var words: HTMLChar[] = this._text.words;
-        if (words && words.length === txt.length)
-            return words as HTMLChar[];
+        if (words && words.length === txt.length) return words as HTMLChar[];
         words === null && (this._text.words = words = []);
         words.length = txt.length;
         var size: any;
@@ -241,7 +245,12 @@ export class HTMLElement {
         var fontStr: string = style.font;
         for (var i: number = 0, n: number = txt.length; i < n; i++) {
             size = ILaya.Browser.measureText(txt.charAt(i), fontStr);
-            words[i] = HTMLChar.create().setData(txt.charAt(i), size.width, size.height || style.fontSize, style);
+            words[i] = HTMLChar.create().setData(
+                txt.charAt(i),
+                size.width,
+                size.height || style.fontSize,
+                style,
+            );
         }
         return words;
     }
@@ -256,10 +265,14 @@ export class HTMLElement {
     _layoutLater(): void {
         var style: HTMLStyle = this.style;
 
-        if ((style._type & HTMLStyle.ADDLAYOUTED))
-            return;
+        if (style._type & HTMLStyle.ADDLAYOUTED) return;
 
-        if (style.widthed(this) && ((this._children && this._children.length > 0) || this._getWords() != null) && style.block) {
+        if (
+            style.widthed(this) &&
+            ((this._children && this._children.length > 0) ||
+                this._getWords() != null) &&
+            style.block
+        ) {
             Layout.later(this);
             style._type |= HTMLStyle.ADDLAYOUTED;
         } else {
@@ -302,7 +315,6 @@ export class HTMLElement {
 
     get height(): number {
         return this._height;
-
     }
 
     set height(value: number) {
@@ -363,7 +375,12 @@ export class HTMLElement {
         this.style.attrs(HTMLDocument.document.styleSheets['.' + value]);
     }
 
-    drawToGraphic(graphic: Graphics, gX: number, gY: number, recList: any[]): void {
+    drawToGraphic(
+        graphic: Graphics,
+        gX: number,
+        gY: number,
+        recList: any[],
+    ): void {
         gX += this.x;
         gY += this.y;
         var cssStyle: HTMLStyle = this.style;
@@ -374,7 +391,15 @@ export class HTMLElement {
             gY += cssStyle.paddingTop;
         }
         if (cssStyle.bgColor != null || cssStyle.borderColor) {
-            graphic.drawRect(gX, gY, this.width, this.height, cssStyle.bgColor, cssStyle.borderColor, 1);
+            graphic.drawRect(
+                gX,
+                gY,
+                this.width,
+                this.height,
+                cssStyle.bgColor,
+                cssStyle.borderColor,
+                1,
+            );
         }
 
         this.renderSelfToGraphic(graphic, gX, gY, recList);
@@ -390,7 +415,12 @@ export class HTMLElement {
         }
     }
 
-    renderSelfToGraphic(graphic: Graphics, gX: number, gY: number, recList: any[]): void {
+    renderSelfToGraphic(
+        graphic: Graphics,
+        gX: number,
+        gY: number,
+        recList: any[],
+    ): void {
         var cssStyle: HTMLStyle = this.style;
         var words: HTMLChar[] = this._getWords();
         var i: number, len: number;
@@ -410,13 +440,21 @@ export class HTMLElement {
                     //graphic.strokeText(a.char, a.x + gX, a.y + gY, font, strokeColor, stroke, 'left');
                     //graphic.fillText(a.char, a.x + gX, a.y + gY, font, color, 'left');
                     //}
-                    graphic.fillBorderWords((<any[]>words), gX, gY, font, color, strokeColor, stroke);
+                    graphic.fillBorderWords(
+                        <any[]>words,
+                        gX,
+                        gY,
+                        font,
+                        color,
+                        strokeColor,
+                        stroke,
+                    );
                 } else {
                     //for (i = 0; i < len; i++) {
                     //a = words[i];
                     //graphic.fillText(a.char, a.x + gX, a.y + gY, font, color, 'left');
                     //}
-                    graphic.fillWords((<any[]>words), gX, gY, font, color);
+                    graphic.fillWords(<any[]>words, gX, gY, font, color);
                 }
                 if (this.href) {
                     var lastIndex: number = words.length - 1;
@@ -424,27 +462,36 @@ export class HTMLElement {
                     var lineY: number = lastWords.y + lastWords.height;
 
                     if (lastWords.y == words[0].y) {
-                        if (cssStyle.textDecoration != "none")
-                            graphic.drawLine(words[0].x, lineY, lastWords.x + lastWords.width, lineY, color, 1);
+                        if (cssStyle.textDecoration != 'none')
+                            graphic.drawLine(
+                                words[0].x,
+                                lineY,
+                                lastWords.x + lastWords.width,
+                                lineY,
+                                color,
+                                1,
+                            );
                         var hitRec: HTMLHitRect = HTMLHitRect.create();
-                        hitRec.rec.setTo(words[0].x, lastWords.y, lastWords.x + lastWords.width - words[0].x, lastWords.height);
+                        hitRec.rec.setTo(
+                            words[0].x,
+                            lastWords.y,
+                            lastWords.x + lastWords.width - words[0].x,
+                            lastWords.height,
+                        );
                         hitRec.href = this.href;
                         recList.push(hitRec);
                     } else {
-                        this.workLines((<any[]>words), graphic, recList);
+                        this.workLines(<any[]>words, graphic, recList);
                     }
-
-
                 }
             }
-
         }
     }
 
     private workLines(wordList: any[], g: Graphics, recList: any[]): void {
         var cssStyle: HTMLStyle = this.style;
         var hasLine: boolean;
-        hasLine = cssStyle.textDecoration != "none";
+        hasLine = cssStyle.textDecoration != 'none';
         var i: number, len: number;
         len = wordList.length;
         var tStartWord: HTMLChar;
@@ -465,20 +512,37 @@ export class HTMLElement {
         }
         this.createOneLine(tStartWord, tEndWord, hasLine, g, recList);
     }
-    private createOneLine(startWord: HTMLChar, lastWords: HTMLChar, hasLine: boolean, graphic: Graphics, recList: any[]): void {
+    private createOneLine(
+        startWord: HTMLChar,
+        lastWords: HTMLChar,
+        hasLine: boolean,
+        graphic: Graphics,
+        recList: any[],
+    ): void {
         var lineY: number = lastWords.y + lastWords.height;
         if (hasLine)
-            graphic.drawLine(startWord.x, lineY, lastWords.x + lastWords.width, lineY, this.style.color, 1);
+            graphic.drawLine(
+                startWord.x,
+                lineY,
+                lastWords.x + lastWords.width,
+                lineY,
+                this.style.color,
+                1,
+            );
         var hitRec: HTMLHitRect = HTMLHitRect.create();
-        hitRec.rec.setTo(startWord.x, lastWords.y, lastWords.x + lastWords.width - startWord.x, lastWords.height);
+        hitRec.rec.setTo(
+            startWord.x,
+            lastWords.y,
+            lastWords.x + lastWords.width - startWord.x,
+            lastWords.height,
+        );
         hitRec.href = this.href;
         recList.push(hitRec);
     }
 }
 
-
 ILaya.regClass(HTMLElement);
 IHtml.HTMLElementType = HTMLElementType;
 
-ClassUtils.regClass("laya.html.dom.HTMLElement", HTMLElement);
-ClassUtils.regClass("Laya.HTMLElement", HTMLElement);
+ClassUtils.regClass('laya.html.dom.HTMLElement', HTMLElement);
+ClassUtils.regClass('Laya.HTMLElement', HTMLElement);

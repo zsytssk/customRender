@@ -1,5 +1,5 @@
-import { Event } from "./Event";
-import { ILaya } from "../../ILaya";
+import { Event } from './Event';
+import { ILaya } from '../../../ILaya';
 
 /**
  * <p><code>KeyBoardManager</code> 是键盘事件管理类。该类从浏览器中接收键盘事件，并派发该事件。</p>
@@ -17,15 +17,19 @@ export class KeyBoardManager {
 
     /**@internal */
     static __init__(): void {
-        KeyBoardManager._addEvent("keydown");
-        KeyBoardManager._addEvent("keypress");
-        KeyBoardManager._addEvent("keyup");
+        KeyBoardManager._addEvent('keydown');
+        KeyBoardManager._addEvent('keypress');
+        KeyBoardManager._addEvent('keyup');
     }
 
     private static _addEvent(type: string): void {
-        ILaya.Browser.document.addEventListener(type, function (e: any): void {
-            KeyBoardManager._dispatch(e, type);
-        }, true);
+        ILaya.Browser.document.addEventListener(
+            type,
+            function (e: any): void {
+                KeyBoardManager._dispatch(e, type);
+            },
+            true,
+        );
     }
 
     private static _dispatch(e: any, type: string): void {
@@ -34,10 +38,17 @@ export class KeyBoardManager {
         KeyBoardManager._event.nativeEvent = e;
         KeyBoardManager._event.keyCode = e.keyCode || e.which || e.charCode;
         //判断同时按下的键
-        if (type === "keydown") KeyBoardManager._pressKeys[KeyBoardManager._event.keyCode] = true;
-        else if (type === "keyup") KeyBoardManager._pressKeys[KeyBoardManager._event.keyCode] = null;
+        if (type === 'keydown')
+            KeyBoardManager._pressKeys[KeyBoardManager._event.keyCode] = true;
+        else if (type === 'keyup')
+            KeyBoardManager._pressKeys[KeyBoardManager._event.keyCode] = null;
 
-        var target: any = (ILaya.stage.focus && (ILaya.stage.focus.event != null) && ILaya.stage.focus.displayedInStage) ? ILaya.stage.focus : ILaya.stage;
+        var target: any =
+            ILaya.stage.focus &&
+            ILaya.stage.focus.event != null &&
+            ILaya.stage.focus.displayedInStage
+                ? ILaya.stage.focus
+                : ILaya.stage;
         var ct: any = target;
         while (ct) {
             ct.event(type, KeyBoardManager._event.setTo(type, ct, target));
@@ -54,4 +65,3 @@ export class KeyBoardManager {
         return KeyBoardManager._pressKeys[key];
     }
 }
-

@@ -1,8 +1,8 @@
-import { ILaya } from "./../../ILaya";
+import { ILaya } from '../../../ILaya';
 /**
-	 * @private
-	 * 对象缓存统一管理类
-	 */
+ * @private
+ * 对象缓存统一管理类
+ */
 export class CacheManger {
     //TODO:
     /**
@@ -19,9 +19,7 @@ export class CacheManger {
      */
     private static _index: number = 0;
 
-    constructor() {
-
-    }
+    constructor() {}
 
     /**
      * 注册cache管理函数
@@ -29,10 +27,16 @@ export class CacheManger {
      * @param getCacheListFunction 获取cache列表函数fun():Array
      *
      */
-    static regCacheByFunction(disposeFunction: Function, getCacheListFunction: Function): void {
+    static regCacheByFunction(
+        disposeFunction: Function,
+        getCacheListFunction: Function,
+    ): void {
         CacheManger.unRegCacheByFunction(disposeFunction, getCacheListFunction);
         var cache: any;
-        cache = { tryDispose: disposeFunction, getCacheList: getCacheListFunction };
+        cache = {
+            tryDispose: disposeFunction,
+            getCacheList: getCacheListFunction,
+        };
         CacheManger._cacheList.push(cache);
     }
 
@@ -42,11 +46,17 @@ export class CacheManger {
      * @param getCacheListFunction 获取cache列表函数fun():Array
      *
      */
-    static unRegCacheByFunction(disposeFunction: Function, getCacheListFunction: Function): void {
+    static unRegCacheByFunction(
+        disposeFunction: Function,
+        getCacheListFunction: Function,
+    ): void {
         var i: number, len: number;
         len = CacheManger._cacheList.length;
         for (i = 0; i < len; i++) {
-            if (CacheManger._cacheList[i].tryDispose == disposeFunction && CacheManger._cacheList[i].getCacheList == getCacheListFunction) {
+            if (
+                CacheManger._cacheList[i].tryDispose == disposeFunction &&
+                CacheManger._cacheList[i].getCacheList == getCacheListFunction
+            ) {
                 CacheManger._cacheList.splice(i, 1);
                 return;
             }
@@ -59,7 +69,8 @@ export class CacheManger {
      */
     //TODO:coverage
     static forceDispose(): void {
-        var i: number, len: number = CacheManger._cacheList.length;
+        var i: number,
+            len: number = CacheManger._cacheList.length;
         for (i = 0; i < len; i++) {
             CacheManger._cacheList[i].tryDispose(true);
         }
@@ -103,5 +114,3 @@ export class CacheManger {
         }
     }
 }
-
-

@@ -1,12 +1,12 @@
 import { Observable, Subscriber } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
-import { Sprite } from 'laya/laya/display/Sprite';
-import { Image } from 'laya/laya/ui/Image';
-import { Skeleton } from 'laya/laya/ani/bone/Skeleton';
-import { Event } from 'laya/laya/events/Event';
-import { Handler } from 'laya/laya/utils/Handler';
-import { ColorFilter } from 'laya/laya/filters/ColorFilter';
-import { GlowFilter } from 'laya/laya/filters/GlowFilter';
+import { Sprite } from 'laya/display/Sprite';
+import { Image } from 'laya/ui/Image';
+import { Skeleton } from 'laya/ani/bone/Skeleton';
+import { Event } from 'laya/events/Event';
+import { Handler } from 'laya/utils/Handler';
+import { ColorFilter } from 'laya/filters/ColorFilter';
+import { GlowFilter } from 'laya/filters/GlowFilter';
 
 export function isFunc(func: Func<void>): boolean {
     return func && typeof func === 'function';
@@ -219,7 +219,5 @@ export function unDarkNode(node: Sprite) {
 }
 
 export function genRandomStr() {
-    return Math.random()
-        .toString()
-        .replace('0.', '');
+    return Math.random().toString().replace('0.', '');
 }

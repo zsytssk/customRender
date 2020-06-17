@@ -6,7 +6,7 @@ import { ILayout } from "../utils/ILayout"
 import { Loader } from "../../net/Loader"
 import { Texture } from "../../resource/Texture"
 import { IHtml } from "../utils/IHtml";
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { ClassUtils } from "../../utils/ClassUtils";
 
 /**
@@ -67,7 +67,7 @@ export class HTMLImageElement extends HTMLElement {
         this.repaint();
     }
 
-    /**@internal 
+    /**@internal
      * @override
     */
     _addToLayout(out: ILayout[]): void {
@@ -76,11 +76,11 @@ export class HTMLImageElement extends HTMLElement {
     }
 
     /**
-     * 
-     * @param graphic 
-     * @param gX 
-     * @param gY 
-     * @param recList 
+     *
+     * @param graphic
+     * @param gX
+     * @param gY
+     * @param recList
      * @override
      */
     renderSelfToGraphic(graphic: Graphics, gX: number, gY: number, recList: any[]): void {

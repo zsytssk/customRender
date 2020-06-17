@@ -4,7 +4,7 @@ import { BaseTexture } from "./BaseTexture"
 import { WebGLContext } from "../webgl/WebGLContext"
 import { BaseShader } from "../webgl/shader/BaseShader"
 import { RenderState2D } from "../webgl/utils/RenderState2D"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { RenderTextureFormat, RenderTextureDepthFormat } from "./RenderTextureFormat";
 
 /**
@@ -204,7 +204,7 @@ export class RenderTexture2D extends BaseTexture {
         //LayaGL.instance.bindFramebuffer(WebGLContext.FRAMEBUFFER, _frameBuffer);
         //_lastRT = _currentActive;
         //_currentActive = this;
-        ////_readyed = false;  
+        ////_readyed = false;
         //_readyed = true;	//这个没什么用。还会影响流程，比如我有时候并不调用end。所以直接改成true
         //
         ////if (_type == TYPE2D) {
@@ -243,7 +243,7 @@ export class RenderTexture2D extends BaseTexture {
         RenderState2D.width = this._lastWidth;
         RenderState2D.height = this._lastHeight;
         BaseShader.activeShader = null;
-        //} else 
+        //} else
         //	gl.viewport(0, 0, Laya.stage.width, Laya.stage.height);
 
     }
@@ -253,7 +253,7 @@ export class RenderTexture2D extends BaseTexture {
         gl.clearColor(r, g, b, a);
         var clearFlag: number = gl.COLOR_BUFFER_BIT;
         switch (this._depthStencilFormat) {
-            //case WebGLContext.DEPTH_COMPONENT: 
+            //case WebGLContext.DEPTH_COMPONENT:
             case gl.DEPTH_COMPONENT16:
                 clearFlag |= gl.DEPTH_BUFFER_BIT;
                 break;

@@ -9,7 +9,7 @@ import { Point } from "../maths/Point"
 import { Rectangle } from "../maths/Rectangle"
 import { WordText } from "../utils/WordText"
 import { Timer } from "../utils/Timer";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -227,7 +227,7 @@ export class Text extends Sprite {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     destroy(destroyChild: boolean = true): void {

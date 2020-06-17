@@ -10,7 +10,7 @@ import { Graphics } from "../display/Graphics"
 import { Event } from "../events/Event"
 import { Point } from "../maths/Point"
 import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -166,7 +166,7 @@ export class ComboBox extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  destroy(destroyChild: boolean = true): void {
@@ -181,7 +181,7 @@ export class ComboBox extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
          * @override
 		*/
 		/*override*/ protected createChildren(): void {
@@ -234,7 +234,7 @@ export class ComboBox extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected measureWidth(): number {
@@ -242,7 +242,7 @@ export class ComboBox extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected measureHeight(): number {
@@ -303,7 +303,7 @@ export class ComboBox extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set width(value: number) {
@@ -318,7 +318,7 @@ export class ComboBox extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set height(value: number) {
@@ -358,7 +358,7 @@ export class ComboBox extends UIComponent {
             g.drawRect(0, 0, this.width - 1, this._listHeight, this._itemColors[4], this._itemColors[3]);
         }
 
-        //填充数据			
+        //填充数据
         var a: any[] = this._list.array || [];
         a.length = 0;
         for (var i: number = 0, n: number = this._labels.length; i < n; i++) {
@@ -565,7 +565,7 @@ export class ComboBox extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

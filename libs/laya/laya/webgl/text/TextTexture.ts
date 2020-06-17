@@ -4,7 +4,7 @@ import { RenderInfo } from "../../renders/RenderInfo"
 import { Resource } from "../../resource/Resource"
 import { WebGLContext } from "../WebGLContext"
 import { CharRenderInfo } from "./CharRenderInfo"
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 
 export class TextTexture extends Resource {
     static gTextRender: ITextRender = null;
@@ -62,11 +62,11 @@ export class TextTexture extends Resource {
     }
 
     /**
-     * 
+     *
      * @param	data
      * @param	x			拷贝位置。
      * @param	y
-     * @param  uv  
+     * @param  uv
      * @return uv数组  如果uv不为空就返回传入的uv，否则new一个数组
      */
     addChar(data: ImageData, x: number, y: number, uv: any[] = null): any[] {
@@ -87,9 +87,9 @@ export class TextTexture extends Resource {
         var v0: number;
         var u1: number;
         var v1: number;
-		u0 = x / this._texW;	
+		u0 = x / this._texW;
 		v0 = y / this._texH;
-		u1 = (x + data.width) / this._texW;	
+		u1 = (x + data.width) / this._texW;
 		v1 = (y + data.height) / this._texH;
         uv = uv || new Array(8);
         uv[0] = u0, uv[1] = v0;
@@ -170,7 +170,7 @@ export class TextTexture extends Resource {
     static getTextTexture(w: number, h: number): TextTexture {
 		// 不再回收
 		return new TextTexture(w, h);
-		
+
         if (w != TextTexture.gTextRender.atlasWidth || w != TextTexture.gTextRender.atlasWidth)
             return new TextTexture(w, h);
         // 否则从回收池中取

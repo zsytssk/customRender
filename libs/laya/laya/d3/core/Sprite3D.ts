@@ -10,7 +10,7 @@ import { Vector3 } from "../math/Vector3";
 import { Shader3D } from "../shader/Shader3D";
 import { Avatar } from "./Avatar";
 import { Transform3D } from "./Transform3D";
-import { Laya } from "../../../Laya";
+import { Laya } from "../../../../Laya";
 import { ICreateResource } from "../../resource/ICreateResource";
 
 /**
@@ -149,7 +149,7 @@ export class Sprite3D extends Node implements ICreateResource {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	_setCreateURL(url: string): void {
 		this._url = URL.formatURL(url);//perfab根节点会设置URL

@@ -24,7 +24,7 @@ import { Byte } from "../../utils/Byte";
 import { Texture } from "../../resource/Texture";
 import { IAniLib } from "../AniLibPack";
 import { Templet } from "../../ani/bone/Templet";
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 import { ClassUtils } from "../../utils/ClassUtils";
 
 
@@ -376,9 +376,9 @@ export class Skeleton extends Sprite {
 
 	/**
 	 * @internal
-	 * @param startTime 
-	 * @param endTime 
-	 * @param startIndex 
+	 * @param startTime
+	 * @param endTime
+	 * @param startIndex
 	 */
 	private _emitMissedEvents(startTime: number, endTime: number, startIndex: number = 0): void {
 		var tEventAniArr: any[] = this._templet.eventAniArr;

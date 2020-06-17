@@ -1,7 +1,7 @@
 import { Box } from "./Box";
 import { Node } from "../display/Node"
 import { Event } from "../events/Event"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -15,8 +15,8 @@ export class LayoutBox extends Box {
     /**@private */
     protected _itemChanged: boolean = false;
 
-		/** 
-		 * @inheritDoc	
+		/**
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  addChild(child: Node): Node {
@@ -29,8 +29,8 @@ export class LayoutBox extends Box {
         this._setItemChanged();
     }
 
-		/** 
-		 * @inheritDoc	
+		/**
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  addChildAt(child: Node, index: number): Node {
@@ -40,7 +40,7 @@ export class LayoutBox extends Box {
     }
 
 		/**
-		 *  @inheritDoc	
+		 *  @inheritDoc
 		 * @override
 		*/
 		/*override*/  removeChildAt(index: number): Node {

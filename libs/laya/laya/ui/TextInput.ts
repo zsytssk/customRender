@@ -6,7 +6,7 @@ import { AutoBitmap } from "./AutoBitmap"
 import { Styles } from "./Styles"
 import { UIUtils } from "./UIUtils"
 import { Handler } from "../utils/Handler"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -128,7 +128,7 @@ export class TextInput extends Label {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
          * @override
 		*/
 		protected preinitialize(): void {
@@ -136,7 +136,7 @@ export class TextInput extends Label {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  destroy(destroyChild: boolean = true): void {
@@ -147,7 +147,7 @@ export class TextInput extends Label {
 
     /**
      * @inheritDoc
-     * @override 
+     * @override
     */
     protected createChildren(): void {
         this.addChild(this._tf = new Input());
@@ -187,7 +187,7 @@ export class TextInput extends Label {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     protected initialize(): void {
@@ -266,7 +266,7 @@ export class TextInput extends Label {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set width(value: number) {
@@ -279,7 +279,7 @@ export class TextInput extends Label {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set height(value: number) {

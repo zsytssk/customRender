@@ -1,16 +1,16 @@
-import { Context } from "../../resource/Context"
-import { ColorUtils } from "../../utils/ColorUtils"
-import { FontInfo } from "../../utils/FontInfo"
-import { Pool } from "../../utils/Pool"
-import { WordText } from "../../utils/WordText"
-import { ILaya } from "../../../ILaya";
-import { HTMLChar } from "../../utils/HTMLChar";
+import { Context } from '../../resource/Context';
+import { ColorUtils } from '../../utils/ColorUtils';
+import { FontInfo } from '../../utils/FontInfo';
+import { Pool } from '../../utils/Pool';
+import { WordText } from '../../utils/WordText';
+import { ILaya } from '../../../../ILaya';
+import { HTMLChar } from '../../utils/HTMLChar';
 
 /**
  * 绘制文字
  */
 export class FillTextCmd {
-    static ID: string = "FillText";
+    static ID: string = 'FillText';
     private _text: string | WordText;
     /**@internal */
     _textIsWorldText = false;
@@ -35,8 +35,18 @@ export class FillTextCmd {
     private _nTexAlign = 0;
 
     /**@private */
-    static create(text: string | WordText, words: HTMLChar[], x: number, y: number, font: string, color: string, textAlign: string, lineWidth: number, borderColor: string): FillTextCmd {
-        var cmd: FillTextCmd = Pool.getItemByClass("FillTextCmd", FillTextCmd);
+    static create(
+        text: string | WordText,
+        words: HTMLChar[],
+        x: number,
+        y: number,
+        font: string,
+        color: string,
+        textAlign: string,
+        lineWidth: number,
+        borderColor: string,
+    ): FillTextCmd {
+        var cmd: FillTextCmd = Pool.getItemByClass('FillTextCmd', FillTextCmd);
         cmd.text = text;
         cmd._textIsWorldText = text instanceof WordText;
         cmd._words = words;
@@ -54,22 +64,51 @@ export class FillTextCmd {
      * 回收到对象池
      */
     recover(): void {
-
-        Pool.recover("FillTextCmd", this);
+        Pool.recover('FillTextCmd', this);
     }
 
     /**@private */
     run(context: Context, gx: number, gy: number): void {
         if (ILaya.stage.isGlobalRepaint()) {
-            this._textIsWorldText && ((<WordText>this._text)).cleanCache();
+            this._textIsWorldText && (<WordText>this._text).cleanCache();
         }
         if (this._words) {
-            Context._textRender.fillWords(context, this._words, this.x + gx, this.y + gy, this._fontObj, this._color, this._borderColor, this._lineWidth);
+            Context._textRender.fillWords(
+                context,
+                this._words,
+                this.x + gx,
+                this.y + gy,
+                this._fontObj,
+                this._color,
+                this._borderColor,
+                this._lineWidth,
+            );
         } else {
-            if (this._textIsWorldText) {// 快速通道
-                context._fast_filltext(((<WordText>this._text)), this.x + gx, this.y + gy, this._fontObj, this._color, this._borderColor, this._lineWidth, this._nTexAlign, 0);
+            if (this._textIsWorldText) {
+                // 快速通道
+                context._fast_filltext(
+                    <WordText>this._text,
+                    this.x + gx,
+                    this.y + gy,
+                    this._fontObj,
+                    this._color,
+                    this._borderColor,
+                    this._lineWidth,
+                    this._nTexAlign,
+                    0,
+                );
             } else {
-                Context._textRender.filltext(context, this._text, this.x + gx, this.y + gy, this.font, this.color, this._borderColor, this._lineWidth, this._textAlign);
+                Context._textRender.filltext(
+                    context,
+                    this._text,
+                    this.x + gx,
+                    this.y + gy,
+                    this.font,
+                    this.color,
+                    this._borderColor,
+                    this._lineWidth,
+                    this._textAlign,
+                );
             }
         }
     }
@@ -90,7 +129,7 @@ export class FillTextCmd {
         //TODO 问题。 怎么通知native
         this._text = value;
         this._textIsWorldText = value instanceof WordText;
-        this._textIsWorldText && ((<WordText>this._text)).cleanCache();
+        this._textIsWorldText && (<WordText>this._text).cleanCache();
     }
 
     /**
@@ -103,7 +142,7 @@ export class FillTextCmd {
     set font(value: string) {
         this._font = value;
         this._fontObj = FontInfo.Parse(value);
-        this._textIsWorldText && ((<WordText>this._text)).cleanCache();
+        this._textIsWorldText && (<WordText>this._text).cleanCache();
     }
 
     /**
@@ -116,7 +155,7 @@ export class FillTextCmd {
     set color(value: string) {
         this._color = value;
         this._fontColor = ColorUtils.create(value).numColor;
-        this._textIsWorldText && ((<WordText>this._text)).cleanCache();
+        this._textIsWorldText && (<WordText>this._text).cleanCache();
     }
 
     /**
@@ -138,7 +177,6 @@ export class FillTextCmd {
             default:
                 this._nTexAlign = ILaya.Context.ENUM_TEXTALIGN_DEFAULT;
         }
-        this._textIsWorldText && ((<WordText>this._text)).cleanCache();
+        this._textIsWorldText && (<WordText>this._text).cleanCache();
     }
 }
-

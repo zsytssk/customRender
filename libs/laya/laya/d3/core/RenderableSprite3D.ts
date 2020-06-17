@@ -5,7 +5,7 @@ import { Shader3D } from "../shader/Shader3D";
 import { Sprite3D } from "./Sprite3D";
 import { BaseRender } from "./render/BaseRender";
 import { Scene3D } from "./scene/Scene3D";
-import { ILaya3D } from "../../../ILaya3D";
+import { ILaya3D } from "../../../../ILaya3D";
 import { ShaderDefine } from "../shader/ShaderDefine";
 
 /**
@@ -48,7 +48,7 @@ export class RenderableSprite3D extends Sprite3D {
 		super(name);
 	}
 
-	/** 
+	/**
 	 * @inheritDoc
 	 * @override
 	 */
@@ -58,7 +58,7 @@ export class RenderableSprite3D extends Sprite3D {
 
 	}
 
-	/** 
+	/**
 	 * @inheritDoc
 	 * @override
 	 */

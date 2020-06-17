@@ -1,4 +1,4 @@
-import { Config3D } from "../../../Config3D";
+import { Config3D } from "../../../../Config3D";
 import { ShaderCompile } from "../../webgl/utils/ShaderCompile";
 import { DefineDatas } from "./DefineDatas";
 import { ShaderDefine } from "./ShaderDefine";
@@ -106,7 +106,7 @@ export class Shader3D {
 
 	/**
 	 * 注册宏定义。
-	 * @param name 
+	 * @param name
 	 */
 	static getDefineByName(name: string): ShaderDefine {
 		var define: ShaderDefine = Shader3D._defineMap[name];

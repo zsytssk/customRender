@@ -1,8 +1,8 @@
-import { AccelerationInfo } from "./AccelerationInfo";
-import { RotationInfo } from "./RotationInfo";
-import { EventDispatcher } from "../../events/EventDispatcher";
-import { ILaya } from "../../../ILaya";
-import { Event } from "../../events/Event";
+import { AccelerationInfo } from './AccelerationInfo';
+import { RotationInfo } from './RotationInfo';
+import { EventDispatcher } from '../../events/EventDispatcher';
+import { ILaya } from '../../../../ILaya';
+import { Event } from '../../events/Event';
 
 /**
  * Accelerator.instance获取唯一的Accelerator引用，请勿调用构造函数。
@@ -35,7 +35,7 @@ export class Accelerator extends EventDispatcher {
     private static _instance: Accelerator;
 
     static get instance(): Accelerator {
-        Accelerator._instance = Accelerator._instance || new Accelerator(0)
+        Accelerator._instance = Accelerator._instance || new Accelerator(0);
         return Accelerator._instance;
     }
 
@@ -45,7 +45,9 @@ export class Accelerator extends EventDispatcher {
 
     constructor(singleton: number) {
         super();
-        this.onDeviceOrientationChange = this.onDeviceOrientationChange.bind(this);
+        this.onDeviceOrientationChange = this.onDeviceOrientationChange.bind(
+            this,
+        );
     }
 
     /**
@@ -53,9 +55,17 @@ export class Accelerator extends EventDispatcher {
      * @param observer	回调函数接受4个参数，见类说明。
      * @override
      */
-    on(type: string, caller: any, listener: Function, args: any[] = null): EventDispatcher {
+    on(
+        type: string,
+        caller: any,
+        listener: Function,
+        args: any[] = null,
+    ): EventDispatcher {
         super.on(type, caller, listener, args);
-        ILaya.Browser.window.addEventListener('devicemotion', this.onDeviceOrientationChange);
+        ILaya.Browser.window.addEventListener(
+            'devicemotion',
+            this.onDeviceOrientationChange,
+        );
         return this;
     }
 
@@ -64,9 +74,17 @@ export class Accelerator extends EventDispatcher {
      * @param	handle	侦听加速器所用处理器。
      * @override
      */
-    off(type: string, caller: any, listener: Function, onceOnly: boolean = false): EventDispatcher {
+    off(
+        type: string,
+        caller: any,
+        listener: Function,
+        onceOnly: boolean = false,
+    ): EventDispatcher {
         if (!this.hasListener(type))
-            ILaya.Browser.window.removeEventListener('devicemotion', this.onDeviceOrientationChange)
+            ILaya.Browser.window.removeEventListener(
+                'devicemotion',
+                this.onDeviceOrientationChange,
+            );
 
         return super.off(type, caller, listener, onceOnly);
     }
@@ -78,16 +96,19 @@ export class Accelerator extends EventDispatcher {
         Accelerator.acceleration.y = e.acceleration.y;
         Accelerator.acceleration.z = e.acceleration.z;
 
-        Accelerator.accelerationIncludingGravity.x = e.accelerationIncludingGravity.x;
-        Accelerator.accelerationIncludingGravity.y = e.accelerationIncludingGravity.y;
-        Accelerator.accelerationIncludingGravity.z = e.accelerationIncludingGravity.z;
+        Accelerator.accelerationIncludingGravity.x =
+            e.accelerationIncludingGravity.x;
+        Accelerator.accelerationIncludingGravity.y =
+            e.accelerationIncludingGravity.y;
+        Accelerator.accelerationIncludingGravity.z =
+            e.accelerationIncludingGravity.z;
 
         Accelerator.rotationRate.alpha = e.rotationRate.gamma * -1;
         Accelerator.rotationRate.beta = e.rotationRate.alpha * -1;
         Accelerator.rotationRate.gamma = e.rotationRate.beta;
 
         if (ILaya.Browser.onAndroid) {
-            if (ILaya.Browser.userAgent.indexOf("Chrome") > -1) {
+            if (ILaya.Browser.userAgent.indexOf('Chrome') > -1) {
                 Accelerator.rotationRate.alpha *= 180 / Math.PI;
                 Accelerator.rotationRate.beta *= 180 / Math.PI;
                 Accelerator.rotationRate.gamma *= 180 / Math.PI;
@@ -95,8 +116,7 @@ export class Accelerator extends EventDispatcher {
 
             Accelerator.acceleration.x *= -1;
             Accelerator.accelerationIncludingGravity.x *= -1;
-        }
-        else if (ILaya.Browser.onIOS) {
+        } else if (ILaya.Browser.onIOS) {
             Accelerator.acceleration.y *= -1;
             Accelerator.acceleration.z *= -1;
 
@@ -105,7 +125,12 @@ export class Accelerator extends EventDispatcher {
 
             interval *= 1000;
         }
-        this.event(Event.CHANGE, [Accelerator.acceleration, Accelerator.accelerationIncludingGravity, Accelerator.rotationRate, interval]);
+        this.event(Event.CHANGE, [
+            Accelerator.acceleration,
+            Accelerator.accelerationIncludingGravity,
+            Accelerator.rotationRate,
+            interval,
+        ]);
     }
 
     private static transformedAcceleration: AccelerationInfo;
@@ -114,23 +139,23 @@ export class Accelerator extends EventDispatcher {
      * @param	acceleration
      * @return
      */
-    static getTransformedAcceleration(acceleration: AccelerationInfo): AccelerationInfo {
-        Accelerator.transformedAcceleration = Accelerator.transformedAcceleration || new AccelerationInfo();
+    static getTransformedAcceleration(
+        acceleration: AccelerationInfo,
+    ): AccelerationInfo {
+        Accelerator.transformedAcceleration =
+            Accelerator.transformedAcceleration || new AccelerationInfo();
         Accelerator.transformedAcceleration.z = acceleration.z;
 
         if (ILaya.Browser.window.orientation == 90) {
             Accelerator.transformedAcceleration.x = acceleration.y;
             Accelerator.transformedAcceleration.y = -acceleration.x;
-        }
-        else if (ILaya.Browser.window.orientation == -90) {
+        } else if (ILaya.Browser.window.orientation == -90) {
             Accelerator.transformedAcceleration.x = -acceleration.y;
             Accelerator.transformedAcceleration.y = acceleration.x;
-        }
-        else if (!ILaya.Browser.window.orientation) {
+        } else if (!ILaya.Browser.window.orientation) {
             Accelerator.transformedAcceleration.x = acceleration.x;
             Accelerator.transformedAcceleration.y = acceleration.y;
-        }
-        else if (ILaya.Browser.window.orientation == 180) {
+        } else if (ILaya.Browser.window.orientation == 180) {
             Accelerator.transformedAcceleration.x = -acceleration.x;
             Accelerator.transformedAcceleration.y = -acceleration.y;
         }
@@ -138,18 +163,16 @@ export class Accelerator extends EventDispatcher {
         var tx: number;
         if (ILaya.stage.canvasDegree == -90) {
             tx = Accelerator.transformedAcceleration.x;
-            Accelerator.transformedAcceleration.x = -Accelerator.transformedAcceleration.y;
+            Accelerator.transformedAcceleration.x = -Accelerator
+                .transformedAcceleration.y;
             Accelerator.transformedAcceleration.y = tx;
-        }
-        else if (ILaya.stage.canvasDegree == 90) {
+        } else if (ILaya.stage.canvasDegree == 90) {
             tx = Accelerator.transformedAcceleration.x;
-            Accelerator.transformedAcceleration.x = Accelerator.transformedAcceleration.y;
+            Accelerator.transformedAcceleration.x =
+                Accelerator.transformedAcceleration.y;
             Accelerator.transformedAcceleration.y = -tx;
         }
 
         return Accelerator.transformedAcceleration;
     }
 }
-
-
-

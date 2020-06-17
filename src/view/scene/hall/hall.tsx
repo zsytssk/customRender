@@ -6,10 +6,10 @@ import {
     Label,
     View,
 } from 'customRenderer/layaCom';
-import { View as LayaView } from 'laya/laya/ui/View';
+import { View as LayaView } from 'laya/ui/View';
 import { Header } from './header';
 import { Loading } from 'view/loading';
-import { Laya } from 'laya/Laya';
+import { Laya } from 'Laya';
 import { Scene } from 'view/com/scene';
 
 const res_list = [

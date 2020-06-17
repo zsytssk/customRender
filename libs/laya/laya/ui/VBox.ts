@@ -1,6 +1,6 @@
 import { LayoutBox } from "./LayoutBox";
 import { UIComponent } from "./UIComponent";
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 /**
 	 * <code>VBox</code> 是一个垂直布局容器类。
@@ -35,8 +35,8 @@ export class VBox extends LayoutBox {
         return super.width;
     }
 
-    /** 
-     * @inheritDoc	
+    /**
+     * @inheritDoc
      * @override
     */
     protected changeItems(): void {

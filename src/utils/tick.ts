@@ -1,4 +1,4 @@
-import { Laya } from 'laya/Laya';
+import { Laya } from 'Laya';
 
 type Listener = (t: number) => void;
 type FunItem = {

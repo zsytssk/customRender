@@ -1,7 +1,7 @@
 import { UIComponent } from "./UIComponent";
 import { Button } from "./Button";
 import { Slider } from "./Slider";
-import { UIConfig } from "./../../UIConfig";
+import { UIConfig } from "../../../UIConfig";
 import { Styles } from "./Styles";
 import { Sprite } from "../display/Sprite"
 import { Event } from "../events/Event"
@@ -10,7 +10,7 @@ import { Loader } from "../net/Loader"
 import { Ease } from "../utils/Ease"
 import { Handler } from "../utils/Handler"
 import { Tween } from "../utils/Tween"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -99,7 +99,7 @@ export class ScrollBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     destroy(destroyChild: boolean = true): void {
@@ -218,7 +218,7 @@ export class ScrollBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     protected _sizeChanged(): void {
@@ -244,7 +244,7 @@ export class ScrollBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     protected measureWidth(): number {
@@ -253,7 +253,7 @@ export class ScrollBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     protected measureHeight(): number {
@@ -356,7 +356,7 @@ export class ScrollBar extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {
@@ -659,7 +659,7 @@ export class ScrollBar extends UIComponent {
         }
 
         this.value -= this._lastOffset;
-        //if (Math.abs(_lastOffset) < 1 || value == max || value == min) 
+        //if (Math.abs(_lastOffset) < 1 || value == max || value == min)
         if (Math.abs(this._lastOffset) < 0.1) {
             ILaya.timer.clear(this, this.tweenMove);
             if (this._isElastic) {

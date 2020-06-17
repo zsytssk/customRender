@@ -1,11 +1,11 @@
-import { HTMLElement } from "./HTMLElement";
-import { Graphics } from "../../display/Graphics"
-import { HTMLStyle } from "../utils/HTMLStyle"
-import { ILayout } from "../utils/ILayout"
-import { Pool } from "../../utils/Pool"
-import { IHtml } from "../utils/IHtml";
-import { ILaya } from "../../../ILaya";
-import { ClassUtils } from "../../utils/ClassUtils";
+import { HTMLElement } from './HTMLElement';
+import { Graphics } from '../../display/Graphics';
+import { HTMLStyle } from '../utils/HTMLStyle';
+import { ILayout } from '../utils/ILayout';
+import { Pool } from '../../utils/Pool';
+import { IHtml } from '../utils/IHtml';
+import { ILaya } from '../../../../ILaya';
+import { ClassUtils } from '../../utils/ClassUtils';
 
 /**
  * @internal
@@ -15,7 +15,7 @@ export class HTMLBrElement {
 
     /**@internal */
     _addToLayout(out: ILayout[]): void {
-        out.push((<ILayout>(this as any)));
+        out.push(<ILayout>(this as any));
     }
 
     //TODO:coverage
@@ -27,20 +27,13 @@ export class HTMLBrElement {
         Pool.recover(HTMLElement.getClassName(this), this.reset());
     }
 
-    protected _setParent(value: HTMLElement): void {
+    protected _setParent(value: HTMLElement): void {}
 
-    }
+    set parent(value: any) {}
 
-    set parent(value: any) {
+    set URI(value: any) {}
 
-    }
-
-    set URI(value: any) {
-    }
-
-    set href(value: any) {
-
-    }
+    set href(value: any) {}
 
     /**@internal */
     //TODO:coverage
@@ -53,13 +46,16 @@ export class HTMLBrElement {
         return HTMLBrElement.brStyle;
     }
 
-    renderSelfToGraphic(graphic: Graphics, gX: number, gY: number, recList: any[]): void {
-
-    }
+    renderSelfToGraphic(
+        graphic: Graphics,
+        gX: number,
+        gY: number,
+        recList: any[],
+    ): void {}
 }
 
 IHtml.HTMLBrElement = HTMLBrElement;
 ILaya.regClass(HTMLBrElement);
 
-ClassUtils.regClass("laya.html.dom.HTMLBrElement", HTMLBrElement);
-ClassUtils.regClass("Laya.HTMLBrElement", HTMLBrElement);
+ClassUtils.regClass('laya.html.dom.HTMLBrElement', HTMLBrElement);
+ClassUtils.regClass('Laya.HTMLBrElement', HTMLBrElement);

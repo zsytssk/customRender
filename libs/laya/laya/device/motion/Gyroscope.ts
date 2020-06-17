@@ -1,12 +1,12 @@
 import { RotationInfo } from "./RotationInfo";
 import { Event } from "../../events/Event";
 import { EventDispatcher } from "../../events/EventDispatcher";
-import { ILaya } from "../../../ILaya";
+import { ILaya } from "../../../../ILaya";
 
 
 /**
  * 使用Gyroscope.instance获取唯一的Gyroscope引用，请勿调用构造函数。
- * 
+ *
  * <p>
  * listen()的回调处理器接受两个参数：
  * <code>function onOrientationChange(absolute:Boolean, info:RotationInfo):void</code>
@@ -15,7 +15,7 @@ import { ILaya } from "../../../ILaya";
  * <li><b>info</b>: <code>RotationInfo</code>类型参数，保存设备的旋转值。</li>
  * </ol>
  * </p>
- * 
+ *
  * <p>
  * 浏览器兼容性参见：<i>http://caniuse.com/#search=deviceorientation</i>
  * </p>

@@ -9,7 +9,7 @@ import { Texture } from "../resource/Texture"
 import { Handler } from "../utils/Handler"
 import { Utils } from "../utils/Utils"
 import { WeakObject } from "../utils/WeakObject"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -166,7 +166,7 @@ export class Clip extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  destroy(destroyChild: boolean = true): void {
@@ -186,7 +186,7 @@ export class Clip extends UIComponent {
 
 		/**
 		 * @inheritDoc
-         * @override 
+         * @override
 		*/
 		/*override*/ protected createChildren(): void {
         this.graphics = this._bitmap = new AutoBitmap();
@@ -348,7 +348,7 @@ export class Clip extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/  set width(value: number) {
@@ -361,7 +361,7 @@ export class Clip extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		 * */
 		/*override*/  set height(value: number) {
@@ -374,7 +374,7 @@ export class Clip extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected measureWidth(): number {
@@ -383,7 +383,7 @@ export class Clip extends UIComponent {
     }
 
 		/**
-		 * @inheritDoc 
+		 * @inheritDoc
 		 * @override
 		*/
 		/*override*/ protected measureHeight(): number {
@@ -506,7 +506,7 @@ export class Clip extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

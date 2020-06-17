@@ -1,16 +1,20 @@
 import { CustomRenderer } from 'customRenderer';
-import { Laya } from 'laya/Laya';
+import { Laya } from 'Laya';
 import { layaInit } from 'layaUtils';
-import React, { Fragment } from 'react';
-import { PopManager } from 'view/pop/popManager';
-import { SceneManager } from 'view/scene/sceneManager';
+import React, { Fragment, useEffect } from 'react';
+import { PopManager } from 'view/com/popManager';
+import { SceneManager } from 'view/com/sceneManager';
 import { initAppModel } from 'view/viewState';
+import { Hall } from 'view/scene/hall/hall';
 
 function App() {
-    initAppModel();
+    useEffect(() => {
+        initAppModel();
+    }, []);
+
     return (
         <>
-            <SceneManager />
+            <SceneManager defScene={Hall} defProps={{ x: 1 }} />
             <PopManager />
         </>
     );

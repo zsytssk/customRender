@@ -1,34 +1,57 @@
-import { HTMLExtendStyle } from "./HTMLExtendStyle";
-import { ILaya } from "../../../ILaya";
-import { Pool } from "../../utils/Pool";
-import { HTMLElement } from "../dom/HTMLElement";
-import { URL } from "../../net/URL";
-import { ClassUtils } from "../../utils/ClassUtils";
+import { HTMLExtendStyle } from './HTMLExtendStyle';
+import { ILaya } from '../../../../ILaya';
+import { Pool } from '../../utils/Pool';
+import { HTMLElement } from '../dom/HTMLElement';
+import { URL } from '../../net/URL';
+import { ClassUtils } from '../../utils/ClassUtils';
 
 /**
  * @private
  */
 export class HTMLStyle {
-
-    private static _CSSTOVALUE: any = { 'letter-spacing': 'letterSpacing', 'white-space': 'whiteSpace', 'line-height': 'lineHeight', 'font-family': 'family', 'vertical-align': 'valign', 'text-decoration': 'textDecoration', 'background-color': 'bgColor', 'border-color': 'borderColor' };
-    private static _parseCSSRegExp: RegExp = new RegExp("([\.\#]\\w+)\\s*{([\\s\\S]*?)}", "g");
+    private static _CSSTOVALUE: any = {
+        'letter-spacing': 'letterSpacing',
+        'white-space': 'whiteSpace',
+        'line-height': 'lineHeight',
+        'font-family': 'family',
+        'vertical-align': 'valign',
+        'text-decoration': 'textDecoration',
+        'background-color': 'bgColor',
+        'border-color': 'borderColor',
+    };
+    private static _parseCSSRegExp: RegExp = new RegExp(
+        '([.#]\\w+)\\s*{([\\s\\S]*?)}',
+        'g',
+    );
     /**
      * 需要继承的属性
      */
-    private static _inheritProps: any[] = ["italic", "align", "valign", "leading", "stroke", "strokeColor", "bold", "fontSize", "lineHeight", "wordWrap", "color"];
+    private static _inheritProps: any[] = [
+        'italic',
+        'align',
+        'valign',
+        'leading',
+        'stroke',
+        'strokeColor',
+        'bold',
+        'fontSize',
+        'lineHeight',
+        'wordWrap',
+        'color',
+    ];
 
     /**水平居左对齐方式。 */
-    static ALIGN_LEFT: string = "left";
+    static ALIGN_LEFT: string = 'left';
     /**水平居中对齐方式。 */
-    static ALIGN_CENTER: string = "center";
+    static ALIGN_CENTER: string = 'center';
     /**水平居右对齐方式。 */
-    static ALIGN_RIGHT: string = "right";
+    static ALIGN_RIGHT: string = 'right';
     /**垂直居中对齐方式。 */
-    static VALIGN_TOP: string = "top";
+    static VALIGN_TOP: string = 'top';
     /**垂直居中对齐方式。 */
-    static VALIGN_MIDDLE: string = "middle";
+    static VALIGN_MIDDLE: string = 'middle';
     /**垂直居底部对齐方式。 */
-    static VALIGN_BOTTOM: string = "bottom";
+    static VALIGN_BOTTOM: string = 'bottom';
     /** 样式表信息。*/
     static styleSheets: any = {};
     /**添加布局。 */
@@ -52,11 +75,26 @@ export class HTMLStyle {
     /**@private */
     protected static _WIDTH_SET: number = 0x8;
 
-    protected static alignVDic: any = { "left": 0, "center": 0x10, "right": 0x20, "top": 0, "middle": 0x40, "bottom": 0x80 };
-    protected static align_Value: any = { 0: "left", 0x10: "center", 0x20: "right" };
-    protected static vAlign_Value: any = { 0: "top", 0x40: "middle", 0x80: "bottom" };
-    protected static _ALIGN: number = 0x30;// 0x10 & 0x20;
-    protected static _VALIGN: number = 0xc0;//0x40 & 0x80;
+    protected static alignVDic: any = {
+        left: 0,
+        center: 0x10,
+        right: 0x20,
+        top: 0,
+        middle: 0x40,
+        bottom: 0x80,
+    };
+    protected static align_Value: any = {
+        0: 'left',
+        0x10: 'center',
+        0x20: 'right',
+    };
+    protected static vAlign_Value: any = {
+        0: 'top',
+        0x40: 'middle',
+        0x80: 'bottom',
+    };
+    protected static _ALIGN: number = 0x30; // 0x10 & 0x20;
+    protected static _VALIGN: number = 0xc0; //0x40 & 0x80;
 
     /**@internal */
     _type: number;
@@ -104,7 +142,8 @@ export class HTMLStyle {
 
     //TODO:coverage
     private _getExtendStyle(): HTMLExtendStyle {
-        if (this._extendStyle === HTMLExtendStyle.EMPTY) this._extendStyle = HTMLExtendStyle.create();
+        if (this._extendStyle === HTMLExtendStyle.EMPTY)
+            this._extendStyle = HTMLExtendStyle.create();
         return this._extendStyle;
     }
 
@@ -168,7 +207,7 @@ export class HTMLStyle {
 
     set align(v: string) {
         if (!(v in HTMLStyle.alignVDic)) return;
-        this._type &= (~HTMLStyle._ALIGN);
+        this._type &= ~HTMLStyle._ALIGN;
         this._type |= HTMLStyle.alignVDic[v];
     }
 
@@ -183,7 +222,7 @@ export class HTMLStyle {
 
     set valign(v: string) {
         if (!(v in HTMLStyle.alignVDic)) return;
-        this._type &= (~HTMLStyle._VALIGN);
+        this._type &= ~HTMLStyle._VALIGN;
         this._type |= HTMLStyle.alignVDic[v];
     }
 
@@ -221,14 +260,24 @@ export class HTMLStyle {
     }
 
     get font(): string {
-        return (this.italic ? "italic " : "") + (this.bold ? "bold " : "") + this.fontSize + "px " + (ILaya.Browser.onIPhone ? (ILaya.Text.fontFamilyMap[this.family] || this.family) : this.family);
+        return (
+            (this.italic ? 'italic ' : '') +
+            (this.bold ? 'bold ' : '') +
+            this.fontSize +
+            'px ' +
+            (ILaya.Browser.onIPhone
+                ? ILaya.Text.fontFamilyMap[this.family] || this.family
+                : this.family)
+        );
     }
 
     /**
      * 是否显示为块级元素。
      */
     set block(value: boolean) {
-        value ? (this._type |= HTMLStyle._CSS_BLOCK) : (this._type &= (~HTMLStyle._CSS_BLOCK));
+        value
+            ? (this._type |= HTMLStyle._CSS_BLOCK)
+            : (this._type &= ~HTMLStyle._CSS_BLOCK);
     }
 
     /**表示元素是否显示为块级元素。*/
@@ -245,7 +294,7 @@ export class HTMLStyle {
         this.wordWrap = true;
         this.fontSize = ILaya.Text.defaultFontSize;
         this.family = ILaya.Text.defaultFont;
-        this.color = "#000000";
+        this.color = '#000000';
         this.valign = HTMLStyle.VALIGN_TOP;
 
         this.padding = HTMLStyle._PADDING;
@@ -274,14 +323,14 @@ export class HTMLStyle {
      */
     //TODO:coverage
     recover(): void {
-        Pool.recover("HTMLStyle", this.reset());
+        Pool.recover('HTMLStyle', this.reset());
     }
 
     /**
      * 从对象池中创建
      */
     static create(): HTMLStyle {
-        return Pool.getItemByClass("HTMLStyle", HTMLStyle);
+        return Pool.getItemByClass('HTMLStyle', HTMLStyle);
     }
 
     /**
@@ -308,7 +357,9 @@ export class HTMLStyle {
     }
 
     set wordWrap(value: boolean) {
-        value ? (this._type &= ~HTMLStyle._NOWARP) : (this._type |= HTMLStyle._NOWARP);
+        value
+            ? (this._type &= ~HTMLStyle._NOWARP)
+            : (this._type |= HTMLStyle._NOWARP);
     }
 
     /**是否为粗体*/
@@ -317,7 +368,9 @@ export class HTMLStyle {
     }
 
     set bold(value: boolean) {
-        value ? (this._type |= HTMLStyle._BOLD) : (this._type &= ~HTMLStyle._BOLD);
+        value
+            ? (this._type |= HTMLStyle._BOLD)
+            : (this._type &= ~HTMLStyle._BOLD);
     }
 
     /**
@@ -329,12 +382,14 @@ export class HTMLStyle {
     }
 
     set italic(value: boolean) {
-        value ? (this._type |= HTMLStyle._ITALIC) : (this._type &= ~HTMLStyle._ITALIC);
+        value
+            ? (this._type |= HTMLStyle._ITALIC)
+            : (this._type &= ~HTMLStyle._ITALIC);
     }
 
     /**@internal */
     _widthAuto(): boolean {
-        return (this._type & HTMLStyle._WIDTHAUTO) !== 0;// || (_type & _WIDTH_SET) === 0;
+        return (this._type & HTMLStyle._WIDTHAUTO) !== 0; // || (_type & _WIDTH_SET) === 0;
     }
 
     /**@inheritDoc	 */
@@ -343,15 +398,15 @@ export class HTMLStyle {
     }
 
     set whiteSpace(type: string) {
-        type === "nowrap" && (this._type |= HTMLStyle._NOWARP);
-        type === "none" && (this._type &= ~HTMLStyle._NOWARP);
+        type === 'nowrap' && (this._type |= HTMLStyle._NOWARP);
+        type === 'none' && (this._type &= ~HTMLStyle._NOWARP);
     }
 
     /**
      * 设置如何处理元素内的空白。
      */
     get whiteSpace(): string {
-        return (this._type & HTMLStyle._NOWARP) ? "nowrap" : "";
+        return this._type & HTMLStyle._NOWARP ? 'nowrap' : '';
     }
 
     /**
@@ -367,13 +422,13 @@ export class HTMLStyle {
      */
     set width(w: any) {
         this._type |= HTMLStyle._WIDTH_SET;
-        if (typeof (w) == 'string') {
+        if (typeof w == 'string') {
             var offset: number = w.indexOf('auto');
             if (offset >= 0) {
                 this._type |= HTMLStyle._WIDTHAUTO;
                 w = w.substr(0, offset);
             }
-            if (this._calculation("width", w)) return;
+            if (this._calculation('width', w)) return;
             w = parseInt(w);
         }
 
@@ -385,8 +440,8 @@ export class HTMLStyle {
      */
     set height(h: any) {
         this._type |= HTMLStyle._HEIGHT_SET;
-        if (typeof (h) == 'string') {
-            if (this._calculation("height", h)) return;
+        if (typeof h == 'string') {
+            if (this._calculation('height', h)) return;
             h = parseInt(h);
         }
         this.size(-1, h);
@@ -432,13 +487,18 @@ export class HTMLStyle {
     }
 
     setLineElement(value: boolean): void {
-        value ? (this._type |= HTMLStyle._LINE_ELEMENT) : (this._type &= (~HTMLStyle._LINE_ELEMENT));
+        value
+            ? (this._type |= HTMLStyle._LINE_ELEMENT)
+            : (this._type &= ~HTMLStyle._LINE_ELEMENT);
     }
 
     /**@internal */
     //TODO:coverage
     _enableLayout(): boolean {
-        return (this._type & HTMLStyle._DISPLAY_NONE) === 0 && (this._type & HTMLStyle._ABSOLUTE) === 0;
+        return (
+            (this._type & HTMLStyle._DISPLAY_NONE) === 0 &&
+            (this._type & HTMLStyle._ABSOLUTE) === 0
+        );
     }
 
     /**
@@ -449,7 +509,7 @@ export class HTMLStyle {
     }
 
     set letterSpacing(d: number) {
-        (typeof (d) == 'string') && (d = parseInt(d + ""));
+        typeof d == 'string' && (d = parseInt(d + ''));
         if (d == this._extendStyle.letterSpacing) return;
         this._getExtendStyle().letterSpacing = d;
     }
@@ -476,14 +536,16 @@ export class HTMLStyle {
     }
 
     set position(value: string) {
-        value === "absolute" ? (this._type |= HTMLStyle._ABSOLUTE) : (this._type &= ~HTMLStyle._ABSOLUTE);
+        value === 'absolute'
+            ? (this._type |= HTMLStyle._ABSOLUTE)
+            : (this._type &= ~HTMLStyle._ABSOLUTE);
     }
 
     /**
      * 元素的定位类型。
      */
     get position(): string {
-        return (this._type & HTMLStyle._ABSOLUTE) ? "absolute" : "";
+        return this._type & HTMLStyle._ABSOLUTE ? 'absolute' : '';
     }
 
     /**@inheritDoc	 */
@@ -520,17 +582,17 @@ export class HTMLStyle {
             // 最后一个元素是空元素。
             if (name.length === 0) continue;
 
-            var value: string = attr.substr(ofs + 1).replace(/^\s+|\s+$/g, '');//去掉前后空格和\n\t
+            var value: string = attr.substr(ofs + 1).replace(/^\s+|\s+$/g, ''); //去掉前后空格和\n\t
             var one: any[] = [name, value];
             switch (name) {
                 case 'italic':
                 case 'bold':
-                    one[1] = value == "true";
+                    one[1] = value == 'true';
                     break;
-                case "font-weight":
-                    if (value == "bold") {
+                case 'font-weight':
+                    if (value == 'bold') {
                         one[1] = true;
-                        one[0] = "bold";
+                        one[0] = 'bold';
                     }
                     break;
                 case 'line-height':
@@ -547,8 +609,15 @@ export class HTMLStyle {
                     break;
                 case 'padding':
                     valueArray = value.split(' ');
-                    valueArray.length > 1 || (valueArray[1] = valueArray[2] = valueArray[3] = valueArray[0]);
-                    one[1] = [parseInt(valueArray[0]), parseInt(valueArray[1]), parseInt(valueArray[2]), parseInt(valueArray[3])];
+                    valueArray.length > 1 ||
+                        (valueArray[1] = valueArray[2] = valueArray[3] =
+                            valueArray[0]);
+                    one[1] = [
+                        parseInt(valueArray[0]),
+                        parseInt(valueArray[1]),
+                        parseInt(valueArray[2]),
+                        parseInt(valueArray[3]),
+                    ];
                     break;
                 default:
                     (one[0] = HTMLStyle._CSSTOVALUE[name]) || (one[0] = name);
@@ -573,5 +642,5 @@ export class HTMLStyle {
     }
 }
 
-ClassUtils.regClass("laya.html.utils.HTMLStyle", HTMLStyle);
-ClassUtils.regClass("Laya.HTMLStyle", HTMLStyle);
+ClassUtils.regClass('laya.html.utils.HTMLStyle', HTMLStyle);
+ClassUtils.regClass('Laya.HTMLStyle', HTMLStyle);

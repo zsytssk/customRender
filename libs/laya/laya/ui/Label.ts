@@ -3,7 +3,7 @@ import { Text } from "../display/Text"
 import { Event } from "../events/Event"
 import { UIComponent } from "./UIComponent"
 import { UIUtils } from "./UIUtils"
-import { ILaya } from "../../ILaya";
+import { ILaya } from "../../../ILaya";
 import { ClassUtils } from "../utils/ClassUtils";
 
 /**
@@ -135,7 +135,7 @@ export class Label extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     destroy(destroyChild: boolean = true): void {
@@ -145,7 +145,7 @@ export class Label extends UIComponent {
 
     /**
      * @override
-     * @inheritDoc 
+     * @inheritDoc
     */
     protected createChildren(): void {
         this.addChild(this._tf = new Text());
@@ -394,7 +394,7 @@ export class Label extends UIComponent {
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @override
     */
     set dataSource(value: any) {

@@ -1,5 +1,5 @@
 import { Sprite } from "./Sprite";
-import { Config } from "./../../Config";
+import { Config } from "../../../Config";
 import { Const } from "../Const"
 import { Event } from "../events/Event"
 import { ClassUtils } from "../utils/ClassUtils";
@@ -160,7 +160,7 @@ export class AnimationBase extends Sprite {
         }
     }
 
-    /**@internal 
+    /**@internal
      * @override
     */
     _setDisplay(value: boolean): void {

@@ -1,15 +1,15 @@
-import { HTMLElement } from "./HTMLElement";
-import { HTMLStyleElement } from "./HTMLStyleElement";
-import { HTMLLinkElement } from "./HTMLLinkElement";
-import { HTMLStyle } from "../utils/HTMLStyle"
-import { ILayout } from "../utils/ILayout"
-import { Layout } from "../utils/Layout"
-import { Rectangle } from "../../maths/Rectangle";
-import { Handler } from "../../utils/Handler";
-import { HTMLChar } from "../../utils/HTMLChar";
-import { IHtml } from "../utils/IHtml";
-import { ILaya } from "../../../ILaya";
-import { ClassUtils } from "../../utils/ClassUtils";
+import { HTMLElement } from './HTMLElement';
+import { HTMLStyleElement } from './HTMLStyleElement';
+import { HTMLLinkElement } from './HTMLLinkElement';
+import { HTMLStyle } from '../utils/HTMLStyle';
+import { ILayout } from '../utils/ILayout';
+import { Layout } from '../utils/Layout';
+import { Rectangle } from '../../maths/Rectangle';
+import { Handler } from '../../utils/Handler';
+import { HTMLChar } from '../../utils/HTMLChar';
+import { IHtml } from '../utils/IHtml';
+import { ILaya } from '../../../../ILaya';
+import { ClassUtils } from '../../utils/ClassUtils';
 
 /**
  * @private
@@ -80,13 +80,19 @@ export class HTMLDivParser extends HTMLElement {
      */
     _addChildsToLayout(out: ILayout[]): boolean {
         var words: HTMLChar[] = this._getWords();
-        if (words == null && (!this._children || this._children.length == 0)) return false;
-        words && words.forEach(function (o: any): void {
-            out.push(o);
-        });
+        if (words == null && (!this._children || this._children.length == 0))
+            return false;
+        words &&
+            words.forEach(function (o: any): void {
+                out.push(o);
+            });
         var tFirstKey: boolean = true;
 
-        for (var i: number = 0, len: number = this._children.length; i < len; i++) {
+        for (
+            var i: number = 0, len: number = this._children.length;
+            i < len;
+            i++
+        ) {
             var o: HTMLElement = this._children[i];
             if (tFirstKey) {
                 tFirstKey = false;
@@ -94,7 +100,7 @@ export class HTMLDivParser extends HTMLElement {
                 out.push(null);
             }
             //o._style._enableLayout() && o._addToLayout(out);
-            o._addToLayout(out)
+            o._addToLayout(out);
         }
         return true;
     }
@@ -169,5 +175,5 @@ export class HTMLDivParser extends HTMLElement {
 IHtml.HTMLDivParser = HTMLDivParser;
 ILaya.regClass(HTMLDivParser);
 
-ClassUtils.regClass("laya.html.dom.HTMLDivParser", HTMLDivParser);
-ClassUtils.regClass("Laya.HTMLDivParser", HTMLDivParser);
+ClassUtils.regClass('laya.html.dom.HTMLDivParser', HTMLDivParser);
+ClassUtils.regClass('Laya.HTMLDivParser', HTMLDivParser);

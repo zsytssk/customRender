@@ -1,5 +1,5 @@
 import { IPhysics } from "./IPhysics";
-import { Laya } from "../../Laya";
+import { Laya } from "../../../Laya";
 import { ColliderBase } from "./ColliderBase";
 import { Component } from "../components/Component"
 import { Sprite } from "..//display/Sprite"
@@ -146,9 +146,9 @@ export class RigidBody extends Component {
     /**
      * 获取对象某属性的get set方法
      * 通过其本身无法获取该方法，只能从原型上获取
-     * @param obj 
-     * @param prop 
-     * @param accessor 
+     * @param obj
+     * @param prop
+     * @param accessor
      */
     private accessGetSetFunc(obj: Object, prop: string, accessor: string): any {
         if (["get", "set"].indexOf(accessor) === -1) { // includes

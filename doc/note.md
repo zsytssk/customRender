@@ -1,6 +1,14 @@
+-   @todo eslint ts
+
+## 2020-06-17 09:19:09
+
 -   @todo 只是示例项目 将常用的功能组件话。。。
 
     -   stateManager PopManager SceneManager...
+
+-   @ques 能不能将 ui 中的 class 做成 jsx
+
+-   @todo tsx 项目。。。
 
 ## 2020-06-05 09:34:19
 
@@ -25,13 +33,15 @@
 
 -   @todo 先全部使用 jsx, 然后再对性能进行优化...
     -   将高性能的地方独立处理
-    -   一旦都创建好了 就不会太卡
+    -   一旦都创建好了 就不会太卡·
 
 ### finish
 
 -   @todo 为什么后面一条鱼 会把前面的鱼冲掉
 
 ## 2020-02-02 11:11:29
+
+·
 
 -   @ques@opt customise render 怎么先创建父亲 再创建子
 
