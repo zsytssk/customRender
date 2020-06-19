@@ -304,28 +304,28 @@ export let SHAPE: ShapeOriData = {
             shape_list: [
                 {
                     type: 'Circle',
-                    radius: 60,
+                    radius: 80,
                     position: {
                         x: 0,
-                        y: -10,
+                        y: 10,
                     },
                 },
-                {
-                    type: 'Circle',
-                    radius: 30,
-                    position: {
-                        x: -90,
-                        y: -90,
-                    },
-                },
-                {
-                    type: 'Circle',
-                    radius: 35,
-                    position: {
-                        x: 90,
-                        y: -100,
-                    },
-                },
+                // {
+                //     type: 'Circle',
+                //     radius: 30,
+                //     position: {
+                //         x: -90,
+                //         y: -90,
+                //     },
+                // },
+                // {
+                //     type: 'Circle',
+                //     radius: 35,
+                //     position: {
+                //         x: 90,
+                //         y: -100,
+                //     },
+                // },
             ],
         },
         '17': {
@@ -340,8 +340,12 @@ export let SHAPE: ShapeOriData = {
             shape_list: [
                 {
                     type: 'Box',
-                    width: 70,
-                    height: 150,
+                    width: 100,
+                    height: 200,
+                    position: {
+                        x: 0,
+                        y: -20,
+                    },
                 },
             ],
         },
@@ -358,18 +362,18 @@ export let SHAPE: ShapeOriData = {
             shape_list: [
                 {
                     type: 'Box',
-                    width: 180,
+                    width: 220,
                     height: 80,
                 },
-                {
-                    type: 'Box',
-                    width: 20,
-                    height: 80,
-                    position: {
-                        x: -130,
-                        y: 0,
-                    },
-                },
+                // {
+                //     type: 'Box',
+                //     width: 20,
+                //     height: 80,
+                //     position: {
+                //         x: -130,
+                //         y: 0,
+                //     },
+                // },
             ],
         },
     },

@@ -6,6 +6,7 @@ import { ComponentManager } from 'comMan/component';
 export type FreezeInfo = {
     user_id: string;
     fish_list: string[];
+    duration: number;
 } & SkillActiveInfo;
 /** 冰冻技能 */
 export class FreezeModel extends ComponentManager implements SkillModel {
@@ -27,10 +28,9 @@ export class FreezeModel extends ComponentManager implements SkillModel {
     }
     public active(info: FreezeInfo) {
         const { skill_core } = this;
-        const { cool_time } = skill_core;
-        const { used_time, fish_list } = info;
+        const { used_time, fish_list, duration } = info;
         const { game } = modelState.app;
-        game.freezing_com.freezing(cool_time - used_time, fish_list);
+        game.freezing_com.freezing(duration - used_time, fish_list);
         skill_core.active(info);
     }
     public disable() {

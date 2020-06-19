@@ -5,7 +5,7 @@ import { clearTick, createTick } from 'utils/tick';
 type MoveUpdateFn = (move_info: DisplaceInfo) => void;
 
 /** 固定路径 移动控制 */
-export class MoveDisplaceCom implements MoveCom {
+export class DisplaceMoveCom implements MoveCom {
     private displace: Displace;
     private tick_index: number;
     private is_stop = false;

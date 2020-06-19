@@ -25,9 +25,6 @@ export class BombModel extends ComponentManager implements SkillModel {
         this.addCom(skill_core);
         this.skill_core = skill_core;
     }
-    public reset() {
-        this.skill_core.reset();
-    }
     public init() {
         this.skill_core.init();
     }
@@ -36,12 +33,11 @@ export class BombModel extends ComponentManager implements SkillModel {
         const { num, fish_list, pos, used_time, is_bomb_fish } = info;
         const { skill_core } = this;
         const { player } = skill_core;
-        const { bullet_num } = player;
         for (const fish of fish_list) {
             const { eid: fish_id, win, drop } = fish;
             const fish_model = getFishById(fish_id);
             if (!fish_model) {
-                player.updateInfo({ bullet_num: bullet_num + win });
+                player.updateInfo({ bullet_num: player.bullet_num + win });
                 continue;
             }
             playerCaptureFish(player, fish_model, { win, drop });
@@ -53,6 +49,10 @@ export class BombModel extends ComponentManager implements SkillModel {
             return;
         }
         skill_core.active({ num, used_time });
+    }
+    public reset() {
+        const { skill_core } = this;
+        skill_core.reset();
     }
     public disable() {
         const { skill_core } = this;

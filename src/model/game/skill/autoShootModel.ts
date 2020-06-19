@@ -2,10 +2,13 @@ import { SkillCoreCom, SkillInfo, SkillStatus } from './skillCoreCom';
 import { SkillModel } from './skillModel';
 import { ComponentManager } from 'comMan/component';
 
-export type AutoLaunchInfo = {} & SkillInfo;
+export type AutoShootInfo = {
+    user_id: string;
+    autoShoot: boolean;
+} & SkillInfo;
 
 /** 炸弹技能: 提示用户选中屏幕的位置, 然后就发射炸弹 */
-export class AutoLaunchModel extends ComponentManager implements SkillModel {
+export class AutoShootModel extends ComponentManager implements SkillModel {
     public skill_core: SkillCoreCom;
     constructor(info: SkillInfo) {
         super();
@@ -28,21 +31,23 @@ export class AutoLaunchModel extends ComponentManager implements SkillModel {
         this.skill_core.init();
     }
     public reset() {
-        this.skill_core.reset();
+        const { skill_core } = this;
+        const { player } = skill_core;
+        player.gun.autoShoot.clear();
+        skill_core.reset();
     }
     public active() {
         // 激活
         const { skill_core } = this;
         const { player } = this.skill_core;
-        player.gun.autoLaunch.active();
+        player.gun.autoShoot.active();
         skill_core.active({
             used_time: 0,
         });
     }
     public disable() {
         const { skill_core } = this;
-        const { player } = skill_core;
-        player.gun.autoLaunch.clear();
-        skill_core.disable();
+        skill_core.reset();
+        this.reset();
     }
 }

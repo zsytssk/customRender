@@ -1,4 +1,4 @@
-import { TrackTarget } from 'model/game/com/moveCom/moveTrackCom';
+import { LockTarget } from 'model/game/com/moveCom/lockMoveCom';
 import { FishModel } from 'model/game/fish/fishModel';
 import { BulletInfo, BulletModel } from './bulletModel';
 import { GunModel } from './gunModel';
@@ -9,7 +9,7 @@ import { ModelEvent } from 'model/modelEvent';
 export type BulletGroupInfo = {
     bullets_pos: Point[];
     velocity: SAT.Vector;
-    track?: TrackTarget;
+    lock?: LockTarget;
 };
 
 export const BulletGroupEvent = {
@@ -40,7 +40,7 @@ export class BulletGroup extends ComponentManager {
         }
     }
     private initBullet(info: BulletGroupInfo) {
-        const { bullets_pos, track, velocity } = info;
+        const { bullets_pos, lock, velocity } = info;
         const { skin, bullet_cost, skin_level } = this.gun;
 
         for (const pos of bullets_pos) {
@@ -48,7 +48,7 @@ export class BulletGroup extends ComponentManager {
                 skin,
                 pos,
                 bullet_cost,
-                track,
+                lock,
                 skin_level,
                 velocity: velocity.clone(),
                 cast_fn: this.castFn,
@@ -74,6 +74,7 @@ export class BulletGroup extends ComponentManager {
             bullet.addNet(is_cur_player);
         }
         bullet_list.clear();
+        this.destroy();
     }; //tslint:disable-line
 
     public destroy() {

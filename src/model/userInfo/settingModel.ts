@@ -6,6 +6,7 @@ export const SettingEvent = {
     VoiceChange: 'voice_change',
     MusicChange: 'music_change',
 };
+
 /** 设置数据 */
 export class SettingModel extends ComponentManager {
     /** 声音 */
@@ -16,8 +17,9 @@ export class SettingModel extends ComponentManager {
         super();
         this.addCom(new EventCom());
     }
-    public initAudio() {
-        const [voice, music] = getAudio();
+    public initUserInfo(data: UserAccountRep) {
+        const { userId } = data;
+        const [voice, music] = getAudio(userId);
         this.voice = voice;
         this.music = music;
     }

@@ -14,10 +14,12 @@
     "license": "ISC",
     "dependencies": {
         "bezier-js": "^2.6.1",
+        "crypto-js": "^4.0.0",
         "jsencrypt": "^3.0.0-rc.1",
         "react": "^16.13.1",
         "react-reconciler": "^0.25.1",
         "rxjs": "^6.5.5",
+        "sat": "^0.8.0",
         "ts-loader": "^7.0.5",
         "ts-node": "^8.10.2",
         "typescript": "^3.9.5",

@@ -9,14 +9,18 @@ import {
 import React, { useState } from 'react';
 import { genRandomStr } from 'utils/utils';
 import { alert } from 'view/pop/alert';
-import { enterGame } from 'view/viewState';
 import { CoinMenu } from './coinMenu';
 import { FlagMenu } from './flagMenu';
 
 export function Header(props: ComProps) {
     const [flagMenuVisible, setFlagMenuVisible] = useState(false);
+    const [coinMenuVisible, setCoinMenuVisible] = useState(false);
+
     const toggleFlagMenu = () => {
         setFlagMenuVisible(!flagMenuVisible);
+    };
+    const toggleCoinMenuVisible = () => {
+        setCoinMenuVisible(!coinMenuVisible);
     };
 
     return (
@@ -31,34 +35,19 @@ export function Header(props: ComProps) {
                 <Sprite texture="image/hall/header_bg.png" />
             </Box>
             <Box y={3} x={320} width={1280} height={78}>
-                <Box
-                    y={17}
+                <CoinMenu
+                    y={54}
                     x={0}
-                    var="user_box"
-                    mouseThrough={false}
-                    mouseEnabled={true}
-                >
-                    <Sprite texture="image/hall/avatar.png" />
-                    <Label
-                        y={9}
-                        x={42}
-                        width={163}
-                        var="nickname"
-                        text="游客"
-                        overflow="hidden"
-                        height={22}
-                        fontSize={22}
-                        color="#fff"
-                        align="center"
-                    />
-                </Box>
-                <CoinMenu y={54} x={219} visible={false} var="coin_menu" />
+                    var="coin_menu"
+                    visible={coinMenuVisible}
+                />
                 <Box
                     y={8}
-                    x={215}
+                    x={0}
                     width={271}
                     var="btn_coin_select"
                     height={56}
+                    onClick={toggleCoinMenuVisible}
                 >
                     <Button stateNum={1} skin="image/hall/btn_coin_type.png" />
                     <Sprite
@@ -105,7 +94,7 @@ export function Header(props: ComProps) {
                         height={31}
                     />
                 </Box>
-                <Box y={3} x={578}>
+                <Box y={3} x={300}>
                     <Button
                         y={-1}
                         x={0}
@@ -130,9 +119,6 @@ export function Header(props: ComProps) {
                         var="btn_get"
                         stateNum={1}
                         skin="image/hall/btn_get.png"
-                        onClick={() => {
-                            enterGame();
-                        }}
                     >
                         <Image
                             y={19}
@@ -178,21 +164,6 @@ export function Header(props: ComProps) {
                         stateNum={1}
                         skin="image/hall/btn_login.png"
                     />
-                </Box>
-                <FlagMenu
-                    y={63.5}
-                    x={1188}
-                    visible={flagMenuVisible}
-                    var="flag_menu"
-                />
-                <Box y={16} x={1207} var="flag_box" onClick={toggleFlagMenu}>
-                    <Button
-                        y={7}
-                        x={45}
-                        stateNum={1}
-                        skin="image/hall/btn_down.png"
-                    />
-                    <Image var="flag" skin="image/common/flag/flag_zh.png" />
                 </Box>
             </Box>
         </View>

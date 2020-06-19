@@ -12,6 +12,8 @@ export function CoinMenu(props: ComProps) {
                 right={0}
                 left={0}
                 bottom={0}
+                width={252}
+                height={356}
             />
             <Sprite
                 y={0}

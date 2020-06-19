@@ -9,8 +9,8 @@ import {
 import { View as LayaView } from 'laya/ui/View';
 import { Header } from './header';
 import { Loading } from 'view/loading';
-import { Laya } from 'Laya';
 import { Scene } from 'view/com/scene';
+import { onHallSocket } from 'ctrl/hallSocket';
 
 const res_list = [
     'image/hall/bg.png',
@@ -25,6 +25,10 @@ const res_list = [
 export const Hall = Loading(res_list, HallCom);
 
 function HallCom() {
+    useEffect(() => {
+        onHallSocket(this);
+    }, []);
+
     return (
         <Scene>
             <Sprite y={0} x={0} texture="image/hall/bg.png" />

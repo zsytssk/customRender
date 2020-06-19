@@ -32,12 +32,13 @@ export type FishData = {
     type: string;
     id: string;
     score: number;
+    currency: string;
 };
 /** 鱼的状态 */
 export enum FishStatus {
     Normal,
-    Freezed,
     QuickLeave,
+    Freezed,
     Dead,
 }
 export class FishModel extends ComponentManager {
@@ -59,9 +60,11 @@ export class FishModel extends ComponentManager {
     public visible = false;
     /** 鱼分 */
     public score: number;
+    /** 鱼分 */
     private game: GameModel;
     public event: EventCom;
     public body: BodyCom;
+    public currency: string;
     constructor(data: FishData, game: GameModel) {
         super();
 
@@ -69,9 +72,12 @@ export class FishModel extends ComponentManager {
         this.initCom(data);
     }
     private initCom(data: FishData) {
-        const { type, id, score } = data;
+        const { type, id, score, currency } = data;
 
-        setProps(this as FishModel, { type, id, score } as FishData);
+        setProps(
+            this as FishModel,
+            { type, id, score: score || 0, currency } as FishData,
+        );
         const sprite_info = getSpriteInfo('fish', type) as FishSpriteInfo;
         let horizon_turn = false;
         if (sprite_info.ani_type === 'horizon_turn') {
@@ -105,6 +111,7 @@ export class FishModel extends ComponentManager {
         if (is_complete) {
             return this.destroy();
         }
+        this.setVisible(visible);
         if (visible) {
             this.pos = pos;
             this.velocity = velocity;
@@ -115,7 +122,6 @@ export class FishModel extends ComponentManager {
                 velocity,
             } as MoveInfo);
         }
-        this.setVisible(visible);
     }; // tslint:disable-line: semicolon
     /** 被网住 */
     public setStatus(status: FishStatus) {

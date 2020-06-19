@@ -67,12 +67,12 @@ export class NetModel extends ComponentManager {
         }, 100);
     }
     public destroy() {
+        this.event.emit(ModelEvent.Destroy);
         this.pos = undefined;
         this.bullet_cost = undefined;
         this.skin = undefined;
         this.skin_level = undefined;
         this.show_cast = false;
-        this.event.emit(ModelEvent.Destroy);
         super.destroy();
     }
 }

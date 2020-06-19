@@ -1,9 +1,9 @@
-type AsyncFn = () => Promise<any>;
+type AsyncQueFn = () => Promise<any>;
 type AwaitQueMap = Map<
     string,
     {
         que: Array<{
-            async_fn: AsyncFn;
+            async_fn: AsyncQueFn;
             reject: (is_last: boolean) => void;
             resolve: (is_last: boolean) => void;
         }>;
@@ -11,7 +11,8 @@ type AwaitQueMap = Map<
     }
 >;
 const await_que_map: AwaitQueMap = new Map();
-export function asyncQue(name: string, async_fn: AsyncFn) {
+/** 将异步函数放到数组中, 一个执行完成 另一个继续执行 一直到结束 */
+export function asyncQue(name: string, async_fn: AsyncQueFn) {
     return new Promise((resolve, reject) => {
         let await_que = await_que_map.get(name);
         if (!await_que) {
@@ -33,7 +34,7 @@ export function asyncQue(name: string, async_fn: AsyncFn) {
     });
 }
 /** 清理异步函数队列 */
-export function stopAsyncQue(name: string) {
+export function clearAsyncQue(name: string) {
     const await_que = await_que_map.get(name);
     const { length } = await_que.que;
     if (!await_que) {
@@ -74,4 +75,69 @@ function putArrLast<T>(arr: T[], item: T) {
     } else {
         arr[arr.length - 1] = item;
     }
+}
+
+type AsyncOnlyFn<T> = () => Promise<T>;
+type AwaitOnlyMap = Map<string, AwaitOnlyItem>;
+type AwaitOnlyItem = {
+    wait: Promise<any>;
+    reject: (data: any) => void;
+    resolve: (error: any) => void;
+};
+const await_only_map: AwaitOnlyMap = new Map();
+
+/** 多次调用同一个 promise, 只会运行一次
+ * @param async_id 异步函数唯一标识
+ * @param async_fn 运行的异步函数
+ * @param temp 是否缓存, 默认 temp=false在 async_fn 结束之后就会清理
+ * 如果 temp=true, async_fn 结束之后 需要使用 {rejectAsyncOnly} 来清理缓存
+ */
+export function asyncOnly<T>(
+    async_id: string,
+    async_fn: AsyncOnlyFn<T>,
+    temp = false,
+): Promise<T> {
+    return new Promise((resolve, reject) => {
+        let await_item = await_only_map.get(async_id);
+        if (!await_item) {
+            let wait = async_fn();
+            if (!temp) {
+                wait = wait
+                    .then(data => {
+                        await_only_map.delete(async_id);
+                        return data;
+                    })
+                    .catch(error => {
+                        await_only_map.delete(async_id);
+                        throw error;
+                    });
+            }
+            await_item = {
+                wait,
+                reject,
+                resolve,
+            } as AwaitOnlyItem;
+            await_only_map.set(async_id, await_item);
+        }
+        await_item.wait
+            .then(data => {
+                resolve(data);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+/** 清理 asyncOnly */
+export function clearAsyncOnly(asyncId: string) {
+    const await_item = await_only_map.get(asyncId);
+    if (!await_item) {
+        return;
+    }
+    setTimeout(() => {
+        const { reject } = await_item;
+        await_only_map.delete(asyncId);
+        reject('Async Only be rejected');
+    });
 }

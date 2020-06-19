@@ -4,7 +4,6 @@ import {
     SkillCoreCom,
     SkillInfo,
     SkillActiveInfo,
-    SkillEvent,
     SkillStatus,
 } from './skillCoreCom';
 import { SkillModel } from './skillModel';
@@ -13,12 +12,14 @@ import { TimeoutCom } from 'comMan/timeoutCom';
 import { BulletGroup, BulletGroupEvent } from '../gun/bulletGroup';
 import { GunModel, GunStatus, GunEvent, AddBulletInfo } from '../gun/gunModel';
 import { FishEvent, FishModel } from 'model/game/fish/fishModel';
+import { log } from 'utils/log';
 
 export type LockFishActiveInfo = {
     user_id?: string;
     fish: string;
-    /** 是否是提示 */
-    is_tip?: boolean;
+    duration?: number;
+    /** 是否激活 */
+    needActive: boolean;
 } & SkillActiveInfo;
 
 export interface LockFishInitInfo extends SkillInfo {
@@ -57,12 +58,19 @@ export class LockFishModel extends ComponentManager implements SkillModel {
     }
     public init() {
         const { timeout, skill_core } = this;
-        const { lock_fish, lock_left } = this.init_info;
-        skill_core.init();
-        if (lock_fish) {
+        const { lock_fish, lock_left, ...other } = this.init_info;
+
+        if (lock_left) {
             timeout.createTimeout(() => {
-                this.active({ fish: lock_fish, used_time: lock_left });
+                this.active({
+                    ...other,
+                    fish: lock_fish,
+                    duration: lock_left + other.used_time,
+                    needActive: true,
+                });
             });
+        } else {
+            skill_core.init();
         }
         this.gun = this.skill_core.player.gun;
     }
@@ -80,32 +88,29 @@ export class LockFishModel extends ComponentManager implements SkillModel {
     public active(info: LockFishActiveInfo) {
         // 激活
         const { skill_core } = this;
-        const { fish, is_tip } = info;
+        const { fish, needActive } = info;
 
-        skill_core.active(info);
-        if (is_tip) {
-            skill_core.event.on(
-                SkillEvent.StatusChange,
-                (status: SkillStatus) => {
-                    if (status === SkillStatus.Disable) {
-                        this.unTrack();
-                        skill_core.event.offAllCaller(this);
-                    }
-                },
-                this,
-            );
-            return this.tipTrack();
+        console.warn(`test:>lockFish:>1:>`, info);
+        if (needActive) {
+            skill_core.active(info, status => {
+                if (status === SkillStatus.Disable) {
+                    this.unLock();
+                }
+            });
         }
+
         const fish_model = getFishById(fish);
         if (!fish_model) {
             return console.error(`cant find fish for eid=${fish}`);
         }
-        this.track(fish_model);
+        this.lock(fish_model);
     }
-    public tipTrack() {
+    public tipLock() {
         const { gun, skill_core } = this;
         const fish = getAimFish();
-        console.log('test:>tipTrack', fish, fish.destroyed);
+        if (fish) {
+            log('test:>tipLock', fish, fish.destroyed);
+        }
         skill_core.activeEvent({
             fish,
             is_tip: true,
@@ -117,10 +122,10 @@ export class LockFishModel extends ComponentManager implements SkillModel {
      * @param fish 追踪的鱼
      * @param is_tip 是否是提示
      */
-    private track(fish: FishModel) {
+    private lock(fish: FishModel) {
         const { gun, skill_core } = this;
-        this.unTrack();
-        this.bindTrackFish(fish);
+        this.unLock();
+        this.bindLockFish(fish);
         skill_core.activeEvent({
             fish,
             is_tip: false,
@@ -128,26 +133,26 @@ export class LockFishModel extends ComponentManager implements SkillModel {
         } as LockActiveData);
     }
     /** 监听锁定鱼事件 */
-    private bindTrackFish(fish: FishModel) {
+    private bindLockFish(fish: FishModel) {
         const { gun } = this;
         const { event: gun_event } = gun;
         const { event: fish_event } = fish;
 
         this.fish = fish;
-        gun.track_fish = fish;
-        this.onTrackMove();
-        fish_event.on(FishEvent.Move, this.onTrackMove, this);
+        gun.lock_fish = fish;
+        this.onLockMove();
+        fish_event.on(FishEvent.Move, this.onLockMove, this);
         fish_event.on(
             FishEvent.Destroy,
             () => {
-                this.unTrack();
+                this.unLock();
                 setTimeout(() => {
-                    this.tipTrack();
+                    this.tipLock();
                 });
             },
             this,
         );
-        gun.setStatus(GunStatus.TrackFish);
+        gun.setStatus(GunStatus.LockFish);
 
         gun.preAddBullet(gun.direction, true);
         gun_event.on(
@@ -157,25 +162,29 @@ export class LockFishModel extends ComponentManager implements SkillModel {
             },
             this,
         );
-        /** 收集 track fish 的子弹 在鱼销毁的时候需要还原
+        /** 收集 lock fish 的子弹 在鱼销毁的时候需要还原
          */
         gun_event.on(
             GunEvent.AddBullet,
             (info: AddBulletInfo) => {
-                if (info.track) {
+                if (info.lock) {
                     const { bullet_group } = info;
                     this.bullet_list.add(bullet_group);
                     /** 子弹销毁的时候需要冲列表中销毁... */
-                    bullet_group.event.on(BulletGroupEvent.Destroy, () => {
-                        this.bullet_list.delete(bullet_group);
-                    });
+                    bullet_group.event.on(
+                        BulletGroupEvent.Destroy,
+                        () => {
+                            this.bullet_list.delete(bullet_group);
+                        },
+                        this,
+                    );
                 }
             },
             this,
         );
     }
-    /** 监听track目标位置改变 */
-    private onTrackMove = () => {
+    /** 监听 lock 目标位置改变 */
+    private onLockMove = () => {
         const { gun, fish } = this;
         if (!fish.visible) {
             return;
@@ -184,7 +193,7 @@ export class LockFishModel extends ComponentManager implements SkillModel {
         const { x: gx, y: gy } = gun.pos;
         gun.setDirection(new SAT.Vector(x - gx, y - gy));
     }; // tslint:disable-line: semicolon
-    private unTrack = () => {
+    public unLock = () => {
         const { fish, gun, bullet_list } = this;
         const { player } = gun;
         if (!fish) {
@@ -204,7 +213,7 @@ export class LockFishModel extends ComponentManager implements SkillModel {
 
         gun.event.emit(GunLockFishEvent.StopLock);
         gun.setStatus(GunStatus.Normal);
-        gun.track_fish = undefined;
+        gun.lock_fish = undefined;
         gun.event.offAllCaller(this);
         fish.event.offAllCaller(this);
         this.fish = null;
@@ -212,5 +221,16 @@ export class LockFishModel extends ComponentManager implements SkillModel {
     public disable() {
         const { skill_core } = this;
         skill_core.disable();
+    }
+    public destroy() {
+        const { fish } = this;
+        fish?.event?.offAllCaller(this);
+        this.unLock();
+
+        this.fish = undefined;
+        this.skill_core = undefined;
+        this.gun = undefined;
+
+        super.destroy();
     }
 }

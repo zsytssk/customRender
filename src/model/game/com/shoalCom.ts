@@ -4,7 +4,7 @@ import { Config } from 'data/config';
 import { calcNormalLen } from 'utils/displace/displaceUtil';
 import { Line } from 'utils/displace/line';
 import { CurveInfo, Displace } from 'utils/displace/displace';
-import { MoveDisplaceCom } from './moveCom/moveDisplaceCom';
+import { DisplaceMoveCom } from './moveCom/displaceMoveCom';
 import { GameModel } from '../gameModel';
 
 export const ShoalEvent = {
@@ -72,7 +72,7 @@ export function quickLeaveFish(fish: FishModel, reverse) {
     ] as CurveInfo[];
     const displace = new Displace(ClearFishTime, 0, curves, false);
 
-    const move_com = new MoveDisplaceCom(displace);
+    const move_com = new DisplaceMoveCom(displace);
     fish.setMoveCom(move_com);
     fish.init();
 }

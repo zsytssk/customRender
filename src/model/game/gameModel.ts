@@ -12,6 +12,7 @@ import {
     playerCaptureFish,
 } from './fish/fishModelUtils';
 import { ModelEvent } from 'model/modelEvent';
+import { window } from 'rxjs/operators';
 
 export const GameEvent = {
     /** 添加鱼 */
@@ -50,9 +51,13 @@ export class GameModel extends ComponentManager {
         if (!group) {
             /** 创建单个鱼 */
             const fish = createFish(fish_info, this);
+            if (!fish) {
+                return;
+            }
             this.fish_list.add(fish);
             this.event.emit(GameEvent.AddFish, fish);
             fish.init();
+            return fish;
         } else {
             /** 创建鱼组 */
             const fish_list = createFishGroup(fish_info, this);
@@ -61,6 +66,8 @@ export class GameModel extends ComponentManager {
                 this.event.emit(GameEvent.AddFish, fish);
                 fish.init();
             }
+
+            return fish_list;
         }
     }
     public removeFish(fish: FishModel) {
@@ -79,10 +86,22 @@ export class GameModel extends ComponentManager {
         return [...fish_list];
     }
     public captureFish(info: HitRep) {
-        const player = this.getPlayerById(info.userId);
-        const fish = this.getFishById(info.eid);
-        if (!fish || !player) {
-            console.error('Game:>captureFish:> cant find fish or player!!');
+        const { userId, eid, backAmount } = info;
+        const player = this.getPlayerById(userId);
+        const fish = this.getFishById(eid);
+
+        if (!player) {
+            console.error(`Game:>captureFish:> cant find player for ${userId}`);
+            return;
+        }
+        if (backAmount) {
+            player.updateInfo({
+                bullet_num: player.bullet_num + backAmount,
+            });
+        }
+
+        if (!fish) {
+            console.error(`Game:>captureFish:> cant find fish for ${eid}`);
             return;
         }
         playerCaptureFish(player, fish, info);
@@ -104,6 +123,17 @@ export class GameModel extends ComponentManager {
         player.init();
         return player;
     }
+    public getCurPlayer() {
+        const { player_list } = this;
+        for (const player of player_list) {
+            if (player.is_cur_player) {
+                return player;
+            }
+        }
+    }
+    public getPlayers() {
+        return this.player_list;
+    }
     public getPlayerById(id: string) {
         const { player_list } = this;
         for (const player of player_list) {
@@ -118,30 +148,57 @@ export class GameModel extends ComponentManager {
     }
     public activeSkill(skill: SkillMap, data: { user_id: string }) {
         const player = this.getPlayerById(data.user_id);
+        if (!player) {
+            console.error(
+                `Game:>activeSkill:> cant find player:>${data.user_id}`,
+            );
+            return;
+        }
         player.activeSkill(skill, data);
+    }
+    public disableSkill(skill: SkillMap, user_id: string) {
+        const player = this.getPlayerById(user_id);
+        if (!player) {
+            console.error(`Game:>resetSkill:> cant find player:>${user_id}`);
+            return;
+        }
+        player.disableSkill(skill);
     }
     public resetSkill(skill: SkillMap, user_id: string) {
         const player = this.getPlayerById(user_id);
+        if (!player) {
+            console.error(`Game:>resetSkill:> cant find player:>${user_id}`);
+            return;
+        }
         player.resetSkill(skill);
     }
     public shoot(data: ShootRep) {
         const player = this.getPlayerById(data.userId);
-        player.gun.addBullet(data.direction);
+        if (!player) {
+            console.error(
+                `Game:>resetSkill:> cant find player:>${data.userId}`,
+            );
+            return;
+        }
+        player.gun.addBullet(data.direction, !player.is_cur_player);
     }
     public shoalComingTip(reverse: boolean) {
         this.shoal_com.preAddShoal(reverse);
     }
-    public destroy() {
+    public clear() {
         const { fish_list, player_list } = this;
-        this.event.emit(GameEvent.Destroy);
-        for (const fish of fish_list) {
-            fish.destroy();
-        }
         for (const player of player_list) {
             player.destroy();
         }
+        for (const fish of fish_list) {
+            fish.destroy();
+        }
         this.fish_list.clear();
         this.player_list.clear();
+    }
+    public destroy() {
+        this.event.emit(GameEvent.Destroy);
+        this.clear();
         super.destroy();
     }
 }

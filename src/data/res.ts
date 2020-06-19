@@ -2,29 +2,20 @@ import { SPRITE } from './sprite';
 import { getGunSkinMap } from 'utils/dataUtil';
 import { AudioRes } from './audioRes';
 import { Loader } from 'laya/net/Loader';
+import { AlertRes } from 'view/pop/alert';
 
 export const res = {
     font: [],
     audio: [],
+    common: [],
     game: [
         {
             url: `res/image/game.png`,
             type: Loader.IMAGE,
         },
-        {
-            url: `res/image/game.json`,
-            type: Loader.JSON,
-        },
-        {
-            url: `image/game/bg_normal.sk`,
-            type: Loader.BUFFER,
-        },
-        {
-            url: `image/game/bg_normal.png`,
-            type: Loader.IMAGE,
-        },
     ],
 };
+
 for (const top_type in SPRITE) {
     if (!SPRITE.hasOwnProperty(top_type)) {
         continue;
@@ -95,6 +86,7 @@ for (let i = 1; i <= 3; i++) {
 export const font_list = [
     'font/score_num',
     'font/numYellow40',
+    'font/lottery',
     'font/numWhite40',
 ];
 for (const font of font_list) {
@@ -118,4 +110,11 @@ for (const key in AudioRes) {
         url,
         type: Loader.SOUND,
     });
+}
+for (const key in AlertRes) {
+    if (!AlertRes.hasOwnProperty(key)) {
+        continue;
+    }
+    const url = AlertRes[key];
+    res.common.push(url);
 }

@@ -7,8 +7,8 @@ const ENV = JSON.stringify(findParam('ENV'));
 const common_config = {
     entry: ['./test/test.ts', './src/main.tsx'],
     output: {
-        path: path.resolve(__dirname, 'bin'),
-        filename: 'app.js',
+        filename: 'js/bundle.js',
+        path: path.join(__dirname, 'bin'),
     },
     module: {
         rules: [
@@ -49,6 +49,9 @@ const dev_config = {
         host: '0.0.0.0',
         contentBase: path.join(__dirname, 'bin'),
         disableHostCheck: true,
+        port: '3000',
+        open: true,
+        openPage: 'http://localhost:3000',
     },
 };
 

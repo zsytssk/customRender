@@ -3,7 +3,7 @@ import { clearTick, createTick } from '../../../../utils/tick';
 import { Config } from 'data/config';
 
 /** 速度 移动控制 */
-export class MoveVelocityCom implements MoveCom {
+export class VelocityMoveCom implements MoveCom {
     private pos: Point;
     private velocity: SAT.Vector;
     private update_fn: MoveUpdateFn;
@@ -43,31 +43,36 @@ export class MoveVelocityCom implements MoveCom {
         this.update_fn = update_fn;
     }
     public detectHitWall() {
-        const { PoolHeight: pool_height, PoolWidth: pool_width } = Config;
+        const {
+            PoolHeight: pool_height,
+            PoolWidth: pool_width,
+            BulletZoneWidth: zone_width,
+        } = Config;
+
         const velocity = this.velocity;
         const pos = this.pos;
         let { x, y } = velocity;
-        // 如果x<0 || x>1334 velocity x 改变方向
-        if (pos.x > pool_width || pos.x < 0) {
-            if (pos.x > pool_width) {
-                pos.x = pool_width - (pos.x - pool_width);
-                x = -Math.abs(velocity.x);
-            }
-            if (pos.x < 0) {
-                pos.x = -pos.x;
-                x = Math.abs(velocity.x);
-            }
+
+        const start = (pool_width - zone_width) / 2;
+        const end = start + zone_width;
+        // 如果 碰到改变子弹的区域 方向 改变方向
+        // x 方向
+        if (pos.x > end) {
+            pos.x = end - (pos.x - end);
+            x = -Math.abs(velocity.x);
         }
-        // 如果y<0 || y>750 velocity y 改变方向
-        if (pos.y > pool_height || pos.y < 0) {
-            if (pos.y > pool_height) {
-                pos.y = pool_height - (pos.y - pool_height);
-                y = -Math.abs(velocity.y);
-            }
-            if (pos.y < 0) {
-                pos.y = -pos.y;
-                y = Math.abs(velocity.y);
-            }
+        if (pos.x < start) {
+            pos.x = start + (start - pos.x);
+            x = Math.abs(velocity.x);
+        }
+        // y 方向
+        if (pos.y > pool_height) {
+            pos.y = pool_height - (pos.y - pool_height);
+            y = -Math.abs(velocity.y);
+        }
+        if (pos.y < 0) {
+            pos.y = -pos.y;
+            y = Math.abs(velocity.y);
         }
         this.velocity = new SAT.Vector(x, y);
         this.pos = pos;

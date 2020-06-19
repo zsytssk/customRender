@@ -4,11 +4,15 @@ import { SpriteType, SpriteInfo } from 'data/sprite';
 import { SPRITE } from 'data/sprite';
 import { SHAPE } from 'data/shape';
 import { vectorToAngle } from './mathUtils';
+import {
+    createSkeleton,
+    createAnimation,
+    createImg,
+} from 'honor/utils/createSkeleton';
 import { GunInfo } from 'data/gun';
 import { FishModel } from 'model/game/fish/fishModel';
-import { Sprite } from 'laya/display/Sprite';
 import { Box } from 'laya/ui/Box';
-import { createSkeleton, createAnimation, createImg } from './createSkeleton';
+import { Sprite } from 'laya/display/Sprite';
 
 /** 获取皮肤对应的id */
 export function getGunSkinMap(skin: string, level: string) {
@@ -62,6 +66,10 @@ export function getShapeInfo(type: SpriteType, level?: number | string) {
     }
     return shape_info;
 }
+/** 获取形状信息 */
+export function getShadowInfo(type: string) {
+    return Coordinates.shadowPos[type] || Coordinates.shadowPos.default;
+}
 
 /**
  * 获取子弹发射的开始位置, 返回的子弹发射开始位置数组, 多个表示多个子弹同时发射
@@ -75,6 +83,7 @@ export function getBulletStartPos(
 ): Point[] {
     const offsets = Coordinates.bullet_offset[skin];
     const result: Point[] = [];
+    const offset_h = direction.clone().normalize().scale(30, 30);
     const offset_v = direction
         .clone()
         .normalize()
@@ -108,8 +117,8 @@ export function getBulletStartPos(
             angle = vectorToAngle(direction) - Math.PI / 2;
         }
         vector = vector.rotate(angle);
-        x = gun_global_pos.x + vector.x + nv.x;
-        y = gun_global_pos.y + vector.y + nv.y;
+        x = gun_global_pos.x + vector.x + nv.x + offset_h.x;
+        y = gun_global_pos.y + vector.y + nv.y + offset_h.y;
         result.push({ x, y });
     }
     return result;

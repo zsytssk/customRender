@@ -5,6 +5,14 @@
 -   @todo 能上生产的动画。。。
     -   test -> tpl -> 正式项目
 
+## save
+
+-   @ques 能不能脱离 ctrl 层。。。
+
+-   @todo eslint ts
+
+*   干净的 gameConfig
+
 ## url
 
 -   https://gist.github.com/search?o=desc&q=finalizeInitialChildren&s=updated

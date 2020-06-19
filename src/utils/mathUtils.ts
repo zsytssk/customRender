@@ -26,6 +26,7 @@ export function vectorToDegree(vector: Point) {
     const degree = angleToDegree(angle);
     return degree;
 }
+
 /** 角度转化为弧度 */
 export function degreeToAngle(degrees: number) {
     return (degrees * Math.PI) / 180;

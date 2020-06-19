@@ -15,6 +15,8 @@ export enum SkillStatus {
     /** 激活状态 */
     Active = 'active',
 }
+
+export type ActiveStepFun = (status: SkillStatus) => void;
 /** 技能属性 */
 export type SkillInfo = {
     item_id?: string;
@@ -27,8 +29,6 @@ export type SkillInfo = {
     used_time?: number;
     player?: PlayerModel;
 };
-
-export type ActiveStepFun = (status: SkillStatus) => void;
 
 /** 技能属性 */
 export type SkillActiveInfo = {
@@ -43,6 +43,8 @@ export const SkillEvent = {
     StatusChange: 'status_change',
     UpdateRadio: 'update_radio',
     ActiveSkill: 'active_skill',
+    DisableSkill: 'disable_skill',
+    Destroy: 'destroy',
 };
 export class SkillCoreCom extends ComponentManager {
     /** 技能对应的id */
@@ -53,7 +55,7 @@ export class SkillCoreCom extends ComponentManager {
     public cool_time: number = 0;
     /** 冷却已经使用的时间 */
     public used_time: number = 0;
-    /** count index */
+    /** 冷却 count index */
     public count_index: number;
     /** 技能的状态 */
     public status = SkillStatus.Normal;
@@ -82,8 +84,8 @@ export class SkillCoreCom extends ComponentManager {
         this.event.emit(SkillEvent.UpdateInfo);
     }
     /** 更新数量 */
-    public addNum(num: number) {
-        this.num += num;
+    public setNum(num: number) {
+        this.num = num;
         this.event.emit(SkillEvent.UpdateInfo);
     }
     /** 设置技能的状态 */
@@ -103,22 +105,33 @@ export class SkillCoreCom extends ComponentManager {
             return false;
         }
         const { cool_time, event } = this;
-        const { used_time, duration } = info;
+        const { used_time, num } = info;
+
+        const duration = info.duration || used_time;
         /** 倒计时的时间间隔 */
         const count_delta = 0.05;
         const cool_remain_time = cool_time - used_time;
-        const duration_remain_time = duration - used_time;
+        let duration_remain_time = duration - used_time;
 
+        /**
+         * 如果 duration === cool_time, 有时候 duration > cool_time;
+         * 这会导致disable无法执行
+         */
+        if (duration_remain_time > cool_remain_time) {
+            duration_remain_time = cool_remain_time;
+        }
+
+        this.setNum(num);
         this.setStatus(SkillStatus.Active);
         this.count_index = startCount(
             cool_remain_time,
             count_delta,
             (rate: number) => {
-                const cool_radio_time = rate * cool_remain_time;
+                const cool_used_time = (1 - rate) * cool_remain_time;
                 const cool_radio = rate * (cool_remain_time / cool_time);
                 event.emit(SkillEvent.UpdateRadio, cool_radio);
                 if (
-                    cool_radio_time <= duration_remain_time &&
+                    cool_used_time >= duration_remain_time &&
                     this.status !== SkillStatus.Disable
                 ) {
                     this.disable();
@@ -133,6 +146,10 @@ export class SkillCoreCom extends ComponentManager {
     }
     /** 重置 */
     public reset() {
+        if (this.status === SkillStatus.Active) {
+            return;
+        }
+        console.warn(`SkillCoreCom:>reset:>`);
         this.setStatus(SkillStatus.Normal);
         clearCount(this.count_index);
     }
@@ -142,7 +159,9 @@ export class SkillCoreCom extends ComponentManager {
     }
     /** 清除 */
     public destroy() {
+        this.event.emit(SkillEvent.Destroy);
         this.setStatus(SkillStatus.Normal);
         clearCount(this.count_index);
+        super.destroy();
     }
 }

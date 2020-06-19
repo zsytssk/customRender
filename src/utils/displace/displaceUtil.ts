@@ -1,15 +1,15 @@
 import Bezier from 'bezier-js';
 import { PATH } from 'data/path';
 import { FishSpriteInfo } from 'data/sprite';
+import GameConfig from 'GameConfig';
 import SAT from 'sat';
 import { getSpriteInfo } from 'utils/dataUtil';
 import { Curve, CurveInfo, Displace } from './displace';
 import { FUNCTION } from './function';
 import { Line } from './line';
-import { Config } from 'data/config';
 
-export const stage_width = Config.width;
-export const stage_height = Config.height;
+export const stage_width = GameConfig.width;
+export const stage_height = GameConfig.height;
 
 /** 寻找屏幕中一个点的朝着一个方向的直线 离开屏幕的点 */
 export function getLineOutPoint(point: Point, derivative: SAT.Vector) {
@@ -24,7 +24,7 @@ export function getLineOutPoint(point: Point, derivative: SAT.Vector) {
     dx1 = x1 - point.x;
     /** 如果两个 */
     if (dx1 * derivative.x < 0) {
-        x1 = stage_width;
+        x1 = GameConfig.width;
         dx1 = x1 - point.x;
     }
     dy1 = (dx1 * derivative.y) / derivative.x;
@@ -38,7 +38,7 @@ export function getLineOutPoint(point: Point, derivative: SAT.Vector) {
     let dy2: number;
     dy2 = y2 - point.y;
     if (dy2 * derivative.y < 0) {
-        y2 = stage_height;
+        y2 = GameConfig.height;
         dy2 = y2 - point.y;
     }
     dx2 = (dy2 * derivative.x) / derivative.y;
@@ -366,6 +366,10 @@ export function createFishDisplace(data: ServerFishInfo) {
                 path_arr = PATH[pathNo];
             } else if (pathList) {
                 path_arr = pathList;
+            }
+            if (!path_arr) {
+                console.error(`cant find path for no:${pathNo}`);
+                return;
             }
             curve_list = createCurvesByPath(path_arr, fishId);
             break;

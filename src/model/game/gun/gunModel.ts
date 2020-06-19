@@ -4,11 +4,11 @@ import { TimeoutCom } from 'comMan/timeoutCom';
 import { Config } from 'data/config';
 import * as SAT from 'sat';
 import { getBulletStartPos, getGunLevelSkinInfo } from 'utils/dataUtil';
-import { GunAutoLaunchCom } from '../com/gunAutoLaunchCom';
+import { GunAutoShootCom } from '../com/gunAutoShootCom';
 import { FishModel } from '../fish/fishModel';
 import { PlayerModel } from '../playerModel';
 import { BulletGroup, BulletGroupInfo } from './bulletGroup';
-import { TrackTarget } from '../com/moveCom/moveTrackCom';
+import { LockTarget } from '../com/moveCom/lockMoveCom';
 
 export const GunEvent = {
     /** 通知ctrl添加子弹 -> 发送给服务端... */
@@ -25,6 +25,8 @@ export const GunEvent = {
     CastFish: 'cast_fish',
     /** 等级修改 */
     LevelChange: 'level_change',
+    /** 自动开炮状态 */
+    AutoShoot: 'auto_shoot',
     /** 子弹数目不够 */
     NotEnoughBulletNum: 'not_enough_bullet_num',
 };
@@ -40,13 +42,13 @@ export type LevelInfo = {
 export type AddBulletInfo = {
     bullet_group: BulletGroup;
     velocity: SAT.Vector;
-    track: TrackTarget;
+    lock: LockTarget;
 };
 
 export enum GunStatus {
     Normal,
-    AutoLaunch,
-    TrackFish,
+    AutoShoot,
+    LockFish,
 }
 /** 炮台数据类 */
 export class GunModel extends ComponentManager {
@@ -67,13 +69,13 @@ export class GunModel extends ComponentManager {
     /** 所属的玩家 */
     public player: PlayerModel;
     /** 追踪的鱼 */
-    public track_fish: FishModel;
+    public lock_fish: FishModel;
     /** 炮台的状态 */
     public status = GunStatus.Normal;
     /** 是否加速  */
     public is_speedup = false;
     /** 是否加速  */
-    public launch_space = Config.LaunchSpace;
+    public shoot_space = Config.ShootTimeSpace;
     /** 枪是否打开, 用来控制发射子弹的间隔 */
     private is_on = true;
     /** 枪是狂暴 */
@@ -118,17 +120,18 @@ export class GunModel extends ComponentManager {
         const timeout = this.getCom(TimeoutCom);
         timeout.createTimeout(() => {
             this.event.emit(GunEvent.DirectionChange, direction);
-        }, this.launch_space);
+        }, this.shoot_space);
     }
-    public changeSkin(skin: string) {
-        this.skin = skin;
-        this.setBulletCost(this.bullet_cost);
+    public changeSkin(skinId: string) {
+        this.skin = skinId;
+        this.setBulletCost(this.bullet_cost, true);
+        // this.event.emit(GunEvent.ChangeSkin, skinId);
     }
-    public setBulletCost(bullet_cost: number) {
-        if (bullet_cost === this.bullet_cost) {
+    public setBulletCost(bullet_cost: number, force: boolean = false) {
+        if (bullet_cost === this.bullet_cost && !force) {
             return;
         }
-        const { skin, timeout, event, launch_space } = this;
+        const { skin, timeout, event, shoot_space } = this;
         const { level_skin, hole_num } = getGunLevelSkinInfo(bullet_cost);
         this.bullet_cost = bullet_cost;
         this.skin_level = level_skin;
@@ -141,7 +144,7 @@ export class GunModel extends ComponentManager {
                 level_skin,
                 hole_num,
             } as LevelInfo);
-        }, launch_space);
+        }, shoot_space);
     }
     public setStatus(status: GunStatus) {
         if (status === this.status) {
@@ -158,42 +161,38 @@ export class GunModel extends ComponentManager {
         event.emit(GunEvent.SpeedUpStatus, is_speedup);
         if (is_speedup === true) {
             /** 开启 */
-            this.launch_space = Config.LaunchSpace / 2;
+            this.shoot_space = Config.ShootTimeSpace / 2;
         } else {
             /** 禁用 */
-            this.launch_space = Config.LaunchSpace;
+            this.shoot_space = Config.ShootTimeSpace;
         }
     }
     /** 自动发射的处理 */
-    public get autoLaunch() {
-        let auto_launch = this.getCom(GunAutoLaunchCom);
-        if (!auto_launch) {
-            auto_launch = new GunAutoLaunchCom(this);
-            this.addCom(auto_launch);
+    public get autoShoot() {
+        let auto_shoot = this.getCom(GunAutoShootCom);
+        if (!auto_shoot) {
+            auto_shoot = new GunAutoShootCom(this);
+            this.addCom(auto_shoot);
         }
-        return auto_launch;
+        return auto_shoot;
     }
     public preAddBullet(velocity: SAT.Vector, force = false) {
-        const {
-            status,
-            is_on,
-            event,
-            launch_space,
-            player,
-            bullet_cost,
-        } = this;
+        const { status, is_on, event, shoot_space, player, bullet_cost } = this;
 
-        if (player.bullet_num - bullet_cost < 0) {
-            event.emit(GunEvent.NotEnoughBulletNum);
-            return;
+        /** 当前用户的特殊处理 */
+        if (player.is_cur_player) {
+            if (player.bullet_num - bullet_cost < 0) {
+                event.emit(GunEvent.NotEnoughBulletNum);
+                return;
+            }
         }
-        if (!force && status === GunStatus.TrackFish) {
+        if (!force && status === GunStatus.LockFish) {
             return;
         }
         velocity = velocity.clone().normalize();
         this.setDirection(velocity);
 
-        if (!force && status === GunStatus.AutoLaunch) {
+        if (!force && status === GunStatus.AutoShoot) {
             return;
         }
 
@@ -208,14 +207,15 @@ export class GunModel extends ComponentManager {
         timeout.createTimeout(() => {
             this.is_on = true;
             event.emit(GunEvent.SwitchOn);
-        }, launch_space);
+        }, shoot_space);
     }
-    public addBullet(direction: Point) {
+    /** 为了防止网络延迟导致炮台抖动, 本人的炮台角度 不跟随服务端 */
+    public addBullet(direction: Point, syncDirec = true) {
         const {
             bullet_cost,
             skin,
             skin_level: level_skin,
-            track_fish: track,
+            lock_fish: lock,
             player,
             event,
             bullet_list,
@@ -223,7 +223,9 @@ export class GunModel extends ComponentManager {
         const { x, y } = direction;
 
         const velocity = new SAT.Vector(x, y).normalize();
-        this.setDirection(velocity);
+        if (syncDirec) {
+            this.setDirection(velocity);
+        }
         const bullets_pos = getBulletStartPos(
             player.server_index,
             velocity.clone(),
@@ -232,14 +234,14 @@ export class GunModel extends ComponentManager {
         const info: BulletGroupInfo = {
             bullets_pos,
             velocity,
-            track,
+            lock,
         };
         const bullet_group = new BulletGroup(info, this);
         bullet_list.add(bullet_group);
         event.emit(GunEvent.AddBullet, {
             bullet_group,
             velocity,
-            track,
+            lock,
         } as AddBulletInfo);
         bullet_group.init();
 
@@ -258,7 +260,7 @@ export class GunModel extends ComponentManager {
             bullet.destroy();
         }
         this.player = undefined;
-        this.track_fish = undefined;
+        this.lock_fish = undefined;
         this.setStatus(GunStatus.Normal);
         this.toggleSpeedUp(false);
         this.bullet_list.clear();

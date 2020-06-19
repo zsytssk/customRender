@@ -4,6 +4,13 @@ export * from './layaCom';
 
 const reconcilerInstance = Reconciler(HostConfig as any);
 
+reconcilerInstance.injectIntoDevTools({
+    bundleType: process.env.NODE_ENV !== 'production' ? 1 : 0,
+    version: '16.13.1',
+    rendererPackageName: 'react-laya',
+    findFiberByHostInstance: () => null,
+});
+
 export const CustomRenderer = {
     render(element, renderDom?, callback?) {
         // element: This is the react element for App component

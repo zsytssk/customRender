@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script src="./app.js"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/javascript">
+            function loadLib(url) {
+                var script = document.createElement('script');
+                script.async = false;
+                script.src = url;
+                document.body.appendChild(script);
+            }
+
+            var CDN_VERSION = '20201606204045';
+        </script>
+        <script src="./bitgame/paladin.min.js"></script>
+        <script src="./index.js"></script>
+    </body>
 </html>

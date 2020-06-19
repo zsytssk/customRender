@@ -5,7 +5,7 @@ export const FishBombEvent = {
 };
 export type FishBombInfo = {
     pos: Point;
-    fish_list?: string[];
+    fish_list?: FishModel[];
     need_emit?: boolean;
 };
 export class FishBombCom {
@@ -22,7 +22,7 @@ export class FishBombCom {
         } as FishBombInfo;
         if (need_emit) {
             data.fish_list = getBeBombFish(pos).filter(item => {
-                return item !== id;
+                return item.id !== id;
             });
         }
         fish.event.emit(FishBombEvent.FishBomb, data);

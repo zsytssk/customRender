@@ -8,8 +8,32 @@ export const ServerName = {
 
 /** socket 错误码 */
 export enum ServerErrCode {
+    /** token过期 */
     TokenExpire = 1002,
+    /** 异地登陆 */
+    OtherLogin = 1003,
+    /** 已经在房间中 */
+    AlreadyInRoom = 109,
+    /** 余额不足 */
+    NoMoney = 101,
+    /** 重新带入 */
+    ReExchange = 112,
+    /** 需要登陆 */
+    NeedLogin = 114,
+    /** TrialTime - hit */
+    TrialTimeGame = 117,
+    /** TrialNotBullet */
+    TrialNotBullet = 116,
+    /** 大厅 room in */
+    TrialTimeHall = 507,
+    /** 网络异常 */
+    NetError = 511,
 }
+
+export type ErrorData = {
+    code: number;
+    error: string;
+};
 
 /** 服务器端的接口 */
 export const ServerEvent = {
@@ -38,9 +62,13 @@ export const ServerEvent = {
     UseBomb: 'useBomb',
     FishBomb: 'fishBomb',
     PowerUp: 'powerUp',
+    autoShoot: 'autoShoot',
     SetRobotReport: 'setRobotReport',
     UseFreeze: 'useFreeze',
     FreezeOver: 'freezeOver',
+    ExchangeBullet: 'exchangeBullet',
+    GetItemList: 'getItemList',
+    GetBulletList: 'getBulletList',
 
     /** 其他部分 */
     ErrCode: 'conn::error',
@@ -50,6 +78,7 @@ export const ServerEvent = {
     LotteryList: 'lotteryList',
     ExchangeList: 'exchangeList',
     TicketExchange: 'ticketExchange',
+    NeedEmitUser: 'needEmitUser',
     ShopList: 'shopList',
     UseSkin: 'useSkin',
     Buy: 'buy',

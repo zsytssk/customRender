@@ -9,7 +9,7 @@ export type ProgressUI = Sprite & {
     progress_bar: ProgressBar;
 };
 /** 控制进度的ctrl */
-export default class ProgressCtrl {
+export default class LayaProgressCtrl {
     /** 控制的ui */
     private view: ProgressUI;
     /** 改变progress的执行函数 */
@@ -23,13 +23,21 @@ export default class ProgressCtrl {
     private initEvent() {
         const { view } = this;
         const { progress_btn } = view;
-        const { CLICK, MOUSE_DOWN, MOUSE_MOVE, MOUSE_OVER, MOUSE_OUT } = Event;
+        const {
+            CLICK,
+            MOUSE_DOWN,
+            MOUSE_MOVE,
+            MOUSE_OVER,
+            MOUSE_OUT,
+            MOUSE_UP,
+        } = Event;
 
         view.on(CLICK, this, this.onClick);
         progress_btn.on(MOUSE_DOWN, this, () => {
             Laya.stage.on(MOUSE_MOVE, this, this.onMouseMove);
             Laya.stage.on(MOUSE_OVER, this, this.onMouseOut);
             Laya.stage.on(MOUSE_OUT, this, this.onMouseOut);
+            Laya.stage.on(MOUSE_UP, this, this.onMouseOut);
         });
     }
     private onClick(e: Event) {
@@ -40,6 +48,7 @@ export default class ProgressCtrl {
         const radio = x / width;
         progress_bar.value = radio;
         progress_btn.x = x;
+        this.setProgress(radio);
     }
     private onMouseMove(e: Event) {
         const { view } = this;
@@ -70,6 +79,9 @@ export default class ProgressCtrl {
         this.radio = radio;
         progress_bar.value = radio;
         progress_btn.x = radio * width;
+        if (radio < 0.1) {
+            radio = 0;
+        }
         this.on_progress(radio);
     }
     public destroy() {

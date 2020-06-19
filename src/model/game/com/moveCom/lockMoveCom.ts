@@ -1,14 +1,14 @@
 import * as SAT from 'sat';
 import { clearTick, createTick } from 'utils/tick';
 
-export interface TrackTarget {
+export interface LockTarget {
     pos: Point;
 }
-export type OnHit = (target: TrackTarget) => void;
+export type OnHit = (target: LockTarget) => void;
 
-/** 追踪目标 移动控制 */
-export class MoveTrackCom implements MoveCom {
-    private target: TrackTarget;
+/** 锁定 移动控制 */
+export class LockMoveCom implements MoveCom {
+    private target: LockTarget;
     private pos: Point;
     /** 初始位置, 为了计算追踪子弹有没有击中目标 */
     private start_pos: Point;
@@ -22,11 +22,11 @@ export class MoveTrackCom implements MoveCom {
     constructor(
         pos: Point,
         velocity: SAT.Vector,
-        target: TrackTarget,
+        target: LockTarget,
         on_hit: OnHit,
     ) {
         this.target = target;
-        this.pos = pos;
+        this.pos = { ...pos };
         this.start_pos = { ...pos };
         this.velocity_size = velocity.len();
         this.on_hit = on_hit;
@@ -63,23 +63,23 @@ export class MoveTrackCom implements MoveCom {
         pos.y += velocity.y * t;
 
         if (this.detectOnHit()) {
-            this.update_fn({ pos: this.pos, velocity });
+            this.update_fn({ pos: { ...target.pos }, velocity });
             this.on_hit(target);
         } else {
-            this.update_fn({ pos: this.pos, velocity });
+            this.update_fn({ pos: { ...this.pos }, velocity });
         }
     }; //tslint:disable-line
     private detectOnHit() {
         const { pos, start_pos, target } = this;
-        const { pos: track_pos } = target;
+        const { pos: lock_pos } = target;
 
         const vector_start = new SAT.Vector(
-            track_pos.x - start_pos.x,
-            track_pos.y - start_pos.y,
+            lock_pos.x - start_pos.x,
+            lock_pos.y - start_pos.y,
         ).normalize();
         const vector_now = new SAT.Vector(
-            track_pos.x - pos.x,
-            track_pos.y - pos.y,
+            lock_pos.x - pos.x,
+            lock_pos.y - pos.y,
         ).normalize();
 
         const dot_start_now = vector_now.dot(vector_start);
@@ -87,7 +87,7 @@ export class MoveTrackCom implements MoveCom {
         if (dot_start_now > 0) {
             return false;
         }
-        this.pos = track_pos;
+        this.pos = lock_pos;
         return true;
     }
     public destroy() {

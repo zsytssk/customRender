@@ -2,7 +2,7 @@ import { ComponentManager } from 'comMan/component';
 import { GunEvent, GunModel, GunStatus } from 'model/game/gun/gunModel';
 
 /** 自动攻击 */
-export class GunAutoLaunchCom extends ComponentManager {
+export class GunAutoShootCom extends ComponentManager {
     private gun: GunModel;
     constructor(gun: GunModel) {
         super();
@@ -19,14 +19,16 @@ export class GunAutoLaunchCom extends ComponentManager {
             },
             this,
         );
-        gun.setStatus(GunStatus.AutoLaunch);
+        gun.setStatus(GunStatus.AutoShoot);
         gun.preAddBullet(gun.direction, true);
+        gun.event.emit(GunEvent.AutoShoot, true);
     }
     public clear() {
         const { gun } = this;
         const { event } = gun;
         gun.setStatus(GunStatus.Normal);
         event.offAllCaller(this);
+        gun.event.emit(GunEvent.AutoShoot, false);
     }
     public destroy() {
         this.clear();

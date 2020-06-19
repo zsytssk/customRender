@@ -2,11 +2,13 @@ import { AppModel } from './appModel';
 import { BodyCom } from './game/com/bodyCom';
 import { detectCollision } from './game/com/bodyComUtil';
 import { FishModel } from './game/fish/fishModel';
+import { Laya } from 'Laya';
+import { Config } from 'data/config';
 
 type ModelState = {
     app: AppModel;
 };
-export const modelState = {} as ModelState;
+export let modelState = {} as ModelState;
 /** 获取当前用户信息 */
 export function getUserInfo() {
     return modelState.app.user_info;
@@ -19,9 +21,9 @@ export function getCurUserId() {
 export function isCurUser(id: string) {
     return id === modelState.app.user_info.user_id;
 }
-/** 获取gameModel */
-export function getGameModel() {
-    return modelState.app.game;
+/** 获取鱼 */
+export function getCurPlayer() {
+    return modelState.app.game.getCurPlayer();
 }
 /** 获取鱼 */
 export function getPlayerById(id: string) {
@@ -39,16 +41,27 @@ export function getFishById(id: string) {
  */
 export function getAimFish() {
     const { game } = modelState.app;
-    const fish_list = game.getAllFish();
-    fish_list.sort((a, b) => {
-        return b.score - a.score;
+    let fish_list = game.getAllFish();
+    fish_list = fish_list.filter((fish) => {
+        return fish.visible && detectInScreen(fish.pos);
     });
 
-    for (const fish of fish_list) {
-        if (fish.visible) {
-            return fish;
-        }
-    }
+    fish_list = fish_list.sort((a, b) => {
+        return b.score - a.score;
+    });
+    return fish_list[0];
+}
+/** 获取锁定提示鱼
+ * 满足两个条件 分数最高 + 没有游离屏幕...
+ */
+export function detectInScreen(pos: Point) {
+    const { width } = Laya.stage;
+    const { PoolWidth: pool_width } = Config;
+    const start = (pool_width - width) / 2;
+    const end = start + width;
+    const { x } = pos;
+
+    return x > start && x < end;
 }
 /** 检测碰撞到鱼: 获取第一个 */
 export function getCollisionFish(ori_body: BodyCom) {

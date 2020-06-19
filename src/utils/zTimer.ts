@@ -1,3 +1,5 @@
+import { timer } from 'Laya';
+
 const calcGcd: (x: number, y: number) => number = (x: number, y: number) => {
     return !y ? x : calcGcd(y, x % y);
 };
@@ -70,7 +72,7 @@ export function clearAll(caller: any) {
 }
 /** 计算所有interval的最大公约数, 每gcd（最大公约数）次执行一次interval */
 function startInterval() {
-    Laya.timer.clear(this, interval);
+    timer.clear(this, interval);
     const delay_arr = hooks.map(item => {
         return item.delay;
     });
@@ -78,7 +80,7 @@ function startInterval() {
         return;
     }
     const gcd = calcGcdArr(delay_arr);
-    Laya.timer.loop(gcd, this, interval);
+    timer.loop(gcd, this, interval);
 }
 
 function interval() {

@@ -32,6 +32,8 @@ export type FishSpriteInfo = SpriteInfo & {
     /** 为了在边界给鱼添加额外的路径, 慢慢的进入|退出 */
     offset?: number[];
     turn_ani?: boolean;
+    coin_flag?: true;
+    coin_color?: string;
 };
 export interface GameSprite {
     /** 枪 */
@@ -211,17 +213,22 @@ export let SPRITE: GameSprite = {
             path: 'ani/fish/fish16',
             ani_type: 'horizon_turn',
             turn_ani: true,
+            coin_flag: true,
+            coin_color: '#ffd52c',
         },
         '17': {
             type: 'DragonBone',
             offset: [122, 92, 150, 92],
             path: 'ani/fish/fish17',
+            coin_flag: true,
+            coin_color: '#af5200',
         },
         '18': {
             type: 'DragonBone',
-            offset: [128, 106, 85, 123],
+            offset: [141, 183, 188, 183],
             path: 'ani/fish/fish18',
-            ani_type: 'horizon_turn',
+            coin_flag: true,
+            coin_color: '#412770',
         },
         '19': {
             type: 'DragonBone',
@@ -229,6 +236,8 @@ export let SPRITE: GameSprite = {
             path: 'ani/fish/fish19',
             ani_type: 'horizon_turn',
             turn_ani: true,
+            coin_flag: true,
+            coin_color: '#ffde00',
         },
         '20': {
             type: 'DragonBone',
@@ -236,6 +245,8 @@ export let SPRITE: GameSprite = {
             path: 'ani/fish/fish20',
             ani_type: 'horizon_turn',
             turn_ani: true,
+            coin_flag: true,
+            coin_color: '#7a3f04',
         },
         G1: {
             group: [
@@ -299,6 +310,10 @@ export let SPRITE: GameSprite = {
             type: 'DragonBone',
             path: 'ani/other/pos_tip',
         },
+        aim_big: {
+            type: 'DragonBone',
+            path: 'ani/other/aim_big',
+        },
         aim: {
             type: 'DragonBone',
             path: 'ani/other/aim',
@@ -307,9 +322,9 @@ export let SPRITE: GameSprite = {
             type: 'DragonBone',
             path: 'ani/other/energy_light',
         },
-        award_big: {
+        award_circle: {
             type: 'DragonBone',
-            path: 'ani/other/award_big',
+            path: 'ani/other/award_circle',
         },
         award_light: {
             type: 'DragonBone',

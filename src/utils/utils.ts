@@ -1,12 +1,9 @@
-import { Observable, Subscriber } from 'rxjs';
-import { throttleTime } from 'rxjs/operators';
-import { Sprite } from 'laya/display/Sprite';
-import { Image } from 'laya/ui/Image';
-import { Skeleton } from 'laya/ani/bone/Skeleton';
-import { Event } from 'laya/events/Event';
-import { Handler } from 'laya/utils/Handler';
 import { ColorFilter } from 'laya/filters/ColorFilter';
 import { GlowFilter } from 'laya/filters/GlowFilter';
+import { Sprite } from 'laya/display/Sprite';
+import { Skeleton } from 'laya/ani/bone/Skeleton';
+import { Handler } from 'laya/utils/Handler';
+import { Event } from 'laya/events/Event';
 
 export function isFunc(func: Func<void>): boolean {
     return func && typeof func === 'function';
@@ -72,60 +69,6 @@ export function addZeroToNum(num: number, len: number): number {
     return addZeroToNum(num, len);
 }
 
-/**
- * 在按钮上绑定事件, 防止多次点击事件导致
- * @param node 绑定的节点
- * @param event 绑定的事件
- * @param callback 执行函数
- * @param once 是否执行一次
- * @param throttle 间隔的时间 默认1s
- */
-export function onNode(
-    node: Sprite,
-    event: string,
-    callback: (event?: Event) => void,
-    once?: boolean,
-    throttle = 1000,
-) {
-    let once_observer: Subscriber<Event>;
-    const observer = new Observable((subscriber: Subscriber<Event>) => {
-        const fn = (_event: Event) => {
-            /** 按钮置灰 */
-            if ((node as Image).gray === true) {
-                return;
-            }
-            (node as Image).gray = true;
-            setTimeout(() => {
-                if (node.destroyed) {
-                    return;
-                }
-                (node as Image).gray = false;
-            }, throttle);
-
-            subscriber.next(_event);
-            once_observer = subscriber;
-            if (once) {
-                subscriber.complete();
-            }
-        };
-        node.on(event, node, fn);
-        subscriber.add(() => {
-            node.off(event, node, fn);
-        });
-    });
-
-    observer.pipe(throttleTime(throttle || 1000)).subscribe((_event: Event) => {
-        if (node.destroyed) {
-            if (once_observer) {
-                once_observer.complete();
-            }
-            return;
-        }
-
-        callback(_event);
-    });
-}
-
 /** 停止骨骼动画, 如果是拖到页面上的 一开始无法停止 需要特殊处理` */
 export function stopSkeleton(ani: Skeleton) {
     if (ani.player) {
@@ -153,7 +96,7 @@ export function playSkeleton(ani: Skeleton, ...params: Params) {
     });
 }
 
-export function playSkeletonOnce(ani: Skeleton, ani_name: string) {
+export function playSkeletonOnce(ani: Skeleton, ani_name: string | number) {
     return new Promise((resolve, reject) => {
         ani.once(Event.STOPPED, ani, () => {
             resolve();
@@ -196,12 +139,13 @@ export function createRedFilter() {
     return new ColorFilter(redMat);
 }
 
-export function createDarkFilter() {
+export function createDarkFilter(radio: number = 0.7) {
+    const mat_val = 1 - radio;
     // prettier-ignore
     const mat = [
-        0.5, 0, 0, 0, 0,
-        0, 0.5, 0, 0, 0,
-        0, 0, 0.5, 0, 0,
+        mat_val, 0, 0, 0, 0,
+        0, mat_val, 0, 0, 0,
+        0, 0, mat_val, 0, 0,
         0, 0, 0, 1, 0,
     ];
     return new ColorFilter(mat);
@@ -209,6 +153,53 @@ export function createDarkFilter() {
 
 export function createGLowRedFilter() {
     return new GlowFilter('#ff0000', 10, 0, 0);
+}
+
+export function createColorFilter(
+    r: number | string,
+    g?: number,
+    b?: number,
+    a: number = 255,
+) {
+    if (typeof r === 'string') {
+        const rgb = hexToRgb(r);
+        r = rgb.r;
+        g = rgb.g;
+        b = rgb.b;
+        a = 255;
+    }
+    r = r / 255;
+    g = g / 255;
+    b = b / 255;
+    a = a / 255;
+
+    // prettier-ignore
+    const redMat = [
+        r, 0, 0, 0, 0, // R
+        0, g, 0, 0, 0, // G
+        0, 0, b, 0, 0, // B
+        0, 0, 0, a, 0, // A
+    ];
+
+    // 创建一个颜色滤镜对象,红色
+    return new ColorFilter(redMat);
+}
+
+export function hexToRgb(hex: string) {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+        return r + r + g + g + b + b;
+    });
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+        ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16),
+          }
+        : null;
 }
 
 export function darkNode(node: Sprite) {
@@ -220,4 +211,51 @@ export function unDarkNode(node: Sprite) {
 
 export function genRandomStr() {
     return Math.random().toString().replace('0.', '');
+}
+
+let param_map: { [key: string]: string };
+export function getParams(key: string) {
+    if (!param_map) {
+        param_map = {};
+        window.location.href.replace(
+            /[?&]+([^=&]+)=([^&]*)/gi,
+            (m, _key, value) => {
+                param_map[_key] = value;
+                return value;
+            },
+        );
+    }
+    return param_map[key];
+}
+
+export function getDateFromNow(a: number) {
+    const date1 = new Date();
+    const time1 =
+        date1.getFullYear() +
+        '-' +
+        (date1.getMonth() + 1) +
+        '-' +
+        date1.getDate();
+
+    const dateEnd = new Date(time1);
+    const dateStart = new Date(time1);
+
+    dateStart.setDate(date1.getDate() + a);
+    dateEnd.setDate(date1.getDate() + a + 1);
+    const m = dateStart.getMonth() + 1;
+    const d = dateStart.getDate();
+    console.log(`test:>getDateFromNow`, dateStart);
+
+    return {
+        date_str: formatDate(m) + '-' + formatDate(d),
+        start: dateStart.valueOf(),
+        end: dateEnd.valueOf(),
+    };
+}
+
+export function formatDate(a: number): string {
+    if (a < 10) {
+        return '0' + a;
+    }
+    return '' + a;
 }

@@ -98,6 +98,9 @@ export class PlayerModel extends ComponentManager {
     public updateInfo(info: Partial<PlayerInfo>) {
         const { bullet_cost } = info;
         setProps(this as PlayerModel, info);
+        if (info.bullet_num) {
+            console.warn(`bullet_num:>1`, info.bullet_num);
+        }
         if (info.bullet_cost) {
             this.gun.setBulletCost(bullet_cost);
         }
@@ -125,14 +128,28 @@ export class PlayerModel extends ComponentManager {
         skill_model.active(data);
     }
     /** 重置技能 */
+    public disableSkill(skill: SkillMap) {
+        const skill_model = this.skill_map.get(skill);
+        skill_model.disable();
+    }
+    /** 重置技能 */
     public resetSkill(skill: SkillMap) {
         const skill_model = this.skill_map.get(skill);
         skill_model.reset();
     }
+    /** 重置技能 */
+    public getSkill(skill: SkillMap) {
+        return this.skill_map.get(skill);
+    }
     /** 更新技能的数目 */
     public addSkillNum(id: string, num: number) {
         const skill_model = this.skill_map.get(id);
-        skill_model.skill_core.addNum(num);
+        if (!skill_model) {
+            console.error(`cant find skill for ${id}`);
+            return;
+        }
+        num = skill_model.skill_core.num + num;
+        skill_model.skill_core.setNum(num);
     }
     public async captureFish(
         pos: Point,
@@ -159,12 +176,16 @@ export class PlayerModel extends ComponentManager {
             }
         }
     }
+    public changeSkin(skinId: string) {
+        this.gun.changeSkin(skinId);
+    }
     public destroy() {
         const { gun, skill_map, game } = this;
 
         for (const [, skill] of skill_map) {
             skill.destroy();
         }
+
         gun.destroy();
         game.removePlayer(this);
         this.event.emit(PlayerEvent.Destroy);

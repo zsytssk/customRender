@@ -1,4 +1,17 @@
+-   连接 socket
+
+-   @ques react-dev-tool customise render..
+
+    -   @inlet/react-pixi
+
 -   @todo eslint ts
+
+-   @ques modelState 怎么样
+
+*   我需要一个脚本 将捕鱼正式 转成 这边可以用的
+    -   gameConfig 挂宅。。
+
+-   @ques 这一大堆的错误 我要怎么处理。。。， 没办法。。。
 
 ## 2020-06-17 09:19:09
 

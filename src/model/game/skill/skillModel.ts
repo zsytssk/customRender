@@ -1,5 +1,5 @@
 import { SkillMap } from 'data/config';
-import { AutoLaunchModel } from './autoLaunchModel';
+import { AutoShootModel } from './autoShootModel';
 import { BombModel } from './bombModel';
 import { FreezeModel } from './freezeModel';
 import { SkillCoreCom } from './skillCoreCom';
@@ -19,6 +19,6 @@ export interface SkillModel {
 export const SkillCtorMap = {
     [SkillMap.Freezing]: FreezeModel,
     [SkillMap.Bomb]: BombModel,
-    [SkillMap.TrackFish]: LockFishModel,
-    [SkillMap.Auto]: AutoLaunchModel,
+    [SkillMap.LockFish]: LockFishModel,
+    [SkillMap.Auto]: AutoShootModel,
 };

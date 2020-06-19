@@ -21,14 +21,18 @@ export class AppModel extends ComponentManager {
         this.addCom(new EventCom());
     }
     public init() {
-        //...
+        this.user_info.init();
+    }
+    public initUserInfo(data: UserAccountRep) {
+        this.user_info.initUserInfo(data);
+        this.setting.initUserInfo(data);
     }
     public enterGame() {
-        const game = new GameModel();
+        let game = this.game;
+        if (!game || game.destroyed) {
+            game = new GameModel();
+        }
         this.game = game;
         return game;
-    }
-    public leaveGame() {
-        this.game = undefined;
     }
 }
