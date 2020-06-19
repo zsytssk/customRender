@@ -1,4 +1,4 @@
-import { CustomRenderer } from 'customRenderer';
+import { CustomRenderer, Box } from 'customRenderer';
 import { Laya } from 'Laya';
 import { layaInit } from 'layaUtils';
 import React, { useEffect } from 'react';
@@ -15,10 +15,11 @@ function App() {
     }, []);
 
     return (
-        <>
-            <SceneManager defScene={Hall} defProps={{ x: 1 }} />
-            <PopManager />
-        </>
+        // <>
+        //     <SceneManager defScene={Hall} defProps={{ x: 1 }} />
+        //     <PopManager />
+        // </>
+        <Box width={300} height={300} />
     );
 }
 

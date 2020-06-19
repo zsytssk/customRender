@@ -3,12 +3,11 @@ import { shallowDiff, initNodeProps, updateNodeProps } from './applyNodeProps';
 
 export const HostConfig = {
     now: Date.now,
-    getRootHostContext: (...args) => {
-        const rootContext = {};
-        return rootContext;
+    getRootHostContext(rootContainerInstance) {
+        return rootContainerInstance.constructor.name;
     },
     getChildHostContext: (parentContext, fiberType, rootInstance) => {
-        return {};
+        return { namespace: fiberType, ancestorInfo: () {} };
     },
     shouldSetTextContent: (type, nextProps) => {
         return false;
@@ -36,7 +35,9 @@ export const HostConfig = {
         initNodeProps(element, props);
         return false;
     },
-    prepareForCommit: () => {},
+    prepareForCommit: () => {
+        return null;
+    },
     resetAfterCommit: () => {},
     supportsMutation: true,
     commitMount: (element, type, newProps, fiberNode) => {},

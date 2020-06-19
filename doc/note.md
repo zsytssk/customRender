@@ -3,6 +3,19 @@
 -   @ques react-dev-tool customise render..
 
     -   @inlet/react-pixi
+    -   https://github.com/facebook/react/blob/30b47103d4354d9187dc0f1fb804855a5208ca9f/packages/react-dom/src/client/ReactDOMHostConfig.js
+    -   react-dom
+    -   能不能搜索。。。
+
+-   @ques dev Tool 找到节点的原因是什么
+
+-   正式的 dom 有什么属性 我外面的节点没有？
+
+## 2020-06-19 20:47:32
+
+-   是不是
+
+-   @ques 怎么将 自定义组件 也在其中显示
 
 -   @todo eslint ts
 

@@ -8,7 +8,14 @@ reconcilerInstance.injectIntoDevTools({
     bundleType: process.env.NODE_ENV !== 'production' ? 1 : 0,
     version: '16.13.1',
     rendererPackageName: 'react-laya',
-    findFiberByHostInstance: () => null,
+    findFiberByHostInstance: (...args: any[]) => {
+        alert(1);
+        console.log(args);
+    },
+    getInspectorDataForViewTag: (...args: any[]) => {
+        alert(1);
+        console.log(args);
+    },
 });
 
 export const CustomRenderer = {
