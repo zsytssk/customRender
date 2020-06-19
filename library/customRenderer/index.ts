@@ -24,6 +24,7 @@ export const CustomRenderer = {
         // renderDom: This is the host root element to which the rendered app will be attached.
         // callback: if specified will be called after render is done.
 
+        console.log(arguments);
         const container = reconcilerInstance.createContainer(
             renderDom,
             false,

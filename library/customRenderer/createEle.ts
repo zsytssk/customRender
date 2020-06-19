@@ -26,92 +26,94 @@ import { View } from 'laya/ui/View';
 import { HTMLDivElement } from 'laya/html/dom/HTMLDivElement';
 
 export function createEle(type) {
+    let ele;
     if (type === 'Box') {
-        return new Box();
+        ele = new Box();
+        ele.type = Box;
     }
     if (type === 'Scene') {
-        return new Scene();
+        ele = new Scene();
     }
     if (type === 'View') {
-        return new View();
+        ele = new View();
     }
     if (type === 'Label') {
-        return new Label();
+        ele = new Label();
     }
     if (type === 'Button') {
-        return new Button();
+        ele = new Button();
     }
     if (type === 'HBox') {
-        return new HBox();
+        ele = new HBox();
     }
     if (type === 'VBox') {
-        return new VBox();
+        ele = new VBox();
     }
     if (type === 'Image') {
-        return new Image();
+        ele = new Image();
     }
     if (type === 'Clip') {
-        return new Clip();
+        ele = new Clip();
     }
     if (type === 'ComboBox') {
-        return new ComboBox();
+        ele = new ComboBox();
     }
     if (type === 'Tab') {
-        return new Tab();
+        ele = new Tab();
     }
     if (type === 'HScrollBar') {
-        return new HScrollBar();
+        ele = new HScrollBar();
     }
     if (type === 'HSlider') {
-        return new HSlider();
+        ele = new HSlider();
     }
     if (type === 'List') {
-        return new List();
+        ele = new List();
     }
     if (type === 'RadioGroup') {
-        return new RadioGroup();
+        ele = new RadioGroup();
     }
     if (type === 'Radio') {
-        return new Radio();
+        ele = new Radio();
     }
     if (type === 'Panel') {
-        return new Panel();
+        ele = new Panel();
     }
     if (type === 'ProgressBar') {
-        return new ProgressBar();
+        ele = new ProgressBar();
     }
     if (type === 'TextInput') {
-        return new TextInput();
+        ele = new TextInput();
     }
     if (type === 'Text') {
-        return new Text();
+        ele = new Text();
     }
     if (type === 'Dialog') {
-        return new Dialog();
+        ele = new Dialog();
     }
     if (type === 'FontClip') {
-        return new FontClip();
+        ele = new FontClip();
     }
     if (type === 'Sprite') {
-        return new Sprite();
+        ele = new Sprite();
     }
     if (type === 'TextArea') {
-        return new TextArea();
+        ele = new TextArea();
     }
     if (type === 'HTMLDivElement') {
-        return new HTMLDivElement();
+        ele = new HTMLDivElement();
     }
     if (type === 'Animation') {
-        return new Animation();
+        ele = new Animation();
     }
     if (type === 'SkeletonPlayer') {
-        return new Skeleton();
+        ele = new Skeleton();
     }
     if (type === 'Skeleton') {
-        return new Skeleton();
+        ele = new Skeleton();
     }
     if (type === 'Templet') {
-        return new Templet();
+        ele = new Templet();
     }
-    console.log(`test:>`, type);
+    return ele;
 }
