@@ -9,6 +9,10 @@
 
 -   @ques dev Tool 找到节点的原因是什么
 
+    -   如何高亮 component
+        -   **REACT_DEVTOOLS_GLOBAL_HOOK**.reactDevtoolsAgent.rendererInterfaces['1'].findNativeNodesForFiberID(13)
+        -   `__REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent._bridge.addListener('highlightNativeElement', (...args) => {console.log(args)})`
+
 -   正式的 dom 有什么属性 我外面的节点没有？
 
 ## 2020-06-19 20:47:32

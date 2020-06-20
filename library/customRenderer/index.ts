@@ -1,23 +1,11 @@
 import Reconciler from 'react-reconciler';
 import { HostConfig } from './hostConfig';
 export * from './layaCom';
+import { injectDevTool, initDevTool } from './devTool';
 
 const reconcilerInstance = Reconciler(HostConfig as any);
 
-reconcilerInstance.injectIntoDevTools({
-    bundleType: process.env.NODE_ENV !== 'production' ? 1 : 0,
-    version: '16.13.1',
-    rendererPackageName: 'react-laya',
-    findFiberByHostInstance: (...args: any[]) => {
-        alert(1);
-        console.log(args);
-    },
-    getInspectorDataForViewTag: (...args: any[]) => {
-        alert(1);
-        console.log(args);
-    },
-});
-
+injectDevTool(reconcilerInstance);
 export const CustomRenderer = {
     render(element, renderDom?, callback?) {
         // element: This is the react element for App component
@@ -32,5 +20,7 @@ export const CustomRenderer = {
         ); // Creates root fiber node.
 
         reconcilerInstance.updateContainer(element, container, null, callback); // Start reconcilation and render the result
+
+        initDevTool();
     },
 };

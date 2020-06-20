@@ -7,7 +7,7 @@ export const HostConfig = {
         return rootContainerInstance.constructor.name;
     },
     getChildHostContext: (parentContext, fiberType, rootInstance) => {
-        return { namespace: fiberType, ancestorInfo: () {} };
+        return { namespace: fiberType, ancestorInfo: () => {} };
     },
     shouldSetTextContent: (type, nextProps) => {
         return false;

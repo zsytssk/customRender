@@ -16,11 +16,10 @@ function App() {
 
     console.log(<Box width={300} height={300} />);
     return (
-        // <>
-        //     <SceneManager defScene={Hall} defProps={{ x: 1 }} />
-        //     <PopManager />
-        // </>
-        <Box width={300} height={300} />
+        <>
+            <SceneManager defScene={Hall} defProps={{ x: 1 }} />
+            <PopManager />
+        </>
     );
 }
 
