@@ -6,7 +6,7 @@ import {
     Sprite,
     View,
 } from 'customRenderer/layaCom';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { genRandomStr } from 'utils/utils';
 import { alert } from 'view/pop/alert';
 import { CoinMenu } from './coinMenu';
@@ -15,6 +15,7 @@ import { FlagMenu } from './flagMenu';
 export function Header(props: ComProps) {
     const [flagMenuVisible, setFlagMenuVisible] = useState(false);
     const [coinMenuVisible, setCoinMenuVisible] = useState(false);
+    const ref = useRef();
 
     const toggleFlagMenu = () => {
         setFlagMenuVisible(!flagMenuVisible);
@@ -23,11 +24,17 @@ export function Header(props: ComProps) {
         setCoinMenuVisible(!coinMenuVisible);
     };
 
+    useEffect(() => {
+        (window as any).test = ref;
+        console.log(ref);
+    }, []);
+
     return (
         <View
             width={1920}
             mouseThrough={true}
             mouseEnabled={true}
+            ref={ref}
             height={750}
             {...props}
         >

@@ -15,6 +15,34 @@
 
 -   正式的 dom 有什么属性 我外面的节点没有？
 
+    -   createInstance
+    -   removeChild removeChildFromContainer
+
+-   能不能 支持 鼠标移动选择节点...
+
+```ts
+const id = __REACT_DEVTOOLS_GLOBAL_HOOK__.rendererInterfaces
+    .get(1)
+    .getFiberIDForNative(temp1);
+
+const element = store.getElementByID(id);
+const rendererID = store.getRendererIDForElement(id);
+
+__REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent._bridge.send(
+    'highlightNativeElement',
+    {
+        displayName: 'View',
+        hideAfterTimeout: false,
+        id,
+        openNativeElementsPanel: false,
+        rendererID: 1,
+        scrollIntoView: false,
+    },
+);
+```
+
+-   @ques hydrateInstance getFundamentalComponentInstance prepareScopeUpdate
+
 ## 2020-06-19 20:47:32
 
 -   是不是

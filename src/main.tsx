@@ -14,12 +14,12 @@ function App() {
         new AppModel();
     }, []);
 
-    console.log(<Box width={300} height={300} />);
     return (
         <>
             <SceneManager defScene={Hall} defProps={{ x: 1 }} />
             <PopManager />
         </>
+        // <Box width={100} height={100} />
     );
 }
 

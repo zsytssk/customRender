@@ -1,5 +1,6 @@
 import { createEle } from './createEle';
 import { shallowDiff, initNodeProps, updateNodeProps } from './applyNodeProps';
+import { patchFiberToNode } from './devTool';
 
 export const HostConfig = {
     now: Date.now,
@@ -25,9 +26,10 @@ export const HostConfig = {
         newProps,
         rootContainerInstance,
         currentHostContext,
-        workInProgress,
+        fiberNode,
     ) => {
         const element = createEle(type);
+        patchFiberToNode(element, fiberNode);
         return element;
     },
     /** 所有子类dom创建完成 正式添加到dom中之前 */
@@ -42,27 +44,21 @@ export const HostConfig = {
     supportsMutation: true,
     commitMount: (element, type, newProps, fiberNode) => {},
     prepareUpdate: (
-        instance,
+        element,
         type,
         oldProps,
         newProps,
         rootContainerInstance,
-        currentHostContext,
+        fiberNode,
     ) => {
         return shallowDiff(oldProps, newProps);
     },
-    commitUpdate(
-        instance,
-        updatePayload,
-        type,
-        oldProps,
-        newProps,
-        finishedWork,
-    ) {
-        updateNodeProps(instance, newProps, oldProps, updatePayload);
-        return; //return nothing.
+    commitUpdate(element, updatePayload, type, oldProps, newProps, fiberNode) {
+        updateNodeProps(element, newProps, oldProps, updatePayload);
+        patchFiberToNode(element, fiberNode);
+        return;
     },
-    appendInitialChild: (parent, child, ...test) => {
+    appendInitialChild: (parent, child) => {
         if (child.parent === parent) {
             return;
         }
@@ -76,7 +72,7 @@ export const HostConfig = {
             parent.addChild(child);
         }
     },
-    insertInContainerBefore: (parent, child, beforeChild, ...test) => {
+    insertInContainerBefore: (parent, child, beforeChild) => {
         const index = parent.getChildIndex(beforeChild);
         if (index !== -1) {
             parent.addChildAt(child, index);
@@ -84,13 +80,13 @@ export const HostConfig = {
             parent.addChild(child);
         }
     },
-    appendChild: (parent, child, ...test) => {
+    appendChild: (parent, child) => {
         if (child.parent === parent) {
             return;
         }
         parent.addChild(child);
     },
-    appendChildToContainer: (parent, child, ...test) => {
+    appendChildToContainer: (parent, child) => {
         if (child.parent === parent) {
             return;
         }
@@ -98,8 +94,10 @@ export const HostConfig = {
     },
     removeChild: (parentInstance, child) => {
         parentInstance.removeChild(child);
+        patchFiberToNode(child, null);
     },
     removeChildFromContainer: (container, child) => {
+        patchFiberToNode(child, null);
         container.removeChild(child);
     },
     shouldDeprioritizeSubtree: (type, props) => {
