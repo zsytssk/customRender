@@ -645,6 +645,9 @@ export class Context {
 			if (!this._width || !this._height)
 				throw Error("asBitmap no size!");
 			if(!rt || rt.width!=this._width||rt.height!=this._height){
+				if(rt){
+					rt.destroy();
+				}
 				this._targets = new RenderTexture2D(this._width, this._height, RenderTextureFormat.R8G8B8A8, -1)
 			}
 		} else {
@@ -1173,6 +1176,9 @@ export class Context {
 	 * @return
 	 */
 	_inner_drawTexture(tex: Texture, imgid: number, x: number, y: number, width: number, height: number, m: Matrix, uv: ArrayLike<number>, alpha: number, lastRender: boolean): boolean {
+		if (width <= 0 || height <= 0) {
+			return;
+		}
 		var preKey: SubmitKey = this._curSubmit._key;
 		uv = uv || tex._uv
 		//为了优化，如果上次是画三角形，并且贴图相同，会认为他们是一组的，把这个也转成三角形，以便合并。
@@ -1595,16 +1601,16 @@ export class Context {
 	}
 
 	drawTriangles(tex: Texture, x: number, y: number, vertices: Float32Array, uvs: Float32Array, indices: Uint16Array, matrix: Matrix, alpha: number, color: ColorFilter, blendMode: string, colorNum: number = 0xffffffff): void {
-		var oldcomp: string = null;
-		if (blendMode) {
-			oldcomp = this.globalCompositeOperation;
-			this.globalCompositeOperation = blendMode;
-		}
 		if (!tex._getSource()) { //source内调用tex.active();
 			if (this.sprite) {
 				ILaya.systemTimer.callLater(this, this._repaintSprite);
 			}
 			return;
+		}
+		var oldcomp: string = null;
+		if (blendMode) {
+			oldcomp = this.globalCompositeOperation;
+			this.globalCompositeOperation = blendMode;
 		}
 		this._drawCount++;
 
@@ -2479,12 +2485,8 @@ export class Context {
 
 		var top: number = sizeGrid[0];
 		var left: number = sizeGrid[3];
-		var d_top: number = top / h;
-		var d_left: number = left / w;
 		var right: number = sizeGrid[1];
 		var bottom: number = sizeGrid[2];
-		var d_right: number = right / w;
-		var d_bottom: number = bottom / h;
 		var repeat: boolean = sizeGrid[4];
 		var needClip: boolean = false;
 
@@ -2494,6 +2496,11 @@ export class Context {
 		if (height == h) {
 			top = bottom = 0;
 		}
+
+		var d_top: number = top / h;
+		var d_left: number = left / w;
+		var d_right: number = right / w;
+		var d_bottom: number = bottom / h;
 
 		//处理进度条不好看的问题
 		if (left + right > width) {

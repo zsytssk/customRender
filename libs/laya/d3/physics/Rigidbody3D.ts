@@ -6,6 +6,7 @@ import { PhysicsComponent } from "./PhysicsComponent";
 import { Physics3D } from "./Physics3D";
 import { PhysicsTriggerComponent } from "./PhysicsTriggerComponent";
 import { ColliderShape } from "./shape/ColliderShape";
+import { Stat } from "../../utils/Stat";
 
 /**
  * <code>Rigidbody3D</code> 类用于创建刚体碰撞器。
@@ -40,6 +41,8 @@ export class Rigidbody3D extends PhysicsTriggerComponent {
 	private static _btTempVector31: number;
 	/** @internal */
 	private static _btVector3Zero: number;
+	/**@internal */
+	private static _btTransform0: number;
 	/** @internal */
 	private static _btInertia: number;
 	/** @internal */
@@ -62,6 +65,7 @@ export class Rigidbody3D extends PhysicsTriggerComponent {
 		Rigidbody3D._btImpulse = bt.btVector3_create(0, 0, 0);
 		Rigidbody3D._btImpulseOffset = bt.btVector3_create(0, 0, 0);
 		Rigidbody3D._btGravity = bt.btVector3_create(0, 0, 0);
+		Rigidbody3D._btTransform0 = bt.btTransform_create();
 	}
 
 	/** @internal */
@@ -116,7 +120,7 @@ export class Rigidbody3D extends PhysicsTriggerComponent {
 
 	set isKinematic(value: boolean) {
 		this._isKinematic = value;
-
+		this._controlBySimulation = !value;//isKinematic not controll by Simulation
 		var bt: any = Physics3D._bullet;
 		var canInSimulation: boolean = !!(this._simulation && this._enabled && this._colliderShape);
 		canInSimulation && this._removeFromSimulation();
@@ -221,21 +225,17 @@ export class Rigidbody3D extends PhysicsTriggerComponent {
 	}
 
 	/**
-	 * 每个轴的线性运动缩放因子。
+	 * 每个轴的线性运动缩放因子,如果某一轴的值为0表示冻结在该轴的线性运动。
 	 */
 	get linearFactor(): Vector3 {
-		if (this._btColliderObject)
-			return this._linearFactor;
-		return null;
+		return this._linearFactor;
 	}
 
 	set linearFactor(value: Vector3) {
 		this._linearFactor = value;
-		if (this._btColliderObject) {
-			var btValue: number = Rigidbody3D._btTempVector30;
-			Utils3D._convertToBulletVec3(value, btValue, false);
-			Physics3D._bullet.btRigidBody_setLinearFactor(this._btColliderObject, btValue);
-		}
+		var btValue: number = Rigidbody3D._btTempVector30;
+		Utils3D._convertToBulletVec3(value, btValue, false);
+		Physics3D._bullet.btRigidBody_setLinearFactor(this._btColliderObject, btValue);
 	}
 
 	/**
@@ -258,21 +258,18 @@ export class Rigidbody3D extends PhysicsTriggerComponent {
 	}
 
 	/**
-	 * 每个轴的角度运动缩放因子。
+	 * 每个轴的角度运动缩放因子,如果某一轴的值为0表示冻结在该轴的角度运动。
 	 */
 	get angularFactor(): Vector3 {
-		if (this._btColliderObject)
-			return this._angularFactor;
-		return null;
+		return this._angularFactor;
 	}
 
 	set angularFactor(value: Vector3) {
 		this._angularFactor = value;
-		if (this._btColliderObject) {
-			var btValue: number = Rigidbody3D._btTempVector30;
-			Utils3D._convertToBulletVec3(value, btValue, false);
-			Physics3D._bullet.btRigidBody_setAngularFactor(this._btColliderObject, btValue);
-		}
+		var btValue: number = Rigidbody3D._btTempVector30;
+		Utils3D._convertToBulletVec3(value, btValue, false);
+		Physics3D._bullet.btRigidBody_setAngularFactor(this._btColliderObject, btValue);
+
 	}
 
 	/**
@@ -360,13 +357,14 @@ export class Rigidbody3D extends PhysicsTriggerComponent {
 
 
 	/**
-	 * 创建一个 <code>RigidBody</code> 实例。
+	 * 创建一个 <code>RigidBody3D</code> 实例。
 	 * @param collisionGroup 所属碰撞组。
 	 * @param canCollideWith 可产生碰撞的碰撞组。
 	 */
 	constructor(collisionGroup: number = Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER, canCollideWith: number = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
 		//LinkedConstraints = new List<Constraint>();
 		super(collisionGroup, canCollideWith);
+		this._controlBySimulation = true;
 	}
 
 	/**
@@ -389,6 +387,19 @@ export class Rigidbody3D extends PhysicsTriggerComponent {
 	protected _onScaleChange(scale: Vector3): void {
 		super._onScaleChange(scale);
 		this._updateMass(this._isKinematic ? 0 : this._mass);//修改缩放需要更新惯性
+	}
+
+	/**
+	 * 	@internal
+	 */
+	_derivePhysicsTransformation(force: boolean): void {
+		var bt: any = Physics3D._bullet;
+		var btColliderObject: number = this._btColliderObject;
+		var oriTransform: number = bt.btCollisionObject_getWorldTransform(btColliderObject);
+		var transform: number =Rigidbody3D._btTransform0;//must use another transform
+		bt.btTransform_equal(transform,oriTransform);
+		this._innerDerivePhysicsTransformation(transform, force);
+		bt.btRigidBody_setCenterOfMassTransform(btColliderObject, transform);//RigidBody use 'setCenterOfMassTransform' instead(influence interpolationWorldTransform and so on) ,or stepSimulation may return old transform because interpolation.
 	}
 
 	/**
@@ -449,6 +460,17 @@ export class Rigidbody3D extends PhysicsTriggerComponent {
 		(data.linearDamping != null) && (this.linearDamping = data.linearDamping);
 		(data.angularDamping != null) && (this.angularDamping = data.angularDamping);
 		(data.overrideGravity != null) && (this.overrideGravity = data.overrideGravity);
+
+		if (data.linearFactor != null) {
+			var linFac = this.linearFactor;
+			linFac.fromArray(data.linearFactor);
+			this.linearFactor = linFac;
+		}
+		if (data.angularFactor != null) {
+			var angFac = this.angularFactor;
+			angFac.fromArray(data.angularFactor);
+			this.angularFactor = angFac;
+		}
 
 		if (data.gravity) {
 			this.gravity.fromArray(data.gravity);
@@ -606,16 +628,17 @@ export class Rigidbody3D extends PhysicsTriggerComponent {
 	 *清除应用到刚体上的所有力。
 	 */
 	clearForces(): void {
-		var rigidBody: any = this._btColliderObject;
+		var rigidBody: number = this._btColliderObject;
 		if (rigidBody == null)
 			throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
 
-		rigidBody.clearForces();
-		var btZero: any = Rigidbody3D._btVector3Zero;
-		rigidBody.setInterpolationLinearVelocity(btZero);
-		rigidBody.setLinearVelocity(btZero);
-		rigidBody.setInterpolationAngularVelocity(btZero);
-		rigidBody.setAngularVelocity(btZero);
+		var bt: any = Physics3D._bullet;
+		bt.btRigidBody_clearForces(rigidBody);
+		var btZero: number = Rigidbody3D._btVector3Zero;
+		bt.btCollisionObject_setInterpolationLinearVelocity(rigidBody, btZero);
+		bt.btRigidBody_setLinearVelocity(rigidBody, btZero);
+		bt.btCollisionObject_setInterpolationAngularVelocity(rigidBody, btZero);
+		bt.btRigidBody_setAngularVelocity(rigidBody, btZero);
 	}
 
 }

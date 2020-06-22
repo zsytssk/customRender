@@ -58,6 +58,7 @@ export class ClassUtils {
      */
     static getClass(className: string): any {
         var classObject = ClassUtils._classMap[className] || ClassUtils._classMap['Laya.' + className] || className;
+
         var glaya: any = ILaya.Laya
         if (typeof (classObject) == 'string') return (ILaya.__classMap[classObject as string] || glaya[className]);
         return classObject;

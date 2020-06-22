@@ -20,7 +20,9 @@ import { ClassUtils } from "../utils/ClassUtils";
 export class FrameAnimation extends AnimationBase {
 
     /**@private */
-    private static _sortIndexFun: (a: any, b: any) => number;
+    private static _sortIndexFun(objpre: any, objnext: any) {
+        return objpre.index - objnext.index
+    }
 
     /**@internal id对象表*/
     _targetDic: any;
@@ -31,7 +33,7 @@ export class FrameAnimation extends AnimationBase {
 
     constructor() {
         super();
-        if (FrameAnimation._sortIndexFun === null) {
+        if (FrameAnimation._sortIndexFun === undefined) {
             FrameAnimation._sortIndexFun = MathUtil.sortByKey("index", false, true);
         }
     }

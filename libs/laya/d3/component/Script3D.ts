@@ -22,6 +22,9 @@ export class Script3D extends Component {
 		return false;
 	}
 
+	/**
+	 * @internal
+	 */
 	private _checkProcessTriggers(): boolean {
 		var prototype: any = Script3D.prototype;
 		if (this.onTriggerEnter !== prototype.onTriggerEnter)
@@ -33,6 +36,9 @@ export class Script3D extends Component {
 		return false;
 	}
 
+	/**
+	 * @internal
+	 */
 	private _checkProcessCollisions(): boolean {
 		var prototype: any = Script3D.prototype;
 		if (this.onCollisionEnter !== prototype.onCollisionEnter)
@@ -49,7 +55,7 @@ export class Script3D extends Component {
 	 * @internal
 	 * @override
 	 */
-	protected _onAwake(): void {
+	_onAwake(): void {
 		this.onAwake();
 		if (this.onStart !== Script3D.prototype.onStart)
 			Laya.startTimer.callLater(this, this.onStart);
@@ -60,17 +66,8 @@ export class Script3D extends Component {
 	 * @internal
 	 * @override
 	 */
-	protected _onEnable(): void {
+	_onEnable(): void {
 		(<Scene3D>this.owner._scene)._addScript(this);
-		var proto: any = Script3D.prototype;
-		if (this.onKeyDown !== proto.onKeyDown)
-			Laya.stage.on(Event.KEY_DOWN, this, this.onKeyDown);
-
-		if (this.onKeyPress !== proto.onKeyPress)
-			Laya.stage.on(Event.KEY_PRESS, this, this.onKeyUp);
-
-		if (this.onKeyUp !== proto.onKeyUp)
-			Laya.stage.on(Event.KEY_UP, this, this.onKeyUp);
 		this.onEnable();
 	}
 
@@ -82,35 +79,7 @@ export class Script3D extends Component {
 	protected _onDisable(): void {
 		(<Scene3D>this.owner._scene)._removeScript(this);
 		this.owner.offAllCaller(this);
-		Laya.stage.offAllCaller(this);
 		this.onDisable();
-	}
-
-	/**
-	 * @inheritDoc
-	 * @internal
-	 * @override
-	 */
-	_isScript(): boolean {
-		return true;
-	}
-
-	/**
-	 * @inheritDoc
-	 * @internal
-	 * @override
-	 */
-	_onAdded(): void {
-		var sprite: Sprite3D = (<Sprite3D>this.owner);
-		var scripts: Script3D[] = sprite._scripts;
-		scripts || (sprite._scripts = scripts = []);
-		scripts.push(this);
-
-		if (!sprite._needProcessCollisions)
-			sprite._needProcessCollisions = this._checkProcessCollisions();//检查是否需要处理物理碰撞
-
-		if (!sprite._needProcessTriggers)
-			sprite._needProcessTriggers = this._checkProcessTriggers();//检查是否需要处理触发器
 	}
 
 	/**
@@ -139,6 +108,33 @@ export class Script3D extends Component {
 			}
 		}
 		this.onDestroy();
+	}
+
+	/**
+	 * @inheritDoc
+	 * @internal
+	 * @override
+	 */
+	_isScript(): boolean {
+		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 * @internal
+	 * @override
+	 */
+	_onAdded(): void {
+		var sprite: Sprite3D = (<Sprite3D>this.owner);
+		var scripts: Script3D[] = sprite._scripts;
+		scripts || (sprite._scripts = scripts = []);
+		scripts.push(this);
+
+		if (!sprite._needProcessCollisions)
+			sprite._needProcessCollisions = this._checkProcessCollisions();//检查是否需要处理物理碰撞
+
+		if (!sprite._needProcessTriggers)
+			sprite._needProcessTriggers = this._checkProcessTriggers();//检查是否需要处理触发器
 	}
 
 	/**
@@ -266,31 +262,7 @@ export class Script3D extends Component {
 	 * 此方法为虚方法，使用时重写覆盖即可
 	 */
 	onMouseOut(): void {
-
-	}
-
-	/**
-	 * 键盘按下时执行
-	 * 此方法为虚方法，使用时重写覆盖即可
-	 */
-	onKeyDown(e: Event): void {
-
-	}
-
-	/**
-	 * 键盘产生一个字符时执行
-	 * 此方法为虚方法，使用时重写覆盖即可
-	 */
-	onKeyPress(e: Event): void {
-
-	}
-
-	/**
-	 * 键盘抬起时执行
-	 * 此方法为虚方法，使用时重写覆盖即可
-	 */
-	onKeyUp(e: Event): void {
-
+		
 	}
 
 	/**

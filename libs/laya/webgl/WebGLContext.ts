@@ -132,8 +132,8 @@ export class WebGLContext {
 	/**
 	 * @internal
 	 */
-    static setBlendFunc(gl: WebGLRenderingContext, sFactor: number, dFactor: number): void {
-        if (sFactor !== WebGLContext._sFactor || dFactor !== WebGLContext._dFactor) {
+    static setBlendFunc(gl: WebGLRenderingContext, sFactor: number, dFactor: number,force:boolean=false): void {
+        if (force || sFactor !== WebGLContext._sFactor || dFactor !== WebGLContext._dFactor) {
             WebGLContext._sFactor = sFactor;
             WebGLContext._dFactor = dFactor;
             WebGLContext._sFactorRGB = null;

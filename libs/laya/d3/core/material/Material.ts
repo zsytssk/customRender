@@ -76,6 +76,8 @@ export class Material extends Resource implements IClone {
 
 				for (var key in props) {
 					switch (key) {
+						case "type":
+							break;
 						case "vectors":
 							var vectors: any[] = props[key];
 							for (i = 0, n = vectors.length; i < n; i++) {
@@ -152,8 +154,6 @@ export class Material extends Resource implements IClone {
 	private _alphaTest: boolean;
 
 	/** @internal */
-	_disablePublicDefineDatas: DefineDatas;//TODO:移除
-	/** @internal */
 	_shader: Shader3D;
 	/** @private */
 	_shaderValues: ShaderData = null;//TODO:剥离贴图ShaderValue
@@ -199,7 +199,6 @@ export class Material extends Resource implements IClone {
 	 */
 	constructor() {
 		super();
-		this._disablePublicDefineDatas = new DefineDatas();
 		this._shaderValues = new ShaderData(this);
 		this.renderQueue = Material.RENDERQUEUE_OPAQUE;
 		this._alphaTest = false;
@@ -272,7 +271,6 @@ export class Material extends Resource implements IClone {
 		var destBaseMaterial: Material = (<Material>destObject);
 		destBaseMaterial.name = this.name;
 		destBaseMaterial.renderQueue = this.renderQueue;
-		this._disablePublicDefineDatas.cloneTo(destBaseMaterial._disablePublicDefineDatas);
 		this._shaderValues.cloneTo(destBaseMaterial._shaderValues);
 	}
 

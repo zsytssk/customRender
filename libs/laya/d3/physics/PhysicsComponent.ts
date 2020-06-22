@@ -190,6 +190,8 @@ export class PhysicsComponent extends Component {
 	protected _colliderShape: ColliderShape = null;
 	/** @internal */
 	protected _transformFlag: number = 2147483647 /*int.MAX_VALUE*/;
+	/** @internal */
+	protected _controlBySimulation: boolean = false;
 
 	/** @internal */
 	_btColliderObject: number;//TODO:不用声明,TODO:删除相关判断
@@ -271,32 +273,6 @@ export class PhysicsComponent extends Component {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 */
-	get enabled(): boolean {
-		return super.enabled;
-	}
-
-	/**
-	 * @inheritDoc
-	 * @override
-	 */
-	set enabled(value: boolean) {
-		if (this._enabled != value) {
-			if (this._simulation && this._colliderShape) {
-				if (value) {
-					this._derivePhysicsTransformation(true);
-					this._addToSimulation();
-				} else {
-					this._removeFromSimulation();
-				}
-			}
-			super.enabled = value;
-		}
-	}
-
-	/**
 	 * 碰撞形状。
 	 */
 	get colliderShape(): ColliderShape {
@@ -360,7 +336,7 @@ export class PhysicsComponent extends Component {
 	}
 
 	/**
-	 * 可碰撞的碰撞组。
+	 * 可碰撞的碰撞组,基于位运算。
 	 */
 	get canCollideWith(): number {
 		return this._canCollideWith;
@@ -418,10 +394,10 @@ export class PhysicsComponent extends Component {
 	 * @internal
 	 * @override
 	 */
-	protected _onEnable(): void {
+	_onEnable(): void {
 		this._simulation = ((<Scene3D>this.owner._scene)).physicsSimulation;
 		Physics3D._bullet.btCollisionObject_setContactProcessingThreshold(this._btColliderObject, 1e30);
-		if (this._colliderShape && this._enabled) {
+		if (this._colliderShape) {
 			this._derivePhysicsTransformation(true);
 			this._addToSimulation();
 		}
@@ -433,7 +409,7 @@ export class PhysicsComponent extends Component {
 	 * @override
 	 */
 	protected _onDisable(): void {
-		if (this._colliderShape && this._enabled) {
+		if (this._colliderShape) {
 			this._removeFromSimulation();
 			(this._inPhysicUpdateListIndex !== -1) && (this._simulation._physicsUpdateList.remove(this));//销毁前一定会调用 _onDisable()
 		}
@@ -509,7 +485,11 @@ export class PhysicsComponent extends Component {
 	 * 	@internal
 	 */
 	_derivePhysicsTransformation(force: boolean): void {
-		this._innerDerivePhysicsTransformation(Physics3D._bullet.btCollisionObject_getWorldTransform(this._btColliderObject), force);
+		var bt: any = Physics3D._bullet;
+		var btColliderObject: number = this._btColliderObject;
+		var btTransform: number = bt.btCollisionObject_getWorldTransform(btColliderObject);
+		this._innerDerivePhysicsTransformation(btTransform, force);
+		bt.btCollisionObject_setWorldTransform(btColliderObject, btTransform);
 	}
 
 	/**
@@ -519,17 +499,15 @@ export class PhysicsComponent extends Component {
 	_innerDerivePhysicsTransformation(physicTransformOut: number, force: boolean): void {
 		var bt: any = Physics3D._bullet;
 		var transform: Transform3D = ((<Sprite3D>this.owner))._transform;
-		var rotation: Quaternion = transform.rotation;
-		var scale: Vector3 = transform.getWorldLossyScale();
+
 		if (force || this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION)) {
 			var shapeOffset: Vector3 = this._colliderShape.localOffset;
 			var position: Vector3 = transform.position;
 			var btPosition: any = PhysicsComponent._btVector30;
 			if (shapeOffset.x !== 0 || shapeOffset.y !== 0 || shapeOffset.z !== 0) {
 				var physicPosition: Vector3 = PhysicsComponent._tempVector30;
-				Vector3.transformQuat(shapeOffset, rotation, physicPosition);
-				Vector3.multiply(physicPosition, scale, physicPosition);
-				Vector3.add(position, physicPosition, physicPosition);
+				var worldMat: Matrix4x4 = transform.worldMatrix;
+				Vector3.transformCoordinate(shapeOffset, worldMat, physicPosition);
 				bt.btVector3_setValue(btPosition, -physicPosition.x, physicPosition.y, physicPosition.z);
 			} else {
 				bt.btVector3_setValue(btPosition, -position.x, position.y, position.z);
@@ -541,6 +519,7 @@ export class PhysicsComponent extends Component {
 		if (force || this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION)) {
 			var shapeRotation: Quaternion = this._colliderShape.localRotation;
 			var btRotation: any = PhysicsComponent._btQuaternion0;
+			var rotation: Quaternion = transform.rotation;
 			if (shapeRotation.x !== 0 || shapeRotation.y !== 0 || shapeRotation.z !== 0 || shapeRotation.w !== 1) {
 				var physicRotation: Quaternion = PhysicsComponent._tempQuaternion0;
 				PhysicsComponent.physicQuaternionMultiply(rotation.x, rotation.y, rotation.z, rotation.w, shapeRotation, physicRotation);
@@ -563,33 +542,23 @@ export class PhysicsComponent extends Component {
 	 * 通过物理矩阵更新渲染矩阵。
 	 */
 	_updateTransformComponent(physicsTransform: number): void {
+		//TODO:Need Test!!! because _innerDerivePhysicsTransformation update position use worldMatrix,not(position rotation WorldLossyScale),maybe the center is no different.
 		var bt: any = Physics3D._bullet;
-		var localOffset: Vector3 = this._colliderShape.localOffset;
-		var localRotation: Quaternion = this._colliderShape.localRotation;
+		var colliderShape: ColliderShape = this._colliderShape;
+		var localOffset: Vector3 = colliderShape.localOffset;
+		var localRotation: Quaternion = colliderShape.localRotation;
 
-		var transform: Transform3D = ((<Sprite3D>this.owner))._transform;
+		var transform: Transform3D = (<Sprite3D>this.owner)._transform;
 		var position: Vector3 = transform.position;
 		var rotation: Quaternion = transform.rotation;
 
 		var btPosition: number = bt.btTransform_getOrigin(physicsTransform);
 		var btRotation: number = bt.btTransform_getRotation(physicsTransform);
+
 		var btRotX: number = -bt.btQuaternion_x(btRotation);
 		var btRotY: number = bt.btQuaternion_y(btRotation);
 		var btRotZ: number = bt.btQuaternion_z(btRotation);
 		var btRotW: number = -bt.btQuaternion_w(btRotation);
-
-		if (localOffset.x !== 0 || localOffset.y !== 0 || localOffset.z !== 0) {
-			var rotShapePosition: Vector3 = PhysicsComponent._tempVector30;
-			PhysicsComponent.physicVector3TransformQuat(localOffset, btRotX, btRotY, btRotZ, btRotW, rotShapePosition);
-			position.x = -bt.btVector3_x(btPosition) - rotShapePosition.x;
-			position.y = bt.btVector3_y(btPosition) - rotShapePosition.y;
-			position.z = bt.btVector3_z(btPosition) - rotShapePosition.z;
-		} else {
-			position.x = -bt.btVector3_x(btPosition);
-			position.y = bt.btVector3_y(btPosition);
-			position.z = bt.btVector3_z(btPosition);
-		}
-		transform.position = position;
 
 		if (localRotation.x !== 0 || localRotation.y !== 0 || localRotation.z !== 0 || localRotation.w !== 1) {
 			var invertShapeRotaion: Quaternion = PhysicsComponent._tempQuaternion0;
@@ -602,6 +571,23 @@ export class PhysicsComponent extends Component {
 			rotation.w = btRotW;
 		}
 		transform.rotation = rotation;
+
+		if (localOffset.x !== 0 || localOffset.y !== 0 || localOffset.z !== 0) {
+			var btScale: number = bt.btCollisionShape_getLocalScaling(colliderShape._btShape);
+			var rotShapePosition: Vector3 = PhysicsComponent._tempVector30;
+			rotShapePosition.x = localOffset.x * bt.btVector3_x(btScale);
+			rotShapePosition.y = localOffset.y * bt.btVector3_y(btScale);
+			rotShapePosition.z = localOffset.z * bt.btVector3_z(btScale);
+			Vector3.transformQuat(rotShapePosition, rotation, rotShapePosition);
+			position.x = -bt.btVector3_x(btPosition) - rotShapePosition.x;
+			position.y = bt.btVector3_y(btPosition) - rotShapePosition.y;
+			position.z = bt.btVector3_z(btPosition) - rotShapePosition.z;
+		} else {
+			position.x = -bt.btVector3_x(btPosition);
+			position.y = bt.btVector3_y(btPosition);
+			position.z = bt.btVector3_z(btPosition);
+		}
+		transform.position = position;
 	}
 
 
@@ -641,7 +627,7 @@ export class PhysicsComponent extends Component {
 	 * @internal
 	 */
 	_onTransformChanged(flag: number): void {
-		if (PhysicsComponent._addUpdateList) {
+		if (PhysicsComponent._addUpdateList || !this._controlBySimulation) {//PhysicsComponent._addUpdateList = false is the stage of physic simulation.
 			flag &= Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDSCALE;//过滤有用TRANSFORM标记
 			if (flag) {
 				this._transformFlag |= flag;
@@ -657,7 +643,7 @@ export class PhysicsComponent extends Component {
 	 * @internal
 	 */
 	_cloneTo(dest: Component): void {
-		var destPhysicsComponent: PhysicsComponent = (<PhysicsComponent>dest);
+		var destPhysicsComponent: PhysicsComponent = <PhysicsComponent>dest;
 		destPhysicsComponent.restitution = this._restitution;
 		destPhysicsComponent.friction = this._friction;
 		destPhysicsComponent.rollingFriction = this._rollingFriction;

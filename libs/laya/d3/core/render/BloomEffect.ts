@@ -11,6 +11,7 @@ import { ShaderData } from "../../shader/ShaderData"
 import { BaseTexture } from "../../../resource/BaseTexture"
 import { Texture2D } from "../../../resource/Texture2D"
 import { RenderTextureFormat, RenderTextureDepthFormat } from "../../../resource/RenderTextureFormat";
+import { FilterMode } from "../../../resource/FilterMode";
 
 /**
  * <code>BloomEffect</code> 类用于创建泛光效果。
@@ -240,15 +241,17 @@ export class BloomEffect extends PostProcessEffect {
 			var upIndex: number = downIndex + 1;
 			var subShader: number = i == 0 ? BloomEffect.SUBSHADER_PREFILTER13 + qualityOffset : BloomEffect.SUBSHADER_DOWNSAMPLE13 + qualityOffset;
 
-			var mipDownTexture: RenderTexture = RenderTexture.createFromPool(tw, th, RenderTextureFormat.R8G8B8, RenderTextureDepthFormat.DEPTHSTENCIL_NONE, BaseTexture.FILTERMODE_BILINEAR);
+			var mipDownTexture: RenderTexture = RenderTexture.createFromPool(tw, th, RenderTextureFormat.R8G8B8, RenderTextureDepthFormat.DEPTHSTENCIL_NONE);
+			mipDownTexture.filterMode = FilterMode.Bilinear;
 			this._pyramid[downIndex] = mipDownTexture;
 
 			if (i !== iterations - 1) {
-				var mipUpTexture: RenderTexture = RenderTexture.createFromPool(tw, th, RenderTextureFormat.R8G8B8, RenderTextureDepthFormat.DEPTHSTENCIL_NONE, BaseTexture.FILTERMODE_BILINEAR);
+				var mipUpTexture: RenderTexture = RenderTexture.createFromPool(tw, th, RenderTextureFormat.R8G8B8, RenderTextureDepthFormat.DEPTHSTENCIL_NONE);
+				mipUpTexture.filterMode = FilterMode.Bilinear;
 				this._pyramid[upIndex] = mipUpTexture;
 			}
 
-			cmd.blitScreenTriangle(lastDownTexture, mipDownTexture,null, this._shader, this._shaderData, subShader);
+			cmd.blitScreenTriangle(lastDownTexture, mipDownTexture, null, this._shader, this._shaderData, subShader);
 
 			lastDownTexture = mipDownTexture;
 			tw = Math.max(Math.floor(tw / 2), 1);
@@ -262,7 +265,7 @@ export class BloomEffect extends PostProcessEffect {
 			mipDownTexture = this._pyramid[downIndex];
 			mipUpTexture = this._pyramid[upIndex];
 			cmd.setShaderDataTexture(this._shaderData, BloomEffect.SHADERVALUE_BLOOMTEX, mipDownTexture);//通过指令延迟设置
-			cmd.blitScreenTriangle(lastUpTexture, mipUpTexture,null, this._shader, this._shaderData, BloomEffect.SUBSHADER_UPSAMPLETENT + qualityOffset);
+			cmd.blitScreenTriangle(lastUpTexture, mipUpTexture, null, this._shader, this._shaderData, BloomEffect.SUBSHADER_UPSAMPLETENT + qualityOffset);
 			lastUpTexture = mipUpTexture;
 		}
 

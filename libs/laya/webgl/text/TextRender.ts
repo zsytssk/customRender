@@ -205,8 +205,8 @@ export class TextRender {
             
             if (sx < 1e-4 || sy < 1e-1)
                 return;
-            this.fontScaleX = sx;
-            this.fontScaleY = sy;
+            if(sx>1) this.fontScaleX = sx;
+            if(sy>1) this.fontScaleY = sy;
         }
 
         font._italic && (ctx._italicDeg = 13);
@@ -250,12 +250,20 @@ export class TextRender {
             //wt.lastGCCnt = _curPage.gcCnt;
             if (this.hasFreedText(sameTexData)) {
                 sameTexData = wt.pageChars = [];
-            }
+			}
+			// if(isWT && (this.fontScaleX!=wt.scalex || this.fontScaleY!=wt.scaley)) {
+			// 	// 文字缩放要清理缓存
+			// 	sameTexData = wt.pageChars = [];
+			// }
         }
         var ri: CharRenderInfo = null;
         //var oneTex: boolean = isWT || TextRender.forceWholeRender;	// 如果能缓存的话，就用一张贴图
         var splitTex: boolean = this.renderPerChar = (!isWT) || TextRender.forceSplitRender || isHtmlChar || (isWT && wt.splitRender); 	// 拆分字符串渲染，这个优先级高
         if (!sameTexData || sameTexData.length < 1) {
+			if (isWT) {
+                wt.scalex = this.fontScaleX;
+                wt.scaley = this.fontScaleY;
+            }
             // 重新构建缓存的贴图信息
             // TODO 还是要ctx.scale么
             if (splitTex) {

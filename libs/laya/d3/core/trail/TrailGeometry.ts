@@ -95,7 +95,7 @@ export class TrailGeometry extends GeometryElement {
 
 		this._resizeData(this._segementCount, this._bufferState);
 		var bounds: Bounds = this._owner._owner.trailRenderer.bounds;
-		var sprite3dPosition:Vector3 = this._owner._owner.transform.position;
+		var sprite3dPosition: Vector3 = this._owner._owner.transform.position;
 		bounds.setMin(sprite3dPosition);
 		bounds.setMax(sprite3dPosition);
 		Render.supportWebGLPlusCulling && this._calculateBoundingBoxForNative();//[NATIVE]
@@ -128,7 +128,6 @@ export class TrailGeometry extends GeometryElement {
 		bufferState.bind();
 		bufferState.applyVertexBuffers(vertexBuffers);
 		bufferState.unBind();
-
 		Resource._addMemory(memorySize, memorySize);
 	}
 
@@ -146,6 +145,8 @@ export class TrailGeometry extends GeometryElement {
 		if (count === this._segementCount) {//当前count=_segementCount表示已满,需要扩充
 			this._vertexBuffer1.destroy();
 			this._vertexBuffer2.destroy();
+			var memorySize: number = this._vertexBuffer1._byteLength + this._vertexBuffer2._byteLength;
+			Resource._addMemory(-memorySize, -memorySize);
 			this._segementCount += this._increaseSegementCount;
 			this._resizeData(this._segementCount, this._bufferState);
 		}
@@ -205,7 +206,7 @@ export class TrailGeometry extends GeometryElement {
 			case TrailAlignment.TransformZ:
 				Vector3.subtract(position, this._lastFixedVertexPosition, delVector3);
 				var forward: Vector3 = TrailGeometry._tempVector32;
-				this._owner._owner.transform.localMatrix.getForward(forward);
+				this._owner._owner.transform.getForward(forward);
 				Vector3.cross(delVector3, forward, pointAtoBVector3);//实时更新模式需要和view一样根据当前forward重新计算
 				break;
 		}
@@ -320,10 +321,11 @@ export class TrailGeometry extends GeometryElement {
 		var min: Vector3, max: Vector3;
 		if (this._disappearBoundsMode) {//如果有顶点消失时候，需要重新计算包围盒
 			bounds = this._owner._owner.trailRenderer.bounds;
+			var sprite3dPosition: Vector3 = this._owner._owner.transform.position;
+			bounds.setMin(sprite3dPosition);
+			bounds.setMax(sprite3dPosition);
 			min = bounds.getMin();
 			max = bounds.getMax();
-			min.setValue(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE);
-			max.setValue(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE);
 			Render.supportWebGLPlusCulling && this._calculateBoundingBoxForNative();//[NATIVE]
 		}
 		var vertexCount: number = this._endIndex;
@@ -457,7 +459,6 @@ export class TrailGeometry extends GeometryElement {
 		super.destroy();
 		var memorySize: number = this._vertexBuffer1._byteLength + this._vertexBuffer2._byteLength;
 		Resource._addMemory(-memorySize, -memorySize);
-
 		this._bufferState.destroy();
 		this._vertexBuffer1.destroy();
 		this._vertexBuffer2.destroy();
@@ -487,6 +488,18 @@ export class TrailGeometry extends GeometryElement {
 		buffer[trail._cullingBufferIndex + 4] = max.x;
 		buffer[trail._cullingBufferIndex + 5] = max.y;
 		buffer[trail._cullingBufferIndex + 6] = max.z;
+	}
+
+	clear(): void {
+		this._activeIndex = 0;
+		this._endIndex = 0;
+		this._disappearBoundsMode = false;
+		this._subBirthTime.fill(0);
+		this._subDistance.fill(0);
+		this._segementCount = 0;
+		this._isTempEndVertex = false;
+		this._needAddFirstVertex = false;
+		this._lastFixedVertexPosition.setValue(0, 0, 0);
 	}
 }
 

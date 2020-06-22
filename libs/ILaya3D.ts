@@ -1,10 +1,10 @@
-import { Scene3D } from './laya/d3/core/scene/Scene3D';
-import { MeshRenderDynamicBatchManager } from './laya/d3/graphics/MeshRenderDynamicBatchManager';
-import { MeshRenderStaticBatchManager } from './laya/d3/graphics/MeshRenderStaticBatchManager';
-import { SubMeshDynamicBatch } from './laya/d3/graphics/SubMeshDynamicBatch';
-import { Matrix4x4 } from './laya/d3/math/Matrix4x4';
-import { Shader3D } from './laya/d3/shader/Shader3D';
-import { Laya3D } from './Laya3D';
+import { Scene3D } from "./laya/d3/core/scene/Scene3D";
+import { MeshRenderDynamicBatchManager } from "./laya/d3/graphics/MeshRenderDynamicBatchManager";
+import { MeshRenderStaticBatchManager } from "./laya/d3/graphics/MeshRenderStaticBatchManager";
+import { SubMeshDynamicBatch } from "./laya/d3/graphics/SubMeshDynamicBatch";
+import { Matrix4x4 } from "./laya/d3/math/Matrix4x4";
+import { Shader3D } from "./laya/d3/shader/Shader3D";
+import { Laya3D } from "./Laya3D";
 
 /**
  * @internal

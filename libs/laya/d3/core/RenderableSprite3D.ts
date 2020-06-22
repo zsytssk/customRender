@@ -14,15 +14,17 @@ import { ShaderDefine } from "../shader/ShaderDefine";
 export class RenderableSprite3D extends Sprite3D {
 	/**精灵级着色器宏定义,接收阴影。*/
 	static SHADERDEFINE_RECEIVE_SHADOW: ShaderDefine;
-	/**精灵级着色器宏定义,光照贴图便宜和缩放。*/
-	static SHADERDEFINE_SCALEOFFSETLIGHTINGMAPUV: ShaderDefine;
 	/**精灵级着色器宏定义,光照贴图。*/
 	static SAHDERDEFINE_LIGHTMAP: ShaderDefine;
+	/**精灵级着色器宏定义,光照贴图方向。 */
+	static SHADERDEFINE_LIGHTMAP_DIRECTIONAL: ShaderDefine;
 
 	/**着色器变量名，光照贴图缩放和偏移。*/
 	static LIGHTMAPSCALEOFFSET: number = Shader3D.propertyNameToID("u_LightmapScaleOffset");
 	/**着色器变量名，光照贴图。*/
 	static LIGHTMAP: number = Shader3D.propertyNameToID("u_LightMap");
+	/**着色器变量名，光照贴图方向。*/
+	static LIGHTMAP_DIRECTION: number = Shader3D.propertyNameToID("u_LightMapDirection");
 	/**拾取颜色。*/
 	static PICKCOLOR: number = Shader3D.propertyNameToID("u_PickColor");
 
@@ -34,8 +36,8 @@ export class RenderableSprite3D extends Sprite3D {
 	 */
 	static __init__(): void {
 		RenderableSprite3D.SHADERDEFINE_RECEIVE_SHADOW = Shader3D.getDefineByName("RECEIVESHADOW");
-		RenderableSprite3D.SHADERDEFINE_SCALEOFFSETLIGHTINGMAPUV = Shader3D.getDefineByName("SCALEOFFSETLIGHTINGMAPUV");
 		RenderableSprite3D.SAHDERDEFINE_LIGHTMAP = Shader3D.getDefineByName("LIGHTMAP");
+		RenderableSprite3D.SHADERDEFINE_LIGHTMAP_DIRECTIONAL = Shader3D.getDefineByName("LIGHTMAP_DIRECTIONAL");
 	}
 
 	/** @internal */
@@ -96,7 +98,7 @@ export class RenderableSprite3D extends Sprite3D {
 	 */
 	_setBelongScene(scene: Node): void {
 		super._setBelongScene(scene);
-		this._render._setBelongScene((<Scene3D>scene));
+		this._render._setBelongScene(<Scene3D>scene);
 	}
 
 	/**

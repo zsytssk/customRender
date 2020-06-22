@@ -9,16 +9,16 @@ import { Utils } from "../utils/Utils";
  */
 export class Component implements ISingletonElement, IDestroy {
 	/** @internal [实现IListPool接口]*/
-	_destroyed: boolean;
-	/** @private [实现IListPool接口]*/
 	private _indexInList: number;
 
+	/** @internal [实现IListPool接口]*/
+	_destroyed: boolean;
 	/** @internal */
 	_id: number;
 	/** @internal */
 	_enabled: boolean;
-	/** @private */
-	private _awaked: boolean;
+	/** @internal */
+	_awaked: boolean;
 
 	/**
 	 * [只读]获取所属Node节点。
@@ -35,14 +35,14 @@ export class Component implements ISingletonElement, IDestroy {
 	}
 
 	/**
-	 * 获取唯一标识ID。
+	 * 唯一标识ID。
 	 */
 	get id(): number {
 		return this._id;
 	}
 
 	/**
-	 * 获取是否启用组件。
+	 * 是否启用组件。
 	 */
 	get enabled(): boolean {
 		return this._enabled;
@@ -61,14 +61,14 @@ export class Component implements ISingletonElement, IDestroy {
 	}
 
 	/**
-	 * 获取是否为单实例组件。
+	 * 是否为单实例组件。
 	 */
 	get isSingleton(): boolean {
 		return true;
 	}
 
 	/**
-	 * 获取是否已经销毁 。
+	 * 是否已经销毁 。
 	 */
 	get destroyed(): boolean {
 		//[实现IListPool接口]
@@ -118,7 +118,7 @@ export class Component implements ISingletonElement, IDestroy {
 	 * 被激活后调用，可根据需要重写此方法
 	 * @internal
 	 */
-	protected _onAwake(): void {
+	_onAwake(): void {
 		//override it.
 	}
 
@@ -126,7 +126,7 @@ export class Component implements ISingletonElement, IDestroy {
 	 * 被激活后调用，可根据需要重写此方法
 	 * @internal
 	 */
-	protected _onEnable(): void {
+	_onEnable(): void {
 		//override it.
 	}
 

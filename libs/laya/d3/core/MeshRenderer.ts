@@ -19,6 +19,10 @@ import { SubMeshRenderElement } from "./render/SubMeshRenderElement";
 import { RenderableSprite3D } from "./RenderableSprite3D";
 import { Sprite3D } from "./Sprite3D";
 import { Transform3D } from "./Transform3D";
+import { LayaGPU } from "../../webgl/LayaGPU";
+import { LayaGL } from "../../layagl/LayaGL";
+import { VertexBuffer3D } from "../graphics/VertexBuffer3D";
+import { VertexMesh } from "../graphics/Vertex/VertexMesh";
 
 /**
  * <code>MeshRenderer</code> 类用于网格渲染器。
@@ -26,8 +30,6 @@ import { Transform3D } from "./Transform3D";
 export class MeshRenderer extends BaseRender {
 	/** @internal */
 	protected _revertStaticBatchDefineUV1: boolean = false;
-	/** @internal */
-	protected _revertStaticBatchDefineLightMapUV: boolean = false;
 	/** @internal */
 	protected _projectionViewWorldMatrix: Matrix4x4;
 
@@ -112,7 +114,8 @@ export class MeshRenderer extends BaseRender {
 	 * @internal
 	 */
 	_renderUpdate(context: RenderContext3D, transform: Transform3D): void {
-		var element: SubMeshRenderElement = (<SubMeshRenderElement>context.renderElement);
+		this._applyLightMapParams();
+		var element: SubMeshRenderElement = <SubMeshRenderElement>context.renderElement;
 		switch (element.renderType) {
 			case RenderElement.RENDERTYPE_NORMAL:
 				this._shaderValues.setMatrix4x4(Sprite3D.WORLDMATRIX, transform.worldMatrix);
@@ -129,13 +132,7 @@ export class MeshRenderer extends BaseRender {
 				else {
 					this._revertStaticBatchDefineUV1 = false;
 				}
-				if (this._shaderValues.hasDefine(RenderableSprite3D.SHADERDEFINE_SCALEOFFSETLIGHTINGMAPUV)) {
-					this._shaderValues.removeDefine(RenderableSprite3D.SHADERDEFINE_SCALEOFFSETLIGHTINGMAPUV);
-					this._revertStaticBatchDefineLightMapUV = true;
-				}
-				else {
-					this._revertStaticBatchDefineLightMapUV = false;
-				}
+				this._shaderValues.setVector(RenderableSprite3D.LIGHTMAPSCALEOFFSET, BaseRender._defaultLightmapScaleOffset);
 				break;
 			case RenderElement.RENDERTYPE_VERTEXBATCH:
 				this._shaderValues.setMatrix4x4(Sprite3D.WORLDMATRIX, Matrix4x4.DEFAULT);
@@ -147,7 +144,10 @@ export class MeshRenderer extends BaseRender {
 				var count: number = insBatches.length;
 				for (var i: number = 0; i < count; i++)
 					worldMatrixData.set(elements[i]._transform.worldMatrix.elements, i * 16);
-				SubMeshInstanceBatch.instance.instanceWorldMatrixBuffer.setData(worldMatrixData.buffer, 0, 0, count * 16 * 4);
+
+				var worldBuffer: VertexBuffer3D = SubMeshInstanceBatch.instance.instanceWorldMatrixBuffer;
+				worldBuffer.orphanStorage();// prphan the memory block to avoid sync problem.can improve performance in HUAWEI P10.   TODO:"WebGL's bufferData(target, size, usage) call is guaranteed to initialize the buffer to 0"
+				worldBuffer.setData(worldMatrixData.buffer, 0, 0, count * 16 * 4);
 				this._shaderValues.addDefine(MeshSprite3DShaderDeclaration.SHADERDEFINE_GPU_INSTANCE);
 				break;
 		}
@@ -160,29 +160,33 @@ export class MeshRenderer extends BaseRender {
 	 */
 	_renderUpdateWithCamera(context: RenderContext3D, transform: Transform3D): void {
 		var projectionView: Matrix4x4 = context.projectionViewMatrix;
-		var element: SubMeshRenderElement = (<SubMeshRenderElement>context.renderElement);
-		switch (element.renderType) {
-			case RenderElement.RENDERTYPE_NORMAL:
-			case RenderElement.RENDERTYPE_STATICBATCH:
-			case RenderElement.RENDERTYPE_VERTEXBATCH:
-				if (transform) {
-					Matrix4x4.multiply(projectionView, transform.worldMatrix, this._projectionViewWorldMatrix);
-					this._shaderValues.setMatrix4x4(Sprite3D.MVPMATRIX, this._projectionViewWorldMatrix);
-				} else {
-					this._shaderValues.setMatrix4x4(Sprite3D.MVPMATRIX, projectionView);
-				}
-				break;
-			case RenderElement.RENDERTYPE_INSTANCEBATCH:
-				var mvpMatrixData: Float32Array = SubMeshInstanceBatch.instance.instanceMVPMatrixData;
-				var insBatches: SingletonList<SubMeshRenderElement> = element.instanceBatchElementList;
-				var elements: SubMeshRenderElement[] = insBatches.elements;
-				var count: number = insBatches.length;
-				for (var i: number = 0; i < count; i++) {
-					var worldMat: Matrix4x4 = elements[i]._transform.worldMatrix;
-					Utils3D.mulMatrixByArray(projectionView.elements, 0, worldMat.elements, 0, mvpMatrixData, i * 16);
-				}
-				SubMeshInstanceBatch.instance.instanceMVPMatrixBuffer.setData(mvpMatrixData.buffer, 0, 0, count * 16 * 4);
-				break;
+		if (projectionView) {//TODO:是否移除MVP
+			var element: SubMeshRenderElement = (<SubMeshRenderElement>context.renderElement);
+			switch (element.renderType) {
+				case RenderElement.RENDERTYPE_NORMAL:
+				case RenderElement.RENDERTYPE_STATICBATCH:
+				case RenderElement.RENDERTYPE_VERTEXBATCH:
+					if (transform) {
+						Matrix4x4.multiply(projectionView, transform.worldMatrix, this._projectionViewWorldMatrix);
+						this._shaderValues.setMatrix4x4(Sprite3D.MVPMATRIX, this._projectionViewWorldMatrix);
+					} else {
+						this._shaderValues.setMatrix4x4(Sprite3D.MVPMATRIX, projectionView);
+					}
+					break;
+				case RenderElement.RENDERTYPE_INSTANCEBATCH:
+					var mvpMatrixData: Float32Array = SubMeshInstanceBatch.instance.instanceMVPMatrixData;
+					var insBatches: SingletonList<SubMeshRenderElement> = element.instanceBatchElementList;
+					var elements: SubMeshRenderElement[] = insBatches.elements;
+					var count: number = insBatches.length;
+					for (var i: number = 0; i < count; i++) {
+						var worldMat: Matrix4x4 = elements[i]._transform.worldMatrix;
+						Utils3D.mulMatrixByArray(projectionView.elements, 0, worldMat.elements, 0, mvpMatrixData, i * 16);
+					}
+					var mvpBuffer: VertexBuffer3D = SubMeshInstanceBatch.instance.instanceMVPMatrixBuffer;
+					mvpBuffer.orphanStorage();// prphan the memory block to avoid sync problem.can improve performance in HUAWEI P10.  TODO:"WebGL's bufferData(target, size, usage) call is guaranteed to initialize the buffer to 0"
+					mvpBuffer.setData(mvpMatrixData.buffer, 0, 0, count * 16 * 4);
+					break;
+			}
 		}
 	}
 	/**
@@ -195,9 +199,7 @@ export class MeshRenderer extends BaseRender {
 			case RenderElement.RENDERTYPE_STATICBATCH:
 				if (this._revertStaticBatchDefineUV1)
 					this._shaderValues.removeDefine(MeshSprite3DShaderDeclaration.SHADERDEFINE_UV1);
-
-				if (this._revertStaticBatchDefineLightMapUV)
-					this._shaderValues.addDefine(RenderableSprite3D.SHADERDEFINE_SCALEOFFSETLIGHTINGMAPUV);
+				this._shaderValues.setVector(RenderableSprite3D.LIGHTMAPSCALEOFFSET, this.lightmapScaleOffset);
 				break;
 			case RenderElement.RENDERTYPE_INSTANCEBATCH:
 				this._shaderValues.removeDefine(MeshSprite3DShaderDeclaration.SHADERDEFINE_GPU_INSTANCE);

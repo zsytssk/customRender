@@ -1,4 +1,4 @@
-import { Handler } from './laya/utils/Handler';
+import { Handler } from "./laya/utils/Handler";
 declare module laya.wx.mini {
     class MiniAdpter {
         static EnvConfig: any;
@@ -43,12 +43,7 @@ declare module laya.wx.mini {
          * @param callBack 文件加载回调,回调内容[errorCode码(0成功,1失败,2加载进度)
          * @param encoding 文件编码默认utf8，非图片文件加载需要设置相应的编码，二进制编码为空字符串
          */
-        static downLoadFile(
-            fileUrl: string,
-            fileType?: string,
-            callBack?: Handler,
-            encoding?: string,
-        ): void;
+        static downLoadFile(fileUrl: string, fileType?: string, callBack?: Handler, encoding?: string): void;
         /**
          * 从本地删除文件
          * @param fileUrl 文件地址(全路径)
@@ -141,12 +136,7 @@ declare module laya.bd.mini {
          * @param callBack 文件加载回调,回调内容[errorCode码(0成功,1失败,2加载进度)
          * @param encoding 文件编码默认utf8，非图片文件加载需要设置相应的编码，二进制编码为空字符串
          */
-        static downLoadFile(
-            fileUrl: string,
-            fileType?: string,
-            callBack?: Handler,
-            encoding?: string,
-        ): void;
+        static downLoadFile(fileUrl: string, fileType?: string, callBack?: Handler, encoding?: string): void;
         /**
          * 从本地删除文件
          * @param fileUrl 文件地址(全路径)
@@ -239,12 +229,7 @@ declare module laya.mi.mini {
          * @param callBack 文件加载回调,回调内容[errorCode码(0成功,1失败,2加载进度)
          * @param encoding 文件编码默认utf8，非图片文件加载需要设置相应的编码，二进制编码为空字符串
          */
-        static downLoadFile(
-            fileUrl: string,
-            fileType?: string,
-            callBack?: Handler,
-            encoding?: string,
-        ): void;
+        static downLoadFile(fileUrl: string, fileType?: string, callBack?: Handler, encoding?: string): void;
         /**
          * 从本地删除文件
          * @param fileUrl 文件地址(全路径)
@@ -337,12 +322,7 @@ declare module laya.qg.mini {
          * @param callBack 文件加载回调,回调内容[errorCode码(0成功,1失败,2加载进度)
          * @param encoding 文件编码默认utf8，非图片文件加载需要设置相应的编码，二进制编码为空字符串
          */
-        static downLoadFile(
-            fileUrl: string,
-            fileType?: string,
-            callBack?: Handler,
-            encoding?: string,
-        ): void;
+        static downLoadFile(fileUrl: string, fileType?: string, callBack?: Handler, encoding?: string): void;
         /**
          * 从本地删除文件
          * @param fileUrl 文件地址(全路径)
@@ -436,12 +416,7 @@ declare module laya.vv.mini {
          * @param callBack 文件加载回调,回调内容[errorCode码(0成功,1失败,2加载进度)
          * @param encoding 文件编码默认utf8，非图片文件加载需要设置相应的编码，二进制编码为空字符串
          */
-        static downLoadFile(
-            fileUrl: string,
-            fileType?: string,
-            callBack?: Handler,
-            encoding?: string,
-        ): void;
+        static downLoadFile(fileUrl: string, fileType?: string, callBack?: Handler, encoding?: string): void;
         /**
          * 从本地删除文件
          * @param fileUrl 文件地址(全路径)
@@ -492,9 +467,14 @@ declare module laya.vv.mini {
 }
 
 declare module Laya {
-    class MiniAdpter extends laya.wx.mini.MiniAdpter {}
-    class BMiniAdapter extends laya.bd.mini.BMiniAdapter {}
-    class KGMiniAdapter extends laya.mi.mini.KGMiniAdapter {}
-    class QGMiniAdapter extends laya.qg.mini.QGMiniAdapter {}
-    class VVMiniAdapter extends laya.vv.mini.VVMiniAdapter {}
+    class MiniAdpter extends laya.wx.mini.MiniAdpter {
+    }
+    class BMiniAdapter extends laya.bd.mini.BMiniAdapter {
+    }
+    class KGMiniAdapter extends laya.mi.mini.KGMiniAdapter {
+    }
+    class QGMiniAdapter extends laya.qg.mini.QGMiniAdapter {
+    }
+    class VVMiniAdapter extends laya.vv.mini.VVMiniAdapter {
+    }
 }

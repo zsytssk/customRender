@@ -164,8 +164,6 @@ export class Stage extends Sprite {
 	private _globalRepaintSet: boolean = false;		// 设置全局重画标志。这个是给IDE用的。IDE的Image无法在onload的时候通知对应的sprite重画。
 	/**@private */
 	private _globalRepaintGet: boolean = false;		// 一个get一个set是为了把标志延迟到下一帧的开始，防止部分对象接收不到。
-	/**@private */
-	static _dbgSprite: Sprite = new Sprite();
 
 	/**@internal */
 	_3dUI: Sprite[] = [];
@@ -272,7 +270,10 @@ export class Stage extends Sprite {
 		super.set_width(value);
 		ILaya.systemTimer.callLater(this, this._changeCanvasSize);
 	}
-
+	/**
+     * @inheritDoc 
+     * @override
+     */
 	get width(): number {
 		return super.get_width();
 	}
@@ -284,14 +285,17 @@ export class Stage extends Sprite {
 		ILaya.systemTimer.callLater(this, this._changeCanvasSize);
 	}
 
-		/** @override*/  get height(): number {
+	/** @override*/  
+	get height(): number {
 		return super.get_height();
 	}
 
-		/**@override*/  set transform(value: Matrix) {
+	/**@override*/
+	set transform(value: Matrix) {
 		super.set_transform(value);
 	}
-		/**@inheritDoc @override*/  get transform(): Matrix {
+	/**@inheritDoc @override*/ 
+	get transform(): Matrix {
 		if (this._tfChanged) this._adjustTransform();
 		return (this._transform = this._transform || this._createTransform());
 	}
@@ -403,8 +407,8 @@ export class Stage extends Sprite {
 		}
 
 		if (this.useRetinalCanvas) {
-			canvasWidth = screenWidth;
-			canvasHeight = screenHeight;
+			realWidth =  canvasWidth = screenWidth;
+			realHeight = canvasHeight = screenHeight;
 		}
 
 		//根据不同尺寸缩放stage画面
@@ -634,7 +638,10 @@ export class Stage extends Sprite {
 			style.visibility = value ? "visible" : "hidden";
 		}
 	}
-
+	/**
+     * @inheritDoc 
+     * @override
+     */
 	get visible() {
 		return super.visible;
 	}
@@ -662,9 +669,6 @@ export class Stage extends Sprite {
 			this.renderToNative(context, x, y);
 			return;
 		}
-
-		//临时
-		Stage._dbgSprite.graphics.clear();
 
 		if (this._frameRate === Stage.FRAME_SLEEP) {
 			var now: number = Browser.now();
@@ -705,8 +709,6 @@ export class Stage extends Sprite {
 			super.render(context, x, y);
 			Stat._StatRender.renderNotCanvas(context, x, y);
 		}
-
-		Stage._dbgSprite.render(context, 0, 0);
 
 		if (this.renderingEnabled) {
 			Stage.clear(this._bgColor);

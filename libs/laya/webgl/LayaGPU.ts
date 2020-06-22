@@ -1,6 +1,8 @@
 
+import { Config } from "../../Config";
 import { ILaya } from "../../ILaya";
 import { VertexArrayObject } from "../../laya/webgl/VertexArrayObject";
+import { SystemUtils } from "./SystemUtils";
 
 /**
  * @internal
@@ -8,14 +10,6 @@ import { VertexArrayObject } from "../../laya/webgl/VertexArrayObject";
 export class LayaGPU {
     /**@internal */
     private static _extentionVendorPrefixes: any[] = ["", "WEBKIT_", "MOZ_"];
-
-    /**
-     * @internal
-     */
-    static _forceSupportVAOPlatform(): boolean {
-        let Browser = ILaya.Browser;
-        return Browser.onBDMiniGame || Browser.onQGMiniGame;
-    }
 
     /**@internal */
     private _gl: any = null;
@@ -35,6 +29,8 @@ export class LayaGPU {
     /**@internal */
     _oesTextureFloat: any = null;
     /**@internal */
+    _extShaderTextureLod: any = null;
+    /**@internal */
     _extTextureFilterAnisotropic: any = null;
     /**@internal */
     _compressedTextureS3tc: any = null;
@@ -42,37 +38,40 @@ export class LayaGPU {
     _compressedTexturePvrtc: any = null;
     /**@internal */
     _compressedTextureEtc1: any = null;
+    /**@internal */
+    _webgl_depth_texture: any = null;
 
     /**
      * @internal
      */
-    constructor(gl: any, isWebGL2: boolean) {
+    constructor(gl: WebGLRenderingContext, isWebGL2: boolean) {
         this._gl = gl;
         this._isWebGL2 = isWebGL2;
-
+        var maxTextureFS: number = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+        var maxTextureSize: number = gl.getParameter(gl.MAX_TEXTURE_SIZE);
         if (!isWebGL2) {
-            var forceVAO: boolean = LayaGPU._forceSupportVAOPlatform();
             if (!ILaya.Render.isConchApp) {
                 VertexArrayObject;//强制引用
-                if ((window as any)._setupVertexArrayObject) {//兼容VAO
-                    if (forceVAO)
-                        (window as any)._forceSetupVertexArrayObject(gl);
-                    else
-                        (window as any)._setupVertexArrayObject(gl);
-                }
+                if ((window as any)._setupVertexArrayObject) //兼容VAO
+                    (window as any)._setupVertexArrayObject(gl);
             }
             this._vaoExt = this._getExtension("OES_vertex_array_object");
-            if (!forceVAO)
-                this._angleInstancedArrays = this._getExtension("ANGLE_instanced_arrays");//forceVAO会导致Instance有BUG
+            this._angleInstancedArrays = this._getExtension("ANGLE_instanced_arrays");
 
             this._oesTextureHalfFloat = this._getExtension("OES_texture_half_float");
             this._oesTextureHalfFloatLinear = this._getExtension("OES_texture_half_float_linear");
             this._oesTextureFloat = this._getExtension("OES_texture_float");
             //this._getExtension("OES_texture_float_linear");
             this._oes_element_index_uint = this._getExtension("OES_element_index_uint");
+            this._extShaderTextureLod = this._getExtension("EXT_shader_texture_lod");
+            this._webgl_depth_texture = this._getExtension("WEBGL_depth_texture");
+
+            SystemUtils._shaderCapailityLevel = 30;
         } else {
             this._getExtension("EXT_color_buffer_float");
             //this._getExtension("OES_texture_float_linear");
+
+            SystemUtils._shaderCapailityLevel = 35;
         }
 
         //_getExtension("EXT_float_blend");
@@ -80,6 +79,9 @@ export class LayaGPU {
         this._compressedTextureS3tc = this._getExtension("WEBGL_compressed_texture_s3tc");
         this._compressedTexturePvrtc = this._getExtension("WEBGL_compressed_texture_pvrtc");
         this._compressedTextureEtc1 = this._getExtension("WEBGL_compressed_texture_etc1");
+
+        SystemUtils._maxTextureCount = maxTextureFS;
+        SystemUtils._maxTextureSize = maxTextureSize;
     }
 
     /**
@@ -170,7 +172,7 @@ export class LayaGPU {
      * @internal
      */
     supportInstance(): boolean {
-        if (this._isWebGL2 || this._angleInstancedArrays)
+        if ((this._isWebGL2 || this._angleInstancedArrays) && Config.allowGPUInstanceDynamicBatch)
             return true;
         else
             return false;

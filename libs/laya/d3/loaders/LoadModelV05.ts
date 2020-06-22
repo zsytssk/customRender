@@ -1,14 +1,16 @@
+import { LayaGL } from "../../layagl/LayaGL"
+import { Byte } from "../../utils/Byte"
+import { Bounds } from "../core/Bounds"
 import { IndexBuffer3D } from "../graphics/IndexBuffer3D"
+import { IndexFormat } from "../graphics/IndexFormat"
 import { VertexMesh } from "../graphics/Vertex/VertexMesh"
 import { VertexBuffer3D } from "../graphics/VertexBuffer3D"
 import { VertexDeclaration } from "../graphics/VertexDeclaration"
 import { HalfFloatUtils } from "../math/HalfFloatUtils"
 import { Matrix4x4 } from "../math/Matrix4x4"
-import { Mesh } from "../resource/models/Mesh"
+import { Vector3 } from "../math/Vector3"
+import { Mesh, skinnedMatrixCache } from "../resource/models/Mesh"
 import { SubMesh } from "../resource/models/SubMesh"
-import { Byte } from "../../utils/Byte"
-import { LayaGL } from "../../layagl/LayaGL";
-import { IndexFormat } from "../graphics/IndexFormat"
 
 
 /**
@@ -32,8 +34,6 @@ export class LoadModelV05 {
 	private static _mesh: Mesh;
 	/**@internal */
 	private static _subMeshes: SubMesh[];
-	/**@internal */
-	private static _bindPoseIndices: number[] = [];
 
 	/**
 	 * @internal
@@ -56,8 +56,6 @@ export class LoadModelV05 {
 			else
 				fn.call(null);
 		}
-		LoadModelV05._mesh._bindPoseIndices = new Uint16Array(LoadModelV05._bindPoseIndices);
-		LoadModelV05._bindPoseIndices.length = 0;
 		LoadModelV05._strings.length = 0;
 		LoadModelV05._readData = null;
 		LoadModelV05._version = null;
@@ -118,6 +116,9 @@ export class LoadModelV05 {
 		var name: string = LoadModelV05._readString();
 		var reader: Byte = LoadModelV05._readData;
 		var arrayBuffer: ArrayBuffer = reader.__getBuffer();
+
+
+
 		var vertexBufferCount: number = reader.getInt16();
 		var offset: number = LoadModelV05._DATA.offset;
 		for (i = 0; i < vertexBufferCount; i++) {//TODO:始终为1
@@ -137,11 +138,13 @@ export class LoadModelV05 {
 
 			switch (LoadModelV05._version) {
 				case "LAYAMODEL:05":
+				case "LAYAMODEL:0501":
 					vertexData = arrayBuffer.slice(vbStart, vbStart + vertexCount * vertexStride);
 					floatData = new Float32Array(vertexData);
 					uint8Data = new Uint8Array(vertexData);
 					break;
 				case "LAYAMODEL:COMPRESSION_05":
+				case "LAYAMODEL:COMPRESSION_0501":
 					vertexData = new ArrayBuffer(vertexStride * vertexCount);
 					floatData = new Float32Array(vertexData);
 					uint8Data = new Uint8Array(vertexData);
@@ -250,6 +253,17 @@ export class LoadModelV05 {
 		mesh._setCPUMemory(memorySize);
 		mesh._setGPUMemory(memorySize);
 
+		if (LoadModelV05._version == "LAYAMODEL:0501" || LoadModelV05._version == "LAYAMODEL:COMPRESSION_0501") {
+			var bounds: Bounds = mesh.bounds;
+			var min: Vector3 = bounds.getMin();
+			var max: Vector3 = bounds.getMax();
+			min.setValue(reader.getFloat32(), reader.getFloat32(), reader.getFloat32());
+			max.setValue(reader.getFloat32(), reader.getFloat32(), reader.getFloat32());
+			bounds.setMin(min);
+			bounds.setMax(max);
+			mesh.bounds = bounds;
+		}
+
 		var boneNames: string[] = mesh._boneNames = [];
 		var boneCount: number = reader.getUint16();
 		boneNames.length = boneCount;
@@ -267,6 +281,7 @@ export class LoadModelV05 {
 			var inverseGlobalBindPose: Matrix4x4 = new Matrix4x4(bindPoseDatas[i + 0], bindPoseDatas[i + 1], bindPoseDatas[i + 2], bindPoseDatas[i + 3], bindPoseDatas[i + 4], bindPoseDatas[i + 5], bindPoseDatas[i + 6], bindPoseDatas[i + 7], bindPoseDatas[i + 8], bindPoseDatas[i + 9], bindPoseDatas[i + 10], bindPoseDatas[i + 11], bindPoseDatas[i + 12], bindPoseDatas[i + 13], bindPoseDatas[i + 14], bindPoseDatas[i + 15], new Float32Array(bindPoseBuffer, i * 4, 16));
 			mesh._inverseBindPoses[i / 16] = inverseGlobalBindPose;
 		}
+
 		return true;
 	}
 
@@ -296,9 +311,9 @@ export class LoadModelV05 {
 		subIndexBufferCount.length = drawCount;
 		boneIndicesList.length = drawCount;
 
-		var pathMarks: any[][] = LoadModelV05._mesh._skinDataPathMarks;
-		var bindPoseIndices: number[] = LoadModelV05._bindPoseIndices;
+		var skinnedCache: skinnedMatrixCache[] = LoadModelV05._mesh._skinnedMatrixCaches;
 		var subMeshIndex: number = LoadModelV05._subMeshes.length;
+		skinnedCache.length = LoadModelV05._mesh._inverseBindPoses.length;
 		for (var i: number = 0; i < drawCount; i++) {
 			subIndexBufferStart[i] = reader.getUint32();
 			subIndexBufferCount[i] = reader.getUint32();
@@ -307,14 +322,7 @@ export class LoadModelV05 {
 			var boneIndices: Uint16Array = boneIndicesList[i] = new Uint16Array(arrayBuffer.slice(offset + boneDicofs, offset + boneDicofs + boneDicCount));
 			for (var j: number = 0, m: number = boneIndices.length; j < m; j++) {
 				var index: number = boneIndices[j];
-				var combineIndex: number = bindPoseIndices.indexOf(index);
-				if (combineIndex === -1) {
-					boneIndices[j] = bindPoseIndices.length;
-					bindPoseIndices.push(index);
-					pathMarks.push([subMeshIndex, i, j]);
-				} else {
-					boneIndices[j] = combineIndex;
-				}
+				skinnedCache[index] || (skinnedCache[index] = new skinnedMatrixCache(subMeshIndex, i, j));
 			}
 		}
 		LoadModelV05._subMeshes.push(subMesh);

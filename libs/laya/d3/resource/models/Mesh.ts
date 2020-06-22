@@ -1,5 +1,6 @@
 import { ILaya } from "../../../../ILaya";
 import { Physics3D } from "../../../d3/physics/Physics3D";
+import { LayaGL } from "../../../layagl/LayaGL";
 import { Resource } from "../../../resource/Resource";
 import { Handler } from "../../../utils/Handler";
 import { Bounds } from "../../core/Bounds";
@@ -13,7 +14,6 @@ import { VertexBuffer3D } from "../../graphics/VertexBuffer3D";
 import { VertexDeclaration } from "../../graphics/VertexDeclaration";
 import { VertexElement } from "../../graphics/VertexElement";
 import { VertexElementFormat } from "../../graphics/VertexElementFormat";
-import { MeshReader } from "../../loaders/MeshReader";
 import { Color } from "../../math/Color";
 import { Matrix4x4 } from "../../math/Matrix4x4";
 import { Vector2 } from "../../math/Vector2";
@@ -21,7 +21,21 @@ import { Vector3 } from "../../math/Vector3";
 import { Vector4 } from "../../math/Vector4";
 import { Utils3D } from "../../utils/Utils3D";
 import { SubMesh } from "./SubMesh";
-import { LayaGL } from "../../../layagl/LayaGL";
+
+
+/**
+ * @internal
+ */
+export class skinnedMatrixCache {
+	readonly subMeshIndex: number;
+	readonly batchIndex: number;
+	readonly batchBoneIndex: number;
+	constructor(subMeshIndex: number, batchIndex: number, batchBoneIndex: number) {
+		this.subMeshIndex = subMeshIndex;
+		this.batchIndex = batchIndex;
+		this.batchBoneIndex = batchBoneIndex;
+	}
+}
 
 /**
  * <code>Mesh</code> 类用于创建文件网格数据模板。
@@ -55,19 +69,11 @@ export class Mesh extends Resource implements IClone {
 		}
 	}
 
-	/**
-	 *@internal
-	 */
-	static _parse(data: any, propertyParams: any = null, constructParams: any[] = null): Mesh {
-		var mesh: Mesh = new Mesh();
-		MeshReader.read(<ArrayBuffer>data, mesh, mesh._subMeshes);
-		return mesh;
-	}
 
 	/**
 	 * 加载网格模板。
 	 * @param url 模板地址。
-	 * @param complete 完成回掉。
+	 * @param complete 完成回调。
 	 */
 	static load(url: string, complete: Handler): void {
 		ILaya.loader.create(url, complete, null, Mesh.MESH);
@@ -81,10 +87,8 @@ export class Mesh extends Resource implements IClone {
 	private _maxVerticesUpdate: number = -1;
 	/** @internal */
 	private _needUpdateBounds: boolean = true;
-
-
 	/** @internal */
-	protected _bounds: Bounds = new Bounds(new Vector3(), new Vector3());
+	private _bounds: Bounds = new Bounds(new Vector3(), new Vector3());
 
 	/** @internal */
 	_isReadable: boolean;
@@ -104,9 +108,7 @@ export class Mesh extends Resource implements IClone {
 	/** @internal */
 	_inverseBindPoses: Matrix4x4[];
 	/** @internal */
-	_bindPoseIndices: Uint16Array;
-	/** @internal */
-	_skinDataPathMarks: any[][];
+	_skinnedMatrixCaches: skinnedMatrixCache[] = [];
 	/** @internal */
 	_vertexCount: number = 0;
 	/** @internal */
@@ -167,7 +169,6 @@ export class Mesh extends Resource implements IClone {
 		super();
 		this._isReadable = isReadable;
 		this._subMeshes = [];
-		this._skinDataPathMarks = [];
 	}
 
 	/**
@@ -290,7 +291,7 @@ export class Mesh extends Resource implements IClone {
 						floatVertices[offset] = cor.r;
 						floatVertices[offset + 1] = cor.g;
 						floatVertices[offset + 2] = cor.b;
-						floatVertices[offset + 2] = cor.a;
+						floatVertices[offset + 3] = cor.a;
 					}
 					break;
 				case VertexMesh.MESH_BLENDINDICES0:
@@ -345,10 +346,8 @@ export class Mesh extends Resource implements IClone {
 	 */
 	_setSubMeshes(subMeshes: SubMesh[]): void {
 		this._subMeshes = subMeshes
-
 		for (var i: number = 0, n: number = subMeshes.length; i < n; i++)
 			subMeshes[i]._indexInMesh = i;
-		this.calculateBounds();
 	}
 
 
@@ -751,19 +750,25 @@ export class Mesh extends Resource implements IClone {
 
 		var i: number;
 		var boneNames: string[] = this._boneNames;
-		var destBoneNames: string[] = destMesh._boneNames = [];
-		for (i = 0; i < boneNames.length; i++)
-			destBoneNames[i] = boneNames[i];
+		if (boneNames) {
+			var destBoneNames: string[] = destMesh._boneNames = [];
+			for (i = 0; i < boneNames.length; i++)
+				destBoneNames[i] = boneNames[i];
+		}
 
 		var inverseBindPoses: Matrix4x4[] = this._inverseBindPoses;
-		var destInverseBindPoses: Matrix4x4[] = destMesh._inverseBindPoses = [];
-		for (i = 0; i < inverseBindPoses.length; i++)
-			destInverseBindPoses[i] = inverseBindPoses[i];
+		if (inverseBindPoses) {
+			var destInverseBindPoses: Matrix4x4[] = destMesh._inverseBindPoses = [];
+			for (i = 0; i < inverseBindPoses.length; i++)
+				destInverseBindPoses[i] = inverseBindPoses[i];
+		}
 
-		destMesh._bindPoseIndices = new Uint16Array(this._bindPoseIndices);
-
-		for (i = 0; i < this._skinDataPathMarks.length; i++)
-			destMesh._skinDataPathMarks[i] = this._skinDataPathMarks[i].slice();
+		var cacheLength: number = this._skinnedMatrixCaches.length;
+		destMesh._skinnedMatrixCaches.length = cacheLength;
+		for (i = 0; i < cacheLength; i++) {
+			var skinnedCache: skinnedMatrixCache = this._skinnedMatrixCaches[i];
+			destMesh._skinnedMatrixCaches[i] = new skinnedMatrixCache(skinnedCache.subMeshIndex, skinnedCache.batchIndex, skinnedCache.batchBoneIndex);
+		}
 
 		for (i = 0; i < this.subMeshCount; i++) {
 			var subMesh: SubMesh = this._subMeshes[i];
