@@ -11,48 +11,50 @@ const load_res = [
     'image/loading/loading_logo.sk',
 ];
 
-export const Loading = (res: string[], Comp: CtorJSXEle) => () => {
-    const [value, setProgress] = useState(0);
-    const [delay, setDelay] = useState(true);
-    const [loaded, setLoaded] = useState(false);
+export const Loading = (res: string[], Comp: CtorJSXEle) => {
+    return function LoadCom() {
+        const [value, setProgress] = useState(0);
+        const [delay, setDelay] = useState(true);
+        const [loaded, setLoaded] = useState(false);
 
-    useEffect(() => {
-        loadRes([...load_res, ...res], (progress: number) => {
-            setProgress(progress);
-        }).then(() => {
-            setLoaded(true);
-        });
+        useEffect(() => {
+            loadRes([...load_res, ...res], (progress: number) => {
+                setProgress(progress);
+            }).then(() => {
+                setLoaded(true);
+            });
 
-        /** 最少显示500ms loading */
-        const timeout = setTimeout(() => {
-            setDelay(false);
-        }, 500);
+            /** 最少显示500ms loading */
+            const timeout = setTimeout(() => {
+                setDelay(false);
+            }, 500);
 
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, []);
+            return () => {
+                clearTimeout(timeout);
+            };
+        }, []);
 
-    if (loaded && !delay) {
-        return <Comp></Comp>;
-    }
+        if (loaded && !delay) {
+            return <Comp></Comp>;
+        }
 
-    return (
-        <Pop width={1920} height={750} isShow={true}>
-            <Sprite y={0} x={0} texture="image/loading/load_bg.png" />
-            <Sprite y={503} x={546} texture="image/loading/loading.png" />
+        return (
+            <Pop width={1920} height={750} isShow={true}>
+                <Sprite y={0} x={0} texture="image/loading/load_bg.png" />
+                <Sprite y={503} x={546} texture="image/loading/loading.png" />
 
-            <ProgressBar
-                y={584}
-                x={529}
-                value={value}
-                skin="image/loading/progress.png"
-            />
-            <SkeletonPlayer
-                y={375}
-                x={960}
-                url="image/loading/loading_logo.sk"
-            />
-        </Pop>
-    );
+                <ProgressBar
+                    y={584}
+                    x={529}
+                    value={value}
+                    skin="image/loading/progress.png"
+                />
+                <SkeletonPlayer
+                    y={375}
+                    x={960}
+                    url="image/loading/loading_logo.sk"
+                />
+            </Pop>
+        );
+    };
 };

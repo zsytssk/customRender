@@ -16,7 +16,7 @@ const randomKey = Math.random().toString(36).slice(2);
 const internalInstanceKey = '__reactFiber$' + randomKey;
 
 export async function initDevTool(reconcilerInstance) {
-    await injectDevTool(reconcilerInstance);
+    // await injectDevTool(reconcilerInstance);
 
     const view = new Sprite();
     Laya.stage.addChild(view);

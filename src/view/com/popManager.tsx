@@ -20,7 +20,8 @@ export const PopState = {
     hidePop: undefined as HidePop,
 };
 (window as any).test = PopState;
-export const PopManager = () => {
+
+export function PopManager() {
     const [pop_list, setPopList] = useState(new Set() as PopList);
     const maskRef = useRef(null as LayaSprite);
 
@@ -90,20 +91,17 @@ export const PopManager = () => {
             ...item,
         };
         if (isShow) {
-            show_arr.push(<Ele {...props} key={Ele}></Ele>);
+            show_arr.push(<Ele {...props} key={Ele.name}></Ele>);
         }
     }
-    if (show_arr.length) {
-        show_arr.splice(
-            show_arr.length - 2,
-            0,
-            <Sprite
-                key="maskLayer"
-                ref={maskRef as any}
-                name="maskLayer"
-            ></Sprite>,
-        );
+    if (!show_arr.length) {
+        return null;
     }
 
-    return <Box key="pop_wrap">{...show_arr}</Box>;
-};
+    return (
+        <Box>
+            <Sprite key="maskLayer" ref={maskRef as any} name="maskLayer" />
+            {...show_arr}
+        </Box>
+    );
+}

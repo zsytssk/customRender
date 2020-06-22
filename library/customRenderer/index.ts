@@ -5,6 +5,7 @@ import { injectDevTool, initDevTool } from './devTool';
 
 const reconcilerInstance = Reconciler(HostConfig as any);
 
+injectDevTool(reconcilerInstance);
 export const CustomRenderer = {
     render(element, renderDom?, callback?) {
         initDevTool(reconcilerInstance);

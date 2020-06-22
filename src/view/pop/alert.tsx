@@ -9,7 +9,7 @@ export function alert(msg: string) {
     PopState.showPop(Alert, msg);
 }
 
-export const Alert = (props: PopProps) => {
+export function Alert(props: PopProps) {
     const { hidePop } = PopState;
     const { id, args, isShow } = props;
     const [msg] = args;
@@ -93,4 +93,4 @@ export const Alert = (props: PopProps) => {
             />
         </Pop>
     );
-};
+}
