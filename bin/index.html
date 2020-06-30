@@ -1,13 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
     <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Document</title>
+        <title>BitFishing</title>
+        <meta charset="utf-8" />
+        <meta name="renderer" content="webkit" />
+        <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+        />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="full-screen" content="true" />
+        <meta name="x5-fullscreen" content="true" />
+        <meta name="360-fullscreen" content="true" />
+        <meta name="laya" screenorientation="landscape" />
+        <meta http-equiv="expires" content="0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta http-equiv="expires" content="0" />
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="./favicon/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="./favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="./favicon/favicon-16x16.png"
+        />
+        <link rel="manifest" href="./favicon/site.webmanifest" />
+        <style type="text/css">
+            html {
+                -ms-touch-action: none;
+            }
+
+            body,
+            canvas,
+            div {
+                display: block;
+                outline: none;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                -khtml-user-select: none;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            }
+
+            /* Remove spin of input type number */
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                /* display: none; <- Crashes Chrome on hover */
+                -webkit-appearance: none;
+                margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+            }
+
+            body {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                border: 0;
+                margin: 0;
+
+                cursor: default;
+                color: #888;
+                background-color: #fff;
+
+                text-align: center;
+                font-family: Helvetica, Verdana, Arial, sans-serif;
+
+                display: flex;
+                flex-direction: column;
+
+                /* fix bug: https://github.com/cocos-creator/2d-tasks/issues/791 */
+                /* overflow cannot be applied in Cocos2dGameContainer,
+              otherwise child elements will be hidden when Cocos2dGameContainer rotated 90 deg */
+                overflow: hidden;
+            }
+        </style>
+        <script src="./bitgame/paladin.min.js?v=20202604142305"></script>
     </head>
+
     <body>
-        <div id="root"></div>
         <script type="text/javascript">
             function loadLib(url) {
                 var script = document.createElement('script');
@@ -16,9 +102,9 @@
                 document.body.appendChild(script);
             }
 
-            var CDN_VERSION = '20201606204045';
+            var CDN_VERSION = '20202406195248';
         </script>
-        <script src="./bitgame/paladin.min.js"></script>
-        <script src="./index.js"></script>
+        <script type="text/javascript" src="index.js"></script>
+        <script type="text/javascript" src="webpack-dev-server.js"></script>
     </body>
 </html>

@@ -1,24 +1,59 @@
+-   写一个 demo 给官方
+
+-   https://blog.bitsrc.io/react-visual-editors-in-2020-de7759d5d592
+
+## 2020-06-28 09:38:35
+
+-   @todo react-devTool-api pr
+
+-   @ques `__REACT_DEVTOOLS_GLOBAL_HOOK__` 怎么绑定到页面上的...
+
+    -   injectIntoDevTools -> findFiberByHostInstance
+    -   **REACT_DEVTOOLS_GLOBAL_HOOK**
+
+-   `__REACT_DEVTOOLS_GLOBAL_HOOK__.inject` -- 能不能用
+
+```ts
+__REACT_DEVTOOLS_GLOBAL_HOOK__.addListener(
+    'highlightElement',
+    (elements: Node[]) => {},
+);
+__REACT_DEVTOOLS_GLOBAL_HOOK__.inspectElement(element: Node);
+
+// 或者放在 - injectIntoDevTools 中
+```
+
+-   @ques 怎么把代码插入到 react0dev-tool 中 ?
+
+-   @ques 怎么测试代码
+    -   能自己打包 chrome extension 吗
+    -   依赖太多了。。。
+
+## 2020-06-24 09:37:18
+
 -   连接 socket
 
--   @ques react-dev-tool customise render..
+-   scheduleDeferredCallback
+
+*   @ques react-dev-tool customise render..
 
     -   @inlet/react-pixi
     -   https://github.com/facebook/react/blob/30b47103d4354d9187dc0f1fb804855a5208ca9f/packages/react-dom/src/client/ReactDOMHostConfig.js
     -   react-dom
     -   能不能搜索。。。
 
--   @ques dev Tool 找到节点的原因是什么
+*   @ques dev Tool 找到节点的原因是什么
 
     -   如何高亮 component
         -   **REACT_DEVTOOLS_GLOBAL_HOOK**.reactDevtoolsAgent.rendererInterfaces['1'].findNativeNodesForFiberID(13)
         -   `__REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent._bridge.addListener('highlightNativeElement', (...args) => {console.log(args)})`
 
--   正式的 dom 有什么属性 我外面的节点没有？
+*   正式的 dom 有什么属性 我外面的节点没有？
 
     -   createInstance
     -   removeChild removeChildFromContainer
 
--   能不能 支持 鼠标移动选择节点...
+*   能不能 支持 鼠标移动选择节点...
 
 ```ts
 const id = __REACT_DEVTOOLS_GLOBAL_HOOK__.rendererInterfaces
@@ -98,8 +133,6 @@ __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent._bridge.send(
 -   @todo 为什么后面一条鱼 会把前面的鱼冲掉
 
 ## 2020-02-02 11:11:29
-
-·
 
 -   @ques@opt customise render 怎么先创建父亲 再创建子
 
