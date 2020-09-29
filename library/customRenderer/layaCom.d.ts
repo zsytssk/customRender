@@ -60,41 +60,43 @@ export interface EventProps {
     onResize?(evt: Event): void;
 }
 type PropsOf<T> = { [P in keyof T]?: T[P] };
-export declare class LayaCom<T> extends React.Component<
-    PropsOf<T> & EventProps & ExtraProps
-> {
-    getPublicInstance(): T;
-}
 
-export declare class Stage extends LayaCom<LayaStage> {}
-export declare class View extends LayaCom<LayaView> {}
-export declare class Node extends LayaCom<LayaNode> {}
-export declare class Label extends LayaCom<LayaLabel> {}
-export declare class Box extends LayaCom<LayaBox> {}
-export declare class Button extends LayaCom<LayaButton> {}
-export declare class HBox extends LayaCom<LayaHBox> {}
-export declare class VBox extends LayaCom<LayaVBox> {}
-export declare class Image extends LayaCom<LayaImage> {}
-export declare class Clip extends LayaCom<LayaClip> {}
-export declare class ComboBox extends LayaCom<LayaComboBox> {}
-export declare class Tab extends LayaCom<LayaTab> {}
-export declare class HScrollBar extends LayaCom<LayaHScrollBar> {}
-export declare class HSlider extends LayaCom<LayaHSlider> {}
-export declare class List extends LayaCom<LayaList> {}
-export declare class CheckBox extends LayaCom<LayaCheckBox> {}
-export declare class RadioGroup extends LayaCom<LayaRadioGroup> {}
-export declare class Radio extends LayaCom<LayaRadio> {}
-export declare class Panel extends LayaCom<LayaPanel> {}
-export declare class ProgressBar extends LayaCom<LayaProgressBar> {}
-export declare class TextInput extends LayaCom<LayaTextInput> {}
-export declare class Text extends LayaCom<LayaText> {}
-export declare class FontClip extends LayaCom<LayaFontClip> {}
-export declare class Sprite extends LayaCom<LayaSprite> {}
-export declare class TextArea extends LayaCom<LayaTextArea> {}
-export declare class HTMLDivElement extends LayaCom<LayaHTMLDivElement> {}
-export declare class Animation extends LayaCom<LayaAnimation> {}
-export declare class Templet extends LayaCom<LayaTemplet> {}
-export declare class Skeleton extends LayaCom<LayaSkeleton> {}
-export declare class SkeletonPlayer extends LayaCom<LayaSkeleton> {}
-export declare class Dialog extends LayaCom<LayaDialog> {}
-export declare class Scene extends LayaCom<LayaScene> {}
+export type LayaCom<T> = (
+    props:
+        | PropsOf<T>
+        | EventProps
+        | ExtraProps
+        | { ref: React.MutableRefObject<T> },
+) => JSX.Element;
+
+export declare let Stage: LayaCom<LayaStage>;
+export declare let View: LayaCom<LayaView>;
+export declare let Node: LayaCom<LayaNode>;
+export declare let Label: LayaCom<LayaLabel>;
+export declare let Box: LayaCom<LayaBox>;
+export declare let Button: LayaCom<LayaButton>;
+export declare let HBox: LayaCom<LayaHBox>;
+export declare let VBox: LayaCom<LayaVBox>;
+export declare let Image: LayaCom<LayaImage>;
+export declare let Clip: LayaCom<LayaClip>;
+export declare let ComboBox: LayaCom<LayaComboBox>;
+export declare let Tab: LayaCom<LayaTab>;
+export declare let HScrollBar: LayaCom<LayaHScrollBar>;
+export declare let HSlider: LayaCom<LayaHSlider>;
+export declare let List: LayaCom<LayaList>;
+export declare let CheckBox: LayaCom<LayaCheckBox>;
+export declare let RadioGroup: LayaCom<LayaRadioGroup>;
+export declare let Radio: LayaCom<LayaRadio>;
+export declare let Panel: LayaCom<LayaPanel>;
+export declare let ProgressBar: LayaCom<LayaProgressBar>;
+export declare let TextInput: LayaCom<LayaTextInput>;
+export declare let Text: LayaCom<LayaText>;
+export declare let FontClip: LayaCom<LayaFontClip>;
+export declare let Sprite: LayaCom<LayaSprite>;
+export declare let TextArea: LayaCom<LayaTextArea>;
+export declare let HTMLDivElement: LayaCom<LayaHTMLDivElement>;
+export declare let Animation: LayaCom<LayaAnimation>;
+export declare let Templet: LayaCom<LayaTemplet>;
+export declare let Dialog: LayaCom<LayaDialog>;
+export declare let Scene: LayaCom<LayaScene>;
+export declare let SkeletonPlayer: LayaCom<LayaSkeleton>;
