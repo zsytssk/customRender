@@ -36,6 +36,7 @@ export type ExtraProps = {
     var?: string;
     renderType?: string;
     editorInfo?: string;
+    children?: LayaCom | LayaCom[];
 };
 
 export interface EventProps {
@@ -92,7 +93,7 @@ export declare let ProgressBar: LayaCom<LayaProgressBar>;
 export declare let TextInput: LayaCom<LayaTextInput>;
 export declare let Text: LayaCom<LayaText>;
 export declare let FontClip: LayaCom<LayaFontClip>;
-export declare let Sprite: LayaCom<LayaSprite>;
+export declare let Sprite: LayaCom<LayaSprite | { texture?: string }>;
 export declare let TextArea: LayaCom<LayaTextArea>;
 export declare let HTMLDivElement: LayaCom<LayaHTMLDivElement>;
 export declare let Animation: LayaCom<LayaAnimation>;
