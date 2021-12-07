@@ -5,12 +5,12 @@ import { Laya } from 'Laya';
 type PopProps = {
     width: number;
     height: number;
-    isShow: boolean;
+    visible: boolean;
 };
 export function Pop(props: ComProps & PopProps) {
-    const { children } = props;
+    let { children } = props;
     const { width, height } = props;
-    const { isShow } = props;
+    const { visible: isShow } = props;
     const [x, setX] = useState(0);
     const [y, setY] = useState(0);
     const [visible, setVisible] = useState(false);

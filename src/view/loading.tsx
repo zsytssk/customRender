@@ -39,7 +39,7 @@ export const Loading = (res: string[], Comp: CtorJSXEle) => {
         }
 
         return (
-            <Pop width={1920} height={750} isShow={true}>
+            <Pop width={1920} height={750} visible={true}>
                 <Sprite y={0} x={0} texture="image/loading/load_bg.png" />
                 <Sprite y={503} x={546} texture="image/loading/loading.png" />
 

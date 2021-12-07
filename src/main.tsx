@@ -8,6 +8,7 @@ import { Hall } from 'view/scene/hall/hall';
 import { AppModel } from 'model/appModel';
 import { Config } from 'data/config';
 import { Lang } from 'data/internationalConfig';
+import { BrowserRouter, Switch } from 'react-router-dom';
 
 function App() {
     useEffect(() => {
@@ -19,7 +20,6 @@ function App() {
             <SceneManager defScene={Hall} defProps={{ x: 1 }} />
             <PopManager />
         </>
-        // <Box width={100} height={100} />
     );
 }
 

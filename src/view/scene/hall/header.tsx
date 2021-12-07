@@ -110,6 +110,9 @@ export function Header(props: ComProps) {
                         onClick={() => {
                             const id = genRandomStr();
                             alert('this is a test ' + id);
+                            setTimeout(() => {
+                                alert('this is a test 12312312321');
+                            }, 3000);
                         }}
                         var="testAlert"
                     >

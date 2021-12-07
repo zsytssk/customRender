@@ -1,9 +1,8 @@
 import { Box, Button, Image, Label, Sprite } from 'customRenderer/layaCom';
 import { Label as LayaLabel } from 'laya/ui/Label';
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Pop } from 'view/com/pop';
 import { PopProps, PopState } from '../com/popManager';
-import { ui } from 'ui/layaMaxUI';
 
 export function alert(msg: string) {
     PopState.showPop(Alert, msg);
@@ -14,12 +13,12 @@ export function Alert(props: PopProps) {
     const { id, args, isShow } = props;
     const [msg] = args;
     const label_ele = useRef(null as LayaLabel);
-    const hide = () => {
+    const hide = useCallback(() => {
         hidePop(id);
-    };
+    }, []);
 
     return (
-        <Pop width={658} height={429} isShow={isShow}>
+        <Pop width={658} height={429} visible={isShow}>
             <Box y={0} x={0} width={658} height={427}>
                 <Sprite y={0} x={0} texture="image/pop/alert/alert_bg_01.png" />
                 <Image
